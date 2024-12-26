@@ -6,10 +6,11 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+//use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Password;
 
 
 class AuthController extends Controller
