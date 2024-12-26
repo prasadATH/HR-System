@@ -199,7 +199,7 @@
     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
     {{ $advance->duration }}
     </td>
-    <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+    <td class="text-xl text-[#3569C3] px-4 py-2 text-center align-middle bg-[#D9D9D966]">
 
     
   @if (strtolower($advance->status ) === 'approved')

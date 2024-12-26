@@ -227,7 +227,7 @@
   {{ $record->pay_date }}
 
   </td>
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+  <td class="text-xl text-black px-4 py-2 text-center align-middle bg-[#D9D9D966]">
 
   
   @if (strtolower($record->status ) === 'paid')
