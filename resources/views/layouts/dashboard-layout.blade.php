@@ -49,7 +49,9 @@
         <div class="flex items-center w-full space-x-4">
        
         <span class="iconify" data-icon="ic:baseline-dashboard" style="width: 16px; height: 16px;"></span>
-            <span id="dashboard" class="text-2xl text-black nunito-" style="font-weight: 700;">Dashboard</span>
+            <span id="dashboard" class="{{request()->routeIs('dashboard.management') ? 'text-green-700': 'text-black' }} text-2xl text-black nunito-" style="font-weight: 700;">Dashboard</span>
+
+
 
             </div>
         </a>
@@ -69,30 +71,10 @@
             <span class="iconify" data-icon="ic:round-man" style="width: 16px; height: 16px;"></span>
             <p id="EmployeeText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">Employee</p>
             </div>
-          <p class="text-xl text-black"><i class="ri-arrow-down-s-line"></i></p>
+       
         </button>
         </a>
-        <ul id="employeeMenu" class="hidden pl-6 space-y-2">
-        <div class="flex items-center">
-            <!-- Timeline -->
-            <div class="flex flex-col items-center">
-              <div class="w-2 h-2 rounded-full bg-gradient-to-b from-blue-600 to-teal-400"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-            </div>
-            <!-- Labels -->
-            <div class="ml-4">
-              <div class="flex flex-col space-y-6">
-              <a href="#" class="text-[#0F5A80] hover:text-blue-500 font-semibold nunito-">Option 1</a>
-              <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Option 2</a>
-              </div>
-            </div>
-            </div>
-        </ul>
+
       </li>
     </ul>
   </div>
@@ -110,33 +92,11 @@
         <p id="payrollText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">Payroll</p>
         </a>
       </div>
-      <p class="text-xl text-blue-500"><i class="ri-arrow-down-s-line"></i></p>
+
     </button>
 
       
-      <div id="payrollMenu" class="hidden pl-6">
-  <div class="flex items-center">
-    <!-- Timeline -->
-    <div class="flex flex-col items-center">
-      <div class="w-2 h-2 rounded-full bg-gradient-to-b from-blue-600 to-teal-400"></div>
-      <div class="w-1 h-10 bg-black"></div>
-      <div class="w-2 h-2 bg-black rounded-full"></div>
-      <div class="w-1 h-10 bg-black"></div>
-      <div class="w-2 h-2 bg-black rounded-full"></div>
-      <div class="w-1 h-10 bg-black"></div>
-      <div class="w-2 h-2 bg-black rounded-full"></div>
-    </div>
-    <!-- Labels -->
-    <div class="ml-4">
-      <div class="flex flex-col space-y-6">
-        <a href="#" class="text-[#0F5A80] hover:text-blue-500 font-semibold nunito-">Department Wise</a>
-        <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Salary Components</a>
-        <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Processing Details</a>
-        <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Reports</a>
-      </div>
-    </div>
-  </div>
-</div>
+
 
     </li>
     <!-- Loan -->
@@ -155,33 +115,9 @@
           <p id="ExpensesText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">Expenses</p>
           </a>
         </div>
-        <p class="text-xl text-blue-500"><i class="ri-arrow-down-s-line"></i></p>
+        
       </button>
-      <div id="expensesMenu" class="hidden pl-6">
-        <div class="flex items-center">
-          
-          <!-- Labels -->
-          <div class="flex items-center">
-            <!-- Timeline -->
-            <div class="flex flex-col items-center">
-              <div class="w-2 h-2 rounded-full bg-gradient-to-b from-blue-600 to-teal-400"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-            </div>
-            <!-- Labels -->
-            <div class="ml-4">
-              <div class="flex flex-col space-y-6">
-              <a href="#" class="text-[#0F5A80] hover:text-blue-500 font-semibold nunito-">View records</a>
-              <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Option 2</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </li>
   </ul>
 </div>
@@ -199,30 +135,9 @@
         <p id="AttendanceText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">Attendance</p>
         </a>  
       </div>
-        <p class="text-xl text-black"><i class="ri-arrow-down-s-line"></i></p>
         </button>
         
-        <div id="attendanceMenu" class="flex items-center hidden">
-    <!-- Timeline -->
-    <div class="flex flex-col items-center">
-      <div class="w-2 h-2 rounded-full bg-gradient-to-b from-blue-600 to-teal-400"></div>
-      <div class="w-1 h-10 bg-black"></div>
-      <div class="w-2 h-2 bg-black rounded-full"></div>
-      <div class="w-1 h-10 bg-black"></div>
-      <div class="w-2 h-2 bg-black rounded-full"></div>
-      <div class="w-1 h-10 bg-black"></div>
-      <div class="w-2 h-2 bg-black rounded-full"></div>
-    </div>
-    <!-- Labels -->
-    <div class="ml-4">
-      <div class="flex flex-col space-y-6">
-        <a href="#" class="text-[#0F5A80] hover:text-blue-500 font-semibold nunito-">Department Wise</a>
-        <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Salary Components</a>
-        <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Processing Details</a>
-        <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Reports</a>
-      </div>
-    </div>
-  </div>
+
       </li>
       <li>
         <button class="flex items-center justify-between w-full space-x-2 text-gray-600 hover:text-blue-500 focus:outline-none" onclick="toggleMenu('leavesMenu'); toggleGradientText4()">
@@ -232,30 +147,9 @@
         <p id="LeaveText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">Leave</p>
       </a>    
       </div>
-        <p class="text-xl text-black"><i class="ri-arrow-down-s-line"></i></p>
+   
         </button>
-        <ul id="leavesMenu" class="hidden pl-6 space-y-2">
-        <div class="flex items-center">
-            <!-- Timeline -->
-            <div class="flex flex-col items-center">
-              <div class="w-2 h-2 rounded-full bg-gradient-to-b from-blue-600 to-teal-400"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-              <div class="w-1 h-10 bg-black"></div>
-              <div class="w-2 h-2 bg-black rounded-full"></div>
-            </div>
-            <!-- Labels -->
-            <div class="ml-4">
-              <div class="flex flex-col space-y-6">
-              <a href="#" class="text-[#0F5A80] hover:text-blue-500 font-semibold nunito-">Expense 1</a>
-              <a href="#" class="font-medium text-black hover:text-blue-500 nunito-">Expense 2</a>
-              </div>
-            </div>
-          </div>
-          
-        </ul>
+
       </li>
       <li><a href="{{ route('incident.management') }}" class="flex items-center space-x-2 text-gray-600 hover:text-blue-500"><span class="iconify" data-icon="material-symbols:event-list" style="width: 16px; height: 16px;"></span>
       <span id="Incident" class="text-2xl font-bold text-black nunito-" style="font-weight: 700;">Incident</span></a></li>
@@ -389,6 +283,24 @@ function toggleDropdown() {
 
 
 <script>
+   document.addEventListener('DOMContentLoaded', () => {
+    const menuItems = document.querySelectorAll('.menu-item');
+
+    menuItems.forEach(item => {
+      item.addEventListener('click', function (e) {
+        // Prevent default behavior if necessary
+        e.preventDefault();
+
+        // Remove the active class from all menu items
+        menuItems.forEach(menu => menu.classList.remove('text-blue-500', 'font-extrabold'));
+
+        // Add the active class to the clicked menu item
+        this.classList.add('text-blue-500', 'font-extrabold');
+      });
+    });
+  });
+
+
   function toggleGradientText() {
     const textElement = document.getElementById('payrollText');
     if (textElement.classList.contains('text-black')) {

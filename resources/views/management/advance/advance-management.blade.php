@@ -97,12 +97,6 @@
     <p class="text-6xl font-bold text-black nunito-">Advance</p>
     </div>
     <div class="flex items-center space-x-4">
-    <!-- Filter Button -->
-    <button class="flex items-center justify-between px-4 py-2 text-[#00000066] text-2xl bg-[#D9D9D980] border-2 border-[#D9D9D980] rounded-md hover:bg-gray-200">
-        <p class="text-3xl"><i class="ri-filter-2-line"></i></p>
-        <span>Filter</span>
-        <p class="text-3xl text-[#00000066]"><i class="ri-arrow-down-s-line"></i></p>
-    </button>
 
     <!-- Add Employee Button -->   
     <button class="flex items-center justify-center space-x-2 px-10 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]" onclick="openAddModal()">
@@ -508,7 +502,7 @@ function openAddModal() {
 
     selectedAddFiles = new DataTransfer();
     // Fetch content from the server
-    fetch(`http://127.0.0.1:8000/dashboard/advances/advance/create`)
+    fetch(`https://hr.jaan.lk/dashboard/advances/advance/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
@@ -661,7 +655,7 @@ function openEditModal(leaveId) {
     selectedFiles = new DataTransfer();
     existingFilesList = [];
 
-    fetch(`http://127.0.0.1:8000/dashboard/advances/advance/${leaveId}/edit`)
+    fetch(`https://hr.jaan.lk/dashboard/advances/advance/${leaveId}/edit`)
         .then(response => response.text())
         .then(html => {
             modalContent.innerHTML = html;

@@ -95,11 +95,6 @@
 
 
     <!-- Filter Button -->
-    <button class="flex items-center justify-between px-4 py-2 text-[#00000066] text-2xl bg-[#D9D9D980] border-2 border-[#D9D9D980] rounded-md hover:bg-gray-200">
-        <p class="text-3xl"><i class="ri-filter-2-line"></i></p>
-        <span>Filter</span>
-        <p class="text-3xl text-[#00000066]"><i class="ri-arrow-down-s-line"></i></p>
-    </button>
 
     <!-- Add record Button -->
 
@@ -209,8 +204,21 @@
   <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
   {{ $leave->duration }}
   </td>
-  <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-  {{ $leave->status }}
+  <td class="text-xl text-[#3569C3] px-4 py-2 text-center align-middle bg-[#D9D9D966]">
+    @if (strtolower($leave->status ) === 'approved')
+
+    <p class="text-[#47B439] border-2 border-[#47B439] bg-[#47B43933] rounded-xl px-2 py-1 shadow-sm">
+        Approved 
+    </p>
+    @elseif (strtolower($leave->status ) === 'pending')
+    <p class="text-[#FFBF00] border-2 border-[#FFBF00] bg-[#FFBF0033] rounded-xl px-2 py-1 shadow-sm">
+        Pending
+    </p>
+    @elseif (strtolower($leave->status) === 'rejected')
+    <p class="text-[#FF0000] border-2 border-[#FF0000] bg-[#FF000033] rounded-xl px-2 py-1 shadow-sm">
+        Rejected
+    </p>
+    @endif
   </td>
   <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
   @if(!empty($leave->supporting_documents) && is_string($leave->supporting_documents))
@@ -366,7 +374,7 @@ function openAddModal() {
 
     selectedAddFiles = new DataTransfer();
     // Fetch content from the server
-    fetch(`http://127.0.0.1:8000/dashboard/leaves/leave/create`)
+    fetch(`https://hr.jaan.lk/dashboard/leaves/leave/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
@@ -520,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
     existingFilesList = [];
 
     // Fetch content from the server
-    fetch(`http://127.0.0.1:8000/dashboard/leaves/${leaveId}/edit`)
+    fetch(`https://hr.jaan.lk/dashboard/leaves/${leaveId}/edit`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;

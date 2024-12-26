@@ -90,12 +90,7 @@
     <p class="text-6xl font-bold text-black nunito-">Departments</p>
     </div>
     <div class="flex items-center space-x-4">
-    <!-- Filter Button -->
-    <button class="flex items-center justify-between w-1/3 px-4 py-2 text-[#00000066] text-2xl bg-[#D9D9D980] border-2 border-[#D9D9D980] rounded-md hover:bg-gray-200">
-        <p class="text-3xl"><i class="ri-filter-2-line"></i></p>
-        <span>Filter</span>
-        <p class="text-3xl text-[#00000066]"><i class="ri-arrow-down-s-line"></i></p>
-    </button>
+
 
     <!-- Add Employee Button -->
     <button class="flex items-center justify-center space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]" onclick="openAddModal()">
@@ -215,7 +210,7 @@ function openAddModal() {
     modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
 
     // Fetch content from the server
-    fetch(`http://127.0.0.1:8000/dashboard/departments/department/create`)
+    fetch(`https://hr.jaan.lk/dashboard/departments/department/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
