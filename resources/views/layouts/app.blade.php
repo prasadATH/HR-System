@@ -15,7 +15,7 @@
 
     <title>@yield('title', 'App')</title>
     @vite(['resources/js/app.js'])
-    @vite(['resources/js/root.js'])
+ 
 </head>
         @yield('content') <!-- Content placeholder -->
 
