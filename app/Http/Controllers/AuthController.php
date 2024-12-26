@@ -24,7 +24,7 @@ class AuthController extends Controller
             return redirect('/management/employee-management'); 
         }
         
-        return view('authentification.login');
+        return view('Authentification.login');
     }
 
     /**
