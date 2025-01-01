@@ -192,7 +192,7 @@ function openAddModal() {
     modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
 
     // Fetch content from the server
-    fetch(`{{ config('app.url') }}/management/department-management/create`)
+    fetch(`https://hr.jaan.lk/management/department-management/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
