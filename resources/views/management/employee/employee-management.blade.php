@@ -56,7 +56,6 @@
             </ul>
         </div>
     @endif
- </script>
 <div class="w-full flex h-auto bg-[#FFFFFF]">
     <div class="flex flex-col items-start justify-start w-full px-2">
         <div class="w-full flex space-y-2 border-b-2 border-[#00000080] pb-8 pl-8 pt-8">
