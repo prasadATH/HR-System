@@ -48,8 +48,9 @@ class ManagementController extends Controller
     }
 
 
-    public function departmentManagement()
+    public function departmentManagement(Request $request)
 {
+    // Modify the query to use pagination
     $departments = DB::table('departments')
         ->leftJoin('employees', 'departments.id', '=', 'employees.department_id')
         ->select(
@@ -61,9 +62,18 @@ class ManagementController extends Controller
         ->groupBy(
             'departments.department_id',
             'departments.name'
-        )
-        ->get();
+        );
 
+    // Apply search filter if a search term is provided
+    if ($search = $request->input('search')) {
+        $departments->where('departments.name', 'like', "%{$search}%")
+                    ->orWhere('departments.department_id', 'like', "%{$search}%");
+    }
+
+    // Apply pagination
+    $departments = $departments->paginate(8);
+
+    // Pass the paginated result to the view
     return view('management.department.department-management', compact('departments'));
 }
 public function settingManagement()
