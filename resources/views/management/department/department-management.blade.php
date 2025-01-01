@@ -145,7 +145,9 @@
   
 </div>
 
-
+<div class="w-full flex justify-center items-center pt-4">
+    {{ $departments->links('vendor.pagination.tailwind') }}
+</div>
 </div>
 
 <script>
