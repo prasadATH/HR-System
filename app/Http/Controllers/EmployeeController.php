@@ -261,10 +261,9 @@ class EmployeeController extends Controller
     
 
     public function store(Request $request)
-{// dd($request->all());
+{ 
     // Validate the form data
-    try {
-        $validator = Validator::make($request->all(), [
+    $validated = $request->validate([
         'full_name' => 'required|string|max:255',
         'first_name' => 'nullable|string|max:255',
         'last_name' => 'nullable|string|max:255',
@@ -308,23 +307,7 @@ class EmployeeController extends Controller
 
         
     ]);
-    if ($validator->fails()) {
-        // Handle validation errors
-        return response()->json([
-            'status' => 'error',
-            'errors' => $validator->errors()
-        ], 422);
-    }
 
-    $validated = $validator->validated();
-    // Proceed with validated data
-} catch (\Exception $e) {
-    // Catch any unexpected exceptions
-    return response()->json([
-        'status' => 'error',
-        'message' => $e->getMessage()
-    ], 500);
-}
 
     try {
 
@@ -350,7 +333,6 @@ class EmployeeController extends Controller
             }
         }
     } catch (\Exception $e) {
-        dd($request->all(), $e->getMessage());
         return redirect()->back()->withErrors(['error' => $e->getMessage()]);
     }
     
@@ -412,6 +394,8 @@ class EmployeeController extends Controller
 
     return redirect()->route('employee.management')->with('success', 'Employee added successfully.');
 }
+
+
 
 public function destroy($id)
 {

@@ -116,28 +116,28 @@
                     <input type="text" name="title" value="{{ $employee->title }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
-                <select name="name" id="name" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" required>
-                    <option disabled>Select Department</option>
-                    @foreach($departments as $department)
-                        <option value="{{ $department->name }}" 
-                            {{ $employee->department->name == $department->name ? 'selected' : '' }}>
-                            {{ $department->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                    <select name="name" id="name" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" required>
+                        <option disabled>Select Department</option>
+                        @foreach($departments as $department)
+                            <option value="{{ $department->name }}" 
+                                {{ $employee->department && $employee->department->name == $department->name ? 'selected' : '' }}>
+                                {{ $department->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div class="w-full">
-                <select name="branch" id="branch" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" required>
-                    <option disabled>Select Branch</option>
-                    @foreach($departments as $department)
-                        <option value="{{ $department->branch }}" 
-                            {{ $employee->department->branch == $department->branch ? 'selected' : '' }}>
-                            {{ $department->branch }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+                <div class="w-full">
+                    <select name="branch" id="branch" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" required>
+                        <option disabled>Select Branch</option>
+                        @foreach($departments as $department)
+                            <option value="{{ $department->branch }}" 
+                                {{ $employee->department && $employee->department->branch == $department->branch ? 'selected' : '' }}>
+                                {{ $department->branch }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
             <div class="w-full">    
                 <input type="text" name="employment_type" value="{{ $employee->employment_type }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />

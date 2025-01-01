@@ -124,8 +124,8 @@
         </div>
         <div class="w-3/4 space-y-4 pl-16 text-black font-bold">   
             <p class="text-xl">{{ $employee->title }}</p>
-            <p class="text-xl">{{ $employee->department->name ?? 'N/A'}}</p>
-            <p class="text-xl">{{ $employee->department->branch ?? 'N/A'}}</p>
+            <p class="text-xl">{{ $employee->department->name ?? 'Null'}}</p>
+            <p class="text-xl">{{ $employee->department->branch ?? 'Null'}}</p>
             <p class="text-xl">{{ $employee->employment_type }}</p>
             <p class="text-xl">{{ $employee->manager_id }}</p>
             <p class="text-xl">{{ $employee->probation_start_date }}</p>
