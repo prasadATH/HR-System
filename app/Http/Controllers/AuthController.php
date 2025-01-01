@@ -6,11 +6,10 @@ use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-//use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Password;
 
 
 class AuthController extends Controller
@@ -258,10 +257,15 @@ public function updatePassword(Request $request)
         return back()->withErrors(['password' => 'Current password is incorrect']);
     }
 
-    $user->update([
-        'password' => Hash::make($request->new_password)
-    ]);
+    try {
+        $user->update([
+            'password' => Hash::make($request->new_password)
+        ]);
 
-    return back()->with('success', 'Password updated successfully');
+        Auth::logout(); // Log out the user after password change for security
+        return redirect('/login')->with('success', 'Password updated successfully. Please log in with your new password.');
+    } catch (\Exception $e) {
+        return back()->withErrors(['error' => 'An error occurred while updating the password.']);
+    }
 }
 }

@@ -93,7 +93,7 @@
 <div class="w-full flex justify-between items-center">
 <div class="w-full flex flex-col">
 <p class="text-xl nunito- text-[#00000080] font-bold">Department</p>
-<p class="text-l nunito- text-black font-bold" style="font-weight: 700;">{{ $employee->department->name ?? 'No Department' }}</p>
+<p class="text-l nunito- text-black font-bold" style="font-weight: 700;">{{ explode(' ', $employee->department->name ?? '')[0] ?? 'No Department' }}</p>
 </div>
 <div class="w-full flex flex-col">
 <p class="text-xl nunito- text-[#00000080] font-bold">Hired Date </p>

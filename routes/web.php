@@ -64,17 +64,18 @@ Route::middleware('auth')->group(function () {
 
    // Route::get('/dashboard/{section}', [DashboardController::class, 'show'])->name('dashboard.section');
 
-    // Employee Management Routes
-    Route::get('/dashboard/employee', [EmployeeController::class, 'index'])->name('dashboard.section');
-    Route::get('/dashboard/employee/{id}', [EmployeeController::class, 'show'])->name('employee.details');
-    Route::get('/employee/{id}', [EmployeeController::class, 'show'])->name('employee.show');
-    Route::post('/employee/update', [EmployeeController::class, 'update']);
-    Route::delete('/employee/delete/{id}', [EmployeeController::class, 'delete']);
+   Route::get('/dashboard/employee/{id}', [EmployeeController::class, 'show'])->name('employee.details');
+   Route::get('/employee/{id}', [EmployeeController::class, 'show'])->name('employee.show');
+   Route::get('/employee/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit');
+   Route::put('/employee/update/{id}', [EmployeeController::class, 'update'])->name('employee.update');
+   Route::delete('/employee/delete/{id}', [EmployeeController::class, 'delete']);
+   Route::get('/searchemployees', [EmployeeController::class, 'GetSearchEmployees'])->name('employees.search');
+   Route::get('/employees/create', [EmployeeController::class, 'create'])->name('employees.create');
+   Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
+   Route::delete('/employee/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 
+   
     
-    Route::get('/searchemployees', [EmployeeController::class, 'GetSearchEmployees'])->name('employees.search');
-    Route::get('/employees/create', [EmployeeController::class, 'create'])->name('employees.create');
-    Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
 
     Route::get('/employees/hierarchy', [EmployeeController::class, 'hierarchy'])->name('employees.hierarchy');
 

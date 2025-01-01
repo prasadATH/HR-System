@@ -17,14 +17,14 @@ class EmployeeController extends Controller
     public function GetAllEmployees()
     {
         // Fetch all employees with their departments and paginate (10 per page)
-        $employees = Employee::with(['department'])->paginate(8);
+        $employees = Employee::with(['department', 'position'])->paginate(8);
     
         return view('management.employee-management', compact('employees'));
     }
      // Display the employee management card view
      public function index()
      {
-         $employees = Employee::with(['department'])->paginate(8); // Load relationships
+         $employees = Employee::with(['position', 'department'])->paginate(8); // Load relationships
          return view('management.employee.employee-management', compact('employees'));
      }
  
@@ -47,7 +47,7 @@ class EmployeeController extends Controller
      {
         $employee = Employee::findOrFail($id);
         $education = Education::findOrFail($employee->education_id);
-         // Validate the form data
+
          $validated = $request->validate([
              'full_name' => 'required|string|max:255',
              'first_name' => 'nullable|string|max:255',
@@ -73,7 +73,7 @@ class EmployeeController extends Controller
              'employment_start_date' => 'nullable|date',
              'employment_end_date' => 'nullable|date',
              'status' => 'nullable|string|max:255',
-             'legal_documents' => 'required|array', 
+             'legal_documents' => 'sometimes|required|array', 
              'account_holder_name' => 'required|string',
              'bank_name' => 'required|string',
              'account_no' => 'required|string',
@@ -99,10 +99,9 @@ class EmployeeController extends Controller
                 $imagePath = $request->file('image')->storeAs(
                     'images', time() . '_' . $request->file('image')->getClientOriginalName(), 'public'
                 );
-    
-                $employee = Employee::findOrFail($id);
+        
+                // Delete the old image from storage if it exists
                 if ($employee->image) {
-                    // Delete the old image from storage
                     Storage::disk('public')->delete($employee->image);
                 }
             }
@@ -222,7 +221,7 @@ class EmployeeController extends Controller
     $search = $request->input('search');
 
     // Build the query with relationships
-    $query = Employee::with(['department']);
+    $query = Employee::with(['department', 'position']);
 
     // If a search query exists, filter results
     if ($search) {
@@ -233,6 +232,9 @@ class EmployeeController extends Controller
               ->orWhere('phone', 'LIKE', "%{$search}%")
               ->orWhereHas('department', function($q) use ($search) {
                   $q->where('name', 'LIKE', "%{$search}%");
+              })
+              ->orWhereHas('position', function($q) use ($search) {
+                  $q->where('title', 'LIKE', "%{$search}%");
               });
         });
     }
@@ -259,9 +261,10 @@ class EmployeeController extends Controller
     
 
     public function store(Request $request)
-{
+{// dd($request->all());
     // Validate the form data
-    $validated = $request->validate([
+    try {
+        $validator = Validator::make($request->all(), [
         'full_name' => 'required|string|max:255',
         'first_name' => 'nullable|string|max:255',
         'last_name' => 'nullable|string|max:255',
@@ -305,7 +308,23 @@ class EmployeeController extends Controller
 
         
     ]);
+    if ($validator->fails()) {
+        // Handle validation errors
+        return response()->json([
+            'status' => 'error',
+            'errors' => $validator->errors()
+        ], 422);
+    }
 
+    $validated = $validator->validated();
+    // Proceed with validated data
+} catch (\Exception $e) {
+    // Catch any unexpected exceptions
+    return response()->json([
+        'status' => 'error',
+        'message' => $e->getMessage()
+    ], 500);
+}
 
     try {
 
@@ -313,7 +332,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imagePath = $image->storeAs(
-                'images',  // Store images in the 'images' folder
+                'images',  
                 time() . '_' . $image->getClientOriginalName(),
                 'public'
             );
@@ -331,6 +350,7 @@ class EmployeeController extends Controller
             }
         }
     } catch (\Exception $e) {
+        dd($request->all(), $e->getMessage());
         return redirect()->back()->withErrors(['error' => $e->getMessage()]);
     }
     
@@ -390,8 +410,30 @@ class EmployeeController extends Controller
 
     $employee->save();
 
-    return redirect()->route('employees.create')->with('success', 'Employee added successfully.');
+    return redirect()->route('employee.management')->with('success', 'Employee added successfully.');
 }
+
+public function destroy($id)
+{
+    try {
+        $employee = Employee::findOrFail($id);
+        if ($employee->image) {
+            Storage::disk('public')->delete($employee->image); // Delete the image
+        }
+        if ($employee->legal_documents) {
+            $files = json_decode($employee->legal_documents, true);
+            foreach ($files as $file) {
+                Storage::disk('public')->delete($file); // Delete legal documents
+            }
+        }
+        $employee->delete(); // Delete the employee record
+
+        return redirect()->route('employee.management')->with('success', 'Employee deleted successfully!');
+    } catch (\Exception $e) {
+        return redirect()->route('employee.management')->with('error', 'Failed to delete employee.');
+    }
+}
+
 
 
 public function hierarchy()

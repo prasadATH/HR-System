@@ -5,18 +5,21 @@
 @section('content')
 <!-- Main Content -->
 
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+
 <div class="flex flex-col items-start justify-start w-full px-16">
-<div class="w-full flex space-y-2 space-x-8 border-b-2 border-[#00000080] pb-8 pl-8 pt-8">
-    <div class="flex items-center justify-center w-20 p-4 border-2 border-black rounded-full">
-      <p class="text-3xl"><i class="ri-notification-4-line"></i></p>
-    </div>
-    <div class="flex items-center justify-center w-20 border-2 border-black rounded-full">
-      <img src="{{ asset('build/assets/bg1.png') }}" class="object-cover w-8 h-12">
-    </div>
-    <div class="flex items-center justify-center w-20">
-    <p class="text-3xl"><i class="ri-arrow-down-s-fill"></i></p>
-    </div>
-</div>
+
 <div class="w-full pt-8">
   <div class="flex items-center justify-between w-full">
   <div class="w-full flex justify-end items-end pt-4 pr-2">
@@ -112,14 +115,19 @@
             </div>
             <div class="w-full flex space-x-8">
                 <p class="text-xl"><i class="ri-info-card-fill"></i></p>
+                <p class="text-xl">Manager ID</p>
+            </div>
+            <div class="w-full flex space-x-8">
+                <p class="text-xl"><i class="ri-info-card-fill"></i></p>
                 <p class="text-xl">Probation Period</p>
             </div>
         </div>
         <div class="w-3/4 space-y-4 pl-16 text-black font-bold">   
             <p class="text-xl">{{ $employee->title }}</p>
-            <p class="text-xl">{{ $employee->department->name ?? 'N/A' }}</p>
-            <p class="text-xl">{{ $employee->department->branch ?? 'N/A' }}</p>
+            <p class="text-xl">{{ $employee->department->name ?? 'N/A'}}</p>
+            <p class="text-xl">{{ $employee->department->branch ?? 'N/A'}}</p>
             <p class="text-xl">{{ $employee->employment_type }}</p>
+            <p class="text-xl">{{ $employee->manager_id }}</p>
             <p class="text-xl">{{ $employee->probation_start_date }}</p>
             <p class="text-xl">{{ $employee->probation_period }}</p>
           
@@ -245,6 +253,38 @@
 </div>
 
     </div>
+    <div class="w-full flex flex-col h-auto space-y-8 p-8 bg-[#D9D9D980] rounded-3xl nunito cursor-pointer mt-4 focus:outline-none focus:ring-2 focus:ring-[#52B69A] focus:border-[#184E77]">
+    <div class="w-full flex pl-8">
+        <p class="text-3xl font-bold text-black">Bank Details</p>
+    </div>
+    <div class="w-full flex">
+        <div class="w-1/2 flex flex-col pl-8 space-y-4 text-[#00000080]">
+            <div class="w-full flex space-x-8">
+                <p class="text-xl"><i class="ri-info-card-fill"></i></p>
+                <label for="account_holder_name" class="text-xl">Account Holder Name</label>
+            </div>
+            <div class="w-full flex space-x-8">
+                <p class="text-xl"><i class="ri-info-card-fill"></i></p>
+                <label for="bank_name" class="text-xl">Bank Name</label>
+            </div>
+            <div class="w-full flex space-x-8">
+                <p class="text-xl"><i class="ri-info-card-fill"></i></p>
+                <label for="account_no" class="text-xl">Account No</label>
+            </div>
+            <div class="w-full flex space-x-8">
+                <p class="text-xl"><i class="ri-info-card-fill"></i></p>
+                <label for="branch_name" class="text-xl">Branch Name</label>
+            </div>
+        </div>
+        <div class="w-3/4 space-y-4 pl-16 text-black font-bold">
+            <p class="text-xl">{{ $employee->account_holder_name ?? 'N/A' }}</p>
+            <p class="text-xl">{{ $employee->bank_name ?? 'N/A' }}</p>
+            <p class="text-xl">{{ $employee->account_no ?? 'N/A' }}</p>
+            <p class="text-xl">{{ $employee->branch_name ?? 'N/A' }}</p>
+        </div>
+    </div>
+</div>
+
 
 </div>
 
