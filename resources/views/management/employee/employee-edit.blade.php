@@ -3,6 +3,60 @@
 @section('title', 'Add New Employee')
 
 @section('content')
+@if(session('success'))
+<script>
+     
+    document.addEventListener("DOMContentLoaded", () => {
+        showNotification("{{ session('success') }}");
+    });
+
+    async function showNotification(message) {
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+
+        // Set the message
+        notificationMessage.textContent = message;
+
+        // Slide the notification down
+        setTimeout(() => {
+        // Slide the notification down
+        notification.style.top = '20px';
+
+        // Hide the notification after an additional 3 seconds
+        setTimeout(() => {
+            notification.style.top = '-100px';
+        }, 3000);
+        }, 5000);
+
+        // Optionally send the message to the backend
+        try {
+            const response = await fetch("{{ route('notify') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ message }),
+            });
+
+            if (!response.ok) {
+                console.error('Failed to send notification:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error sending notification:', error);
+        }
+    }
+    </script>
+     @endif
+    @if($errors->any())
+        <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 <div class="flex flex-col items-start justify-start w-full px-16">
 
 
