@@ -220,7 +220,6 @@ public function update(Request $request)
 
     return redirect()->back()->with('success', 'Profile updated successfully.');
 }
-
 public function deleteAccount(Request $request)
 {
     // Ensure the user is authenticated
