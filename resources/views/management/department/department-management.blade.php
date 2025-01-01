@@ -56,7 +56,7 @@
             console.error('Error sending notification:', error);
         }
     }
-    
+    </script>
      @endif
     @if($errors->any())
         <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
@@ -67,7 +67,7 @@
             </ul>
         </div>
     @endif
-</script>
+
 <div class="modal fade" id="editDepartmentModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
 <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
 
