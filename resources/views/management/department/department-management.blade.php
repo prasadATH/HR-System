@@ -68,87 +68,107 @@
         </div>
     @endif
 
-<div class="modal fade" id="editDepartmentModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
-<button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
 
-  <div class="modal-dialog modal-dialog-centered " style="padding: 0;">
-    <div class="rounded-3xl" style="padding-top: 0;" id="editDepartmentContent">
-      <!-- Close Button -->
-      <!-- Dynamically loaded content will be injected here -->
-      <div class="text-center py-4">
-        <p>Loading...</p>
-      </div>
-    </div>
-  </div>
-</div>
 
-    <div class="flex flex-col items-start justify-start w-full px-16">
-
-<div class="w-full pt-8">
-  <div class="flex items-center justify-between w-full">
-    <div class="flex ">
-    <p class="text-6xl font-bold text-black nunito-">Departments</p>
-    </div>
-    <div class="flex items-center space-x-4">
-
-    <!-- Add Employee Button -->
-    <button class="flex items-center justify-center space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]" onclick="openAddModal()">
-        <p class="text-3xl"><i class="ri-add-fill"></i></p>
-        <span>Add Department</span>
-    </button>
-    </div>
-
-  </div>
-</div>
-<nav class="flex py-3" aria-label="Breadcrumb">
-  <ol class="inline-flex items-center space-x-1 md:space-x-3">
-    <li class="inline-flex items-center">
-      <a href="#" class="inline-flex items-center text-3xl font-medium text-[#00000080] hover:text-blue-600">
-        Department
-      </a>
-    </li>
-    <li>
-      <div class="flex items-center">
-        <p class="text-[#00000080] text-3xl"><i class="ri-arrow-right-wide-line"></i></p>
-        <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Department Management</a>
-      </div>
-    </li>
-  </ol>
-</nav>
-
-@foreach ($departments->chunk(4) as $departmentChunk)
-  <div class="grid items-center w-full grid-cols-1 gap-8 pt-8 pb-8 md:grid-cols-4 nunito-">
-  @foreach ($departmentChunk as $department)
-  <a href="{{ route('department.show', $department->department_id) }}" class="block relative">
-      <div class="border-2 border-[#00000080] p-8 space-y-4">
-        <div class="flex flex-col items-center justify-center w-full">
-          <p class="text-4xl text-black font-bold">{{ explode(' ', $department->name)[0] }}</p>
-          <p class="text-2xl text-[#00000099]">Department ID: {{ substr($department->department_id, 0, 5) }}</p>
-        </div>
-        <div class="flex flex-col w-full pt-4 space-y-2 border-l-4 border-[#34A0A4] pl-4">
-          <p class="text-xl font-bold text-black nunito-">Total Number of Employees</p>
-          <p class="text-3xl nunito- text-[#34A0A4] font-bold">{{ $department->employees_count }} </p>
-        </div>
-        <div class="flex flex-col w-full pt-4 space-y-2 border-l-4 border-[#34A0A4] pl-4">
-          <p class="text-xl font-bold text-black nunito-">Total Number of Branches</p>
-          @php
-            
-          @endphp
-          <p class="text-3xl nunito- text-[#34A0A4] font-bold">{{ $department->branch_count }}</p>
+    <div class="modal fade" id="editDepartmentModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
+      <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
+      
+        <div class="modal-dialog modal-dialog-left " style="padding: 0;">
+          <div class="rounded-3xl" style="padding-top: 200px;" id="editDepartmentContent">
+            <!-- Close Button -->
+            <!-- Dynamically loaded content will be injected here -->
+            <div class="text-center py-4">
+              <p>Loading...</p>
+            </div>
+          </div>
         </div>
       </div>
-      </a>
-    @endforeach
-  </div>
-@endforeach
-
+      
+          <div class="flex flex-col items-start justify-start w-full md:px-16">
+      
+      <div class="w-full pt-8">
+        <div class="flex items-center justify-between w-full">
+          <div class="flex ">
+          <p class="md:text-6xl text-4xl font-bold text-black nunito-">Departments</p>
+          </div>
+          <div class="flex items-center space-x-4">
+          <!-- Filter Button -->
   
-</div>
-
-<div class="w-full flex justify-center items-center pt-4">
-    {{ $departments->links('vendor.pagination.tailwind') }}
-</div>
-</div>
+          <!-- Add Employee Button -->
+          <button class="flex items-center justify-center space-x-2 px-8 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]" onclick="openAddModal()">
+              <p class="md:text-3xl"><i class="ri-add-fill"></i></p>
+              <span>Add Department</span>
+          </button>
+          </div>
+      
+        </div>
+      </div>
+      <nav class="flex py-3" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+          <li class="inline-flex items-center">
+            <a href="#" class="inline-flex items-center text-3xl font-medium text-[#00000080] hover:text-blue-600">
+              Department
+            </a>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <p class="text-[#00000080] text-3xl"><i class="ri-arrow-right-wide-line"></i></p>
+              <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Department Management</a>
+            </div>
+          </li>
+        </ol>
+      </nav>
+      
+      @foreach ($departments->chunk(4) as $departmentChunk)
+        <div class="grid items-center w-full grid-cols-2 gap-8 pt-8 pb-8 md:grid-cols-4 nunito-">
+        @foreach ($departmentChunk as $department)
+            <div class="border-2 border-[#00000080] p-8 space-y-4 h-[280px]">
+              <div class="flex flex-col items-center justify-center w-full">
+                <p class="text-4xl text-black font-bold">{{ explode(' ', $department->name)[0] }}</p>
+                <p class="text-2xl text-[#00000099]">Department ID: {{ substr($department->department_id, 0, 5) }}</p>
+              </div>
+              <div class="flex flex-col w-full pt-4 space-y-2 border-l-4 border-[#34A0A4] pl-4">
+                <p class="text-xl font-bold text-black nunito-">Total Number of Employees</p>
+                <p class="text-3xl nunito- text-[#34A0A4] font-bold">{{ $department->employees_count }} </p>
+              </div>
+              <div class="flex flex-col w-full pt-4 space-y-2 border-l-4 border-[#34A0A4] pl-4">
+                <p class="text-xl font-bold text-black nunito-">Total Number of Branches</p>
+                @php
+                  
+                @endphp
+                <p class="text-3xl nunito- text-[#34A0A4] font-bold">{{ $department->branch_count }}</p>
+              </div>
+            </div>
+          @endforeach
+        </div>
+      @endforeach
+      
+        
+      </div>
+      
+      <div class="flex items-center justify-center w-full space-x-4">
+        <!-- Previous Button -->
+        <button class="flex items-center px-2 py-1 text-gray-500 hover:text-black focus:outline-none">
+          <i class="ri-arrow-left-s-line"></i>
+          <span class="ml-1">Prev</span>
+        </button>
+      
+        <!-- Page Numbers -->
+        <div class="flex items-center space-x-2">
+          <button class="flex items-center justify-center w-8 h-8 font-bold text-black bg-teal-200 rounded-full focus:outline-none">1</button>
+          <button class="flex items-center justify-center w-8 h-8 text-black rounded-full hover:bg-gray-200 focus:outline-none">2</button>
+          <button class="flex items-center justify-center w-8 h-8 text-black rounded-full hover:bg-gray-200 focus:outline-none">3</button>
+          <button class="flex items-center justify-center w-8 h-8 text-black rounded-full hover:bg-gray-200 focus:outline-none">4</button>
+        </div>
+      
+        <!-- Next Button -->
+        <button class="flex items-center px-2 py-1 text-gray-500 hover:text-black focus:outline-none">
+          <span class="mr-1">Next</span>
+          <i class="ri-arrow-right-s-line"></i>
+        </button>
+      </div>
+      
+      </div>
 
 <script>
   function toggleGradientText() {

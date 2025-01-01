@@ -2,35 +2,9 @@
 
 @section('title', 'Employee Management')
 
-@section('header-content')
-<div class="w-full flex space-y-2 pb-8 pl-8 pt-8">
-    
-    
-    <form method="GET" action="{{ route('employees.search') }}" class="flex md:w-5/6 w-full space-x-4">
-        <input 
-            name="search" 
-            id="input-field" 
-            type="text" 
-            placeholder="Search employee here" 
-            class="w-full px-4 py-2 border-2 border-[#00000080] text-2xl text-[#00000080] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value="{{ request('search') }}" 
-        />
-        <button 
-            type="submit" 
-            class="text-white text-2xl px-6 py-2 bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]"
-        >
-            Search
-        </button>
-    </form>
-    
-</div>
-@endsection
-
 @section('content')
 <div class="w-full flex h-auto bg-[#FFFFFF]">
     <div class="flex flex-col items-start justify-start w-full px-2">
-     
-                <!-- Add Employee Button
         <div class="w-full flex space-y-2 border-b-2 border-[#00000080] pb-8 pl-8 pt-8">
             <form method="GET" action="{{ route('employees.search') }}" class="flex w-5/6 space-x-4">
                 <input 
@@ -49,29 +23,38 @@
                 </button>
             </form>
         </div>
-         -->
+        
         <div class="w-full pt-4">
             <div class="flex items-center justify-between w-full">
                 <div class="flex">
-                    <p class="md:text-6xl text-4xl font-bold text-black nunito-">EMPLOYEE</p>
+                    <p class="text-6xl font-bold text-black nunito-">EMPLOYEE</p>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <!-- Filter Button -->
-                    <button class="flex items-center justify-between md:w-1/3 px-4 md:py-2 text-[#00000066] md:text-2xl text-xl bg-[#D9D9D980] border-2 border-[#D9D9D980] rounded-md hover:bg-gray-200">
-                        <p class="md:text-3xl"><i class="ri-filter-2-line"></i></p>
-                        <span>Filter</span>
-                        <p class="text-3xl text-[#00000066]"><i class="ri-arrow-down-s-line"></i></p>
-                    </button>
+ 
                     <!-- Add Employee Button -->
                     <a href="{{ route('employees.create') }}" 
-                        class="flex items-center justify-center space-x-2 px-8 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
-                            <p class="md:text-3xl"><i class="ri-add-fill"></i></p>
-                            <span>Add Employee</span>
-                    </a>
+   class="flex items-center justify-center space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+    <p class="text-3xl"><i class="ri-add-fill"></i></p>
+    <span>Add Employee</span>
+</a>
                 </div>
             </div>
         </div>
-        
+        <nav class="flex px-5 py-3" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="#" class="inline-flex items-center text-3xl font-medium text-[#00000080] hover:text-blue-600">
+                        Employee
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <p class="text-[#00000080] text-3xl"><i class="ri-arrow-right-wide-line"></i></p>
+                        <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Employee Management</a>
+                    </div>
+                </li>
+            </ol>
+        </nav>
         <div class="flex">
  
         @if(request('search'))
@@ -80,11 +63,11 @@
  
 </div>
         <!-- Dynamic Employee Cards -->
-        <div class="w-full grid grid-cols-2 md:grid-cols-4 gap-8 items-center pt-8 pb-8">
+        <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-8 items-center pt-8 pb-8">
 
 @foreach ($employees as $employee)
 <a href="{{ route('employee.show', $employee->id) }}" class="block">
-<div class="border-2 border-[#00000066] md:p-8 p-4 space-y-4 h-[320px] rounded-3xl">
+<div class="border-2 border-[#00000066] p-8 space-y-4 rounded-3xl">
 <div class="w-full flex justify-center items-center">
 <div class="w-1/2 flex justify-start items-center">
 <img src="{{ $employee->image ? asset('storage/' . $employee->image) : asset('/bg1.png') }}" class="w-32 h-32 rounded-full">
@@ -110,7 +93,7 @@
 <div class="w-full flex justify-between items-center">
 <div class="w-full flex flex-col">
 <p class="text-xl nunito- text-[#00000080] font-bold">Department</p>
-<p class="text-l nunito- text-black font-bold" style="font-weight: 700;">{{ $employee->department->name ?? 'No Department' }}</p>
+<p class="text-l nunito- text-black font-bold" style="font-weight: 700;">{{ explode(' ', $employee->department->name ?? '')[0] ?? 'No Department' }}</p>
 </div>
 <div class="w-full flex flex-col">
 <p class="text-xl nunito- text-[#00000080] font-bold">Hired Date </p>

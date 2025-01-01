@@ -72,293 +72,290 @@
 
 
 
-<div class="modal fade" id="editAdvanceModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
-<button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
 
-  <div class="modal-dialog modal-dialog-centered " style="padding: 0;">
-    <div class="rounded-3xl" style="padding-top: 0;" id="editAdvanceContent">
-      <!-- Close Button -->
-      <!-- Dynamically loaded content will be injected here -->
-      <div class="text-center py-4">
-        <p>Loading...</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="flex flex-col items-start justify-start w-full px-4">
-
-
-<div class="w-full pt-1">
-  <div class="flex items-center justify-between w-full">
-    <div class="w-full pt-1">
-  <div class="flex items-center justify-between w-full">
-    <div class="flex ">
-    <p class="md:text-6xl text-4xl font-bold text-black nunito-">Advance</p>
-    </div>
-    <div class="flex items-center space-x-4">
-    <!-- Filter Button -->
-    <button class="flex items-center justify-between px-4 md:py-2 py-1 text-[#00000066] md:text-2xl text-xl bg-[#D9D9D980] border-2 border-[#D9D9D980] rounded-md hover:bg-gray-200">
-        <p class="text-3xl"><i class="ri-filter-2-line"></i></p>
-        <span>Filter</span>
-        <p class="text-3xl text-[#00000066]"><i class="ri-arrow-down-s-line"></i></p>
-    </button>
-
-    <!-- Add Employee Button -->   
-    <button class="flex items-center justify-center space-x-2 px-10 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]" onclick="openAddModal()">
-    <p class="text-3xl"><i class="ri-add-fill"></i></p>
-        <span>Add Record</span>
-    </button>
-
-    </div>
-    
-
-  </div>
-  <div class="w-full flex justify-between items-end pt-2">
-    <nav class="flex " aria-label="Breadcrumb">
-  <ol class="inline-flex items-center space-x-1 md:space-x-3 nunito-">
-    <li class="inline-flex items-center">
-      <a href="#" class="inline-flex items-center text-3xl font-medium text-[#00000080] hover:text-blue-600">
-      Advances
-      </a>
-    </li>
-    <li>
-      <div class="flex items-center">
-        <p class="text-[#00000080] text-3xl"><i class="ri-arrow-right-wide-line"></i></p>
-        <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Employee Advance</a>
-      </div>
-    </li>
-  </ol>
-</nav>
-
-
-
-  </div>
-  <div class="w-full flex justify-end items-end pt-2 pb-2">
-  <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
-        <span>Generate Report</span>
-    </button>
-  </div>
-
-</div>
-  </div>
-</div>
-
-
-<div class="w-full flex justify-end items-center">
-<div class="relative w-[300px] nunito- z-10">
-  <!-- Calendar Button -->
-  <button
-    id="calendarButton"
-    class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
-  >
-    <div class="flex items-center space-x-4">
-      <span class="iconify text-[#184E77]" data-icon="mdi:calendar-outline" style="font-size: 20px;"></span>
-      <div>
-        <span class="text-sm text-[#184E77]">Select a day</span>
-        <p id="selectedDate" class="text-lg font-bold">13.03.2021</p>
-      </div>
-    </div>
-    <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
-  </button>
-
-  <!-- Hidden Input for Flatpickr -->
-  <input
-    id="calendarInput"
-    type="text"
-    class="absolute z-10 opacity-0 pointer-events-none"
-  />
-</div>
-</div>
-<div class="flex w-1/3 align-left">
-  <input id="custom-search-input" type="text" placeholder="Search record here" class="w-full px-4 py-2 border-2 border-[#00000080] text-2xl text-[#00000080] rounded-xl"/>
-  </div>
-
-<table class="w-full nunito- border-separate mt-8" style="border-spacing: 0 10px;" id="attendance-table">
-  <thead>
-    <tr class="bg-white">
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Employee</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Advance Amount</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Interest</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Advance Date</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Payment Duration</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Approval Status</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Supporting Docs.</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    @foreach ($advances as $advance)
-    <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500">
-    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl">
-    {{ $advance->employee_name }} 
-    </td>
-    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-    {{ $advance->loan_amount }}
-    </td>
-    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-    {{ $advance->interest_rate }}
-    </td>
-    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-    {{ $advance->loan_start_date }}
-    </td>
-    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-    {{ $advance->duration }}
-    </td>
-    <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-
-    
-  @if (strtolower($advance->status ) === 'approved')
-
-<p class="text-[#47B439] border-2 border-[#47B439] text-center bg-[#47B43933] rounded-xl px-2 py-1 shadow-sm">
-    Approved 
-</p>
-@elseif (strtolower($advance->status ) === 'pending')
-<p class="text-[#FFBF00] border-2 border-[#FFBF00] text-center bg-[#FFBF0033] rounded-xl px-2 py-1 shadow-sm">
-    Pending
-</p>
-@elseif (strtolower($advance->status) === 'rejected')
-<p class="text-[#FF0000] border-2 border-[#FF0000] text-center bg-[#FF000033] rounded-xl px-2 py-1 shadow-sm">
-    Rejected
-</p>
-@endif
-    </td>
-    <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-    @if(!empty($advance->advance_documents) && is_string($advance->advance_documents))
-        @php
-        $documents = json_decode($advance->advance_documents, true);
-        @endphp
-        @if(is_array($documents))
-        <ul>
-            @foreach ($documents as $document)
-            @if(is_string($document))
-                <li>
-                @php
-                    $fileName = basename($document);
-                @endphp
-                <a href="{{ asset('storage/' . $document) }}" target="_blank" class="text-blue-500 underline document-link">
-                    {{ $fileName }}
-                </a>
-                </li>
-            @endif
-            @endforeach
-        </ul>
-        @else
-        <p class="text-gray-500">Invalid documents data</p>
-        @endif
-    @else
-        <p class="text-gray-500">No documents uploaded</p>
-    @endif
-    </td>
-
-    <td class="text-left align-left  bg-[#D9D9D966] rounded-r-xl">
-
-    <!-- Dropdown column -->
-
-    <div class="relative inline-block text-center">
-        <!-- Toggle Button -->
-        <button id="dropdownButton"  class="dropdown-trigger p-2 rounded hover:bg-gray-300">
-        <span class="iconify" data-icon="qlementine-icons:menu-dots-16" style="width: 16px; height: 16px;"></span>
-    </button>
-
-        <!-- Dropdown Menu -->
-        <div id="dropdown-menu" 
-             class="absolute top-0 right-3 mt-12 w-30 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-10">
-            <ul class=" text-gray-700">
-                <li><a href="#" class="block px-2 py-2 hover:bg-gray-100" onclick="openViewModal({
-                employeeName: '{{ $advance->employee_name }}',
-                employeeId: '{{ $advance->employment_ID }}',
-                Amount: '{{ $advance->loan_amount }}',
-                Interest: '{{ $advance->interest_rate }}',
-                StartDate: '{{ $advance->loan_start_date }}',
-                Duration: '{{ $advance->duration }}',
-                Status: '{{ $advance->status}}',
-                Description: '{{ $advance->description }}',
-                supportingDoc: '{{ $advance->advance_documents }}',
-
-            })">
-            View</a></li>
-                <li class="cursor-pointer" ><a onclick="openEditModal({{ $advance->id }})"  class="block px-2 py-2 hover:bg-gray-100">Edit</a></li>
-                <li class="bg-red">
-                  
-                <form action="{{route('advance.destroy', $advance->id) }}" method="POST" class="m-0 p-0">
-@csrf
-            @method('DELETE')
-            <button type="submit" 
-    class="block px-2 py-2 w-full rounded-xl bg-red-600 text-white hover:bg-red-700">
-    Delete
-</button>
-            </form></li>
-            </ul>
-        </div>
-    </div>
- 
-
-
-
-
-
-    </td>
-    </tr>
-    @endforeach
-  </tbody>
-</table>
-
-
-</div>
-
-<div id="view-advance-modal-container" class=" fixed inset-0 bg-black bg-opacity-50 w-full opacity-0 transition-opacity duration-300 flex justify-center items-center hidden z-50">
-
-<div class="w-full flex justify-center items-center rounded-3xl">
-  <!-- Close Button -->
-  <div id="modal-container" class="w-1/3 flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
-    <button onclick="closeAddNewModal()" id="close-button" class="absolute top-4 right-4 text-black font-medium rounded-full text-xl p-4 inline-flex items-center">
-        <span class="iconify" data-icon="ic:baseline-close" style="width: 16px; height: 16px;"></span>
-    </button>
-    <div class="w-full flex flex-col justify-start items-center bg-white p-8 rounded-3xl space-y-8">
-      <div class="flex flex-col justify-center items-center space-y-4">
-        <p class="text-5xl text-black font-bold">Advance</p>
-        <p class="text-3xl text-[#00000080]">Enter the Information about Advance </p>
-      </div>
-        <div class="w-full flex mx-auto pb-8 pt-8 px-16">
-            <div class="w-1/2 flex flex-col space-y-8">
-                <!-- Employee ID -->
-            <p class="text-xl font-bold text-black">Employee Name :</p>
-            <p class="text-xl font-bold text-black">Employee ID :</p>
-            <p class="text-xl font-bold text-black">Advance Amount :</p>
-            <p class="text-xl font-bold text-black">Interest :</p>
-            <p class="text-xl font-bold text-black">Payment Duration :</p>
-            <p class="text-xl font-bold text-black">Approval Status :</p>
-            <p class="text-xl font-bold text-black">Description : </p>
-            <p class="text-xl font-bold text-black">Supporting Doc :</p>
-            </div>
-            <div class="w-1/2 flex flex-col space-y-8">
-            <p class="text-xl font-bold text-black modal-employee-name"></p>
-            <p class="text-xl font-bold text-black modal-employee-id"></p>
-            <p class="text-xl font-bold text-black modal-amount"></p>
-            <p class="text-xl font-bold text-black modal-interest"></p>
-            <p class="text-xl font-bold text-black modal-start-date"></p>
-            <p class="text-xl font-bold text-black modal-duration"></p>
-            <p class="text-xl font-bold text-black modal-status"></p>
-            <p class="text-xl font-bold text-black modal-description"></p>
-            <p class="text-xl font-bold text-black modal-supporting-doc"></p>
-            </div>
-          
-        </div>
-        <!-- Submit Button -->
-        <div class="w-full text-center px-16">
-          <button
-            type="submit"
-            class="w-full bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-white font-bold py-4 px-4 rounded-xl hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-          Done
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+            <div class="modal fade" id="editAdvanceModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
+                <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                
+                  <div class="modal-dialog modal-dialog-centered " style="padding: 0;">
+                    <div class="rounded-3xl" style="padding-top: 0;" id="editAdvanceContent">
+                      <!-- Close Button -->
+                      <!-- Dynamically loaded content will be injected here -->
+                      <div class="text-center py-4">
+                        <p>Loading...</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex flex-col items-start justify-start w-full px-4">
+                
+                
+                <div class="w-full pt-1">
+                  <div class="flex items-center justify-between w-full">
+                    <div class="w-full pt-1">
+                  <div class="flex items-center justify-between w-full">
+                    <div class="flex ">
+                    <p class="md:text-6xl text-4xl font-bold text-black nunito-">Advance</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                    <!-- Filter Button -->
+               
+                
+                    <!-- Add Employee Button -->   
+                    <button class="flex items-center justify-center space-x-2 px-10 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]" onclick="openAddModal()">
+                    <p class="text-3xl"><i class="ri-add-fill"></i></p>
+                        <span>Add Record</span>
+                    </button>
+                
+                    </div>
+                    
+                
+                  </div>
+                  <div class="w-full flex justify-between items-end pt-2">
+                    <nav class="flex " aria-label="Breadcrumb">
+                  <ol class="inline-flex items-center space-x-1 md:space-x-3 nunito-">
+                    <li class="inline-flex items-center">
+                      <a href="#" class="inline-flex items-center text-3xl font-medium text-[#00000080] hover:text-blue-600">
+                      Advances
+                      </a>
+                    </li>
+                    <li>
+                      <div class="flex items-center">
+                        <p class="text-[#00000080] text-3xl"><i class="ri-arrow-right-wide-line"></i></p>
+                        <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Employee Advance</a>
+                      </div>
+                    </li>
+                  </ol>
+                </nav>
+                
+                
+                
+                  </div>
+                  <div class="w-full flex justify-end items-end pt-2 pb-2">
+                  <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+                        <span>Generate Report</span>
+                    </button>
+                  </div>
+                
+                </div>
+                  </div>
+                </div>
+                
+                
+                <div class="w-full flex justify-end items-center">
+                <div class="relative w-[300px] nunito- z-10">
+                  <!-- Calendar Button -->
+                  <button
+                    id="calendarButton"
+                    class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
+                  >
+                    <div class="flex items-center space-x-4">
+                      <span class="iconify text-[#184E77]" data-icon="mdi:calendar-outline" style="font-size: 20px;"></span>
+                      <div>
+                        <span class="text-sm text-[#184E77]">Select a day</span>
+                        <p id="selectedDate" class="text-lg font-bold">13.03.2021</p>
+                      </div>
+                    </div>
+                    <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
+                  </button>
+                
+                  <!-- Hidden Input for Flatpickr -->
+                  <input
+                    id="calendarInput"
+                    type="text"
+                    class="absolute z-10 opacity-0 pointer-events-none"
+                  />
+                </div>
+                </div>
+                <div class="flex w-1/3 align-left">
+                  <input id="custom-search-input" type="text" placeholder="Search record here" class="w-full px-4 py-2 border-2 border-[#00000080] text-2xl text-[#00000080] rounded-xl"/>
+                  </div>
+                
+                <table class="w-full nunito- border-separate mt-8" style="border-spacing: 0 10px;" id="attendance-table">
+                  <thead>
+                    <tr class="bg-white">
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Employee</th>
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Advance Amount</th>
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Interest</th>
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Advance Date</th>
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Payment Duration</th>
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Approval Status</th>
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Supporting Docs.</th>
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($advances as $advance)
+                    <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500">
+                    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl">
+                    {{ $advance->employee_name }} 
+                    </td>
+                    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    {{ $advance->loan_amount }}
+                    </td>
+                    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    {{ $advance->interest_rate }}
+                    </td>
+                    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    {{ $advance->loan_start_date }}
+                    </td>
+                    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    {{ $advance->duration }}
+                    </td>
+                    <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                
+                    
+                  @if (strtolower($advance->status ) === 'approved')
+                
+                <p class="text-[#47B439] border-2 border-[#47B439] text-center bg-[#47B43933] rounded-xl px-2 py-1 shadow-sm">
+                    Approved 
+                </p>
+                @elseif (strtolower($advance->status ) === 'pending')
+                <p class="text-[#FFBF00] border-2 border-[#FFBF00] text-center bg-[#FFBF0033] rounded-xl px-2 py-1 shadow-sm">
+                    Pending
+                </p>
+                @elseif (strtolower($advance->status) === 'rejected')
+                <p class="text-[#FF0000] border-2 border-[#FF0000] text-center bg-[#FF000033] rounded-xl px-2 py-1 shadow-sm">
+                    Rejected
+                </p>
+                @endif
+                    </td>
+                    <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    @if(!empty($advance->advance_documents) && is_string($advance->advance_documents))
+                        @php
+                        $documents = json_decode($advance->advance_documents, true);
+                        @endphp
+                        @if(is_array($documents))
+                        <ul>
+                            @foreach ($documents as $document)
+                            @if(is_string($document))
+                                <li>
+                                @php
+                                    $fileName = basename($document);
+                                @endphp
+                                <a href="{{ asset('storage/' . $document) }}" target="_blank" class="text-blue-500 underline document-link">
+                                    {{ $fileName }}
+                                </a>
+                                </li>
+                            @endif
+                            @endforeach
+                        </ul>
+                        @else
+                        <p class="text-gray-500">Invalid documents data</p>
+                        @endif
+                    @else
+                        <p class="text-gray-500">No documents uploaded</p>
+                    @endif
+                    </td>
+                
+                    <td class="text-left align-left  bg-[#D9D9D966] rounded-r-xl">
+                
+                    <!-- Dropdown column -->
+                
+                    <div class="relative inline-block text-center">
+                        <!-- Toggle Button -->
+                        <button id="dropdownButton"  class="dropdown-trigger p-2 rounded hover:bg-gray-300">
+                        <span class="iconify" data-icon="qlementine-icons:menu-dots-16" style="width: 16px; height: 16px;"></span>
+                    </button>
+                
+                        <!-- Dropdown Menu -->
+                        <div id="dropdown-menu" 
+                             class="absolute top-0 right-3 mt-12 w-30 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-10">
+                            <ul class=" text-gray-700">
+                                <li><a href="#" class="block px-2 py-2 hover:bg-gray-100" onclick="openViewModal({
+                                employeeName: '{{ $advance->employee_name }}',
+                                employeeId: '{{ $advance->employment_ID }}',
+                                Amount: '{{ $advance->loan_amount }}',
+                                Interest: '{{ $advance->interest_rate }}',
+                                StartDate: '{{ $advance->loan_start_date }}',
+                                Duration: '{{ $advance->duration }}',
+                                Status: '{{ $advance->status}}',
+                                Description: '{{ $advance->description }}',
+                                supportingDoc: '{{ $advance->advance_documents }}',
+                
+                            })">
+                            View</a></li>
+                                <li class="cursor-pointer" ><a onclick="openEditModal({{ $advance->id }})"  class="block px-2 py-2 hover:bg-gray-100">Edit</a></li>
+                                <li class="bg-red">
+                                  
+                                <form action="{{route('advance.destroy', $advance->id) }}" method="POST" class="m-0 p-0">
+                @csrf
+                            @method('DELETE')
+                            <button type="submit" 
+                    class="block px-2 py-2 w-full rounded-xl bg-red-600 text-white hover:bg-red-700">
+                    Delete
+                </button>
+                            </form></li>
+                            </ul>
+                        </div>
+                    </div>
+                 
+                
+                
+                
+                
+                
+                    </td>
+                    </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+                
+                
+                </div>
+                
+                <div id="view-advance-modal-container" class=" fixed inset-0 bg-black bg-opacity-50 w-full opacity-0 transition-opacity duration-300 flex justify-center items-center hidden z-50">
+                
+                <div class="w-full flex justify-center items-center rounded-3xl">
+                  <!-- Close Button -->
+                  <div id="modal-container" class="w-1/3 flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
+                    <button onclick="closeAddNewModal()" id="close-button" class="absolute top-4 right-4 text-black font-medium rounded-full text-xl p-4 inline-flex items-center">
+                        <span class="iconify" data-icon="ic:baseline-close" style="width: 16px; height: 16px;"></span>
+                    </button>
+                    <div class="w-full flex flex-col justify-start items-center bg-white p-8 rounded-3xl space-y-8">
+                      <div class="flex flex-col justify-center items-center space-y-4">
+                        <p class="text-5xl text-black font-bold">Advance</p>
+                        <p class="text-3xl text-[#00000080]">Enter the Information about Advance </p>
+                      </div>
+                        <div class="w-full flex mx-auto pb-8 pt-8 px-16">
+                            <div class="w-1/2 flex flex-col space-y-8">
+                                <!-- Employee ID -->
+                            <p class="text-xl font-bold text-black">Employee Name :</p>
+                            <p class="text-xl font-bold text-black">Employee ID :</p>
+                            <p class="text-xl font-bold text-black">Advance Amount :</p>
+                            <p class="text-xl font-bold text-black">Interest :</p>
+                            <p class="text-xl font-bold text-black">Payment Duration :</p>
+                            <p class="text-xl font-bold text-black">Approval Status :</p>
+                            <p class="text-xl font-bold text-black">Description : </p>
+                            <p class="text-xl font-bold text-black">Supporting Doc :</p>
+                            </div>
+                            <div class="w-1/2 flex flex-col space-y-8">
+                            <p class="text-xl font-bold text-black modal-employee-name"></p>
+                            <p class="text-xl font-bold text-black modal-employee-id"></p>
+                            <p class="text-xl font-bold text-black modal-amount"></p>
+                            <p class="text-xl font-bold text-black modal-interest"></p>
+                            <p class="text-xl font-bold text-black modal-start-date"></p>
+                            <p class="text-xl font-bold text-black modal-duration"></p>
+                            <p class="text-xl font-bold text-black modal-status"></p>
+                            <p class="text-xl font-bold text-black modal-description"></p>
+                            <p class="text-xl font-bold text-black modal-supporting-doc"></p>
+                            </div>
+                          
+                        </div>
+                        <!-- Submit Button -->
+                        <div class="w-full text-center px-16">
+                          <button
+                            type="submit"
+                            class="w-full bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-white font-bold py-4 px-4 rounded-xl hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                          >
+                          Done
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
 
 <script>
 
@@ -508,7 +505,7 @@ function openAddModal() {
 
     selectedAddFiles = new DataTransfer();
     // Fetch content from the server
-    fetch(`http://127.0.0.1:8000/dashboard/advances/advance/create`)
+    fetch(`https://hr.jaan.lk/dashboard/advances/advance/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
@@ -661,7 +658,7 @@ function openEditModal(leaveId) {
     selectedFiles = new DataTransfer();
     existingFilesList = [];
 
-    fetch(`http://127.0.0.1:8000/dashboard/advances/advance/${leaveId}/edit`)
+    fetch(`https://hr.jaan.lk/dashboard/advances/advance/${leaveId}/edit`)
         .then(response => response.text())
         .then(html => {
             modalContent.innerHTML = html;

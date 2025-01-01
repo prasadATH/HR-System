@@ -72,283 +72,284 @@
 <!--edit modal start -->
 <!-- Edit Modal -->
 <div class="modal fade" id="editAttendanceModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
-<button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
-
-  <div class="modal-dialog modal-dialog-centered " style="padding: 0;">
-    <div class="rounded-3xl" style="padding-top: 0;" id="editAttendanceContent">
-      <!-- Close Button -->
-      <!-- Dynamically loaded content will be injected here -->
-      <div class="text-center py-4">
-        <p>Loading...</p>
+    <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
+    
+      <div class="modal-dialog modal-dialog-left " style="padding: 0;">
+        <div class="rounded-3xl" style="padding-top: 60px;" id="editAttendanceContent">
+          <!-- Close Button -->
+          <!-- Dynamically loaded content will be injected here -->
+          <div class="text-center py-4">
+            <p>Loading...</p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+    
+    <div class="flex flex-col items-start justify-start w-full px-2">
+    
+    <div class="w-full pt-2">
+      <div class="flex items-center justify-between w-full">
+        <div class="flex ">
+        <p class="md:text-6xl text-4xl font-bold text-black nunito-">Payroll</p>
+        </div>
+        <div class="flex items-center space-x-4">
+    
+    
+        <!-- Filter Button -->
 
-<div class="flex flex-col items-start justify-start w-full px-2">
-
-<div class="w-full pt-2">
-  <div class="flex items-center justify-between w-full">
-    <div class="flex ">
-    <p class="text-6xl font-bold text-black nunito-">Payroll</p>
+    
+        <!-- Add record Button -->
+        <button class="flex items-center justify-center nunito- space-x-2 px-8 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+        <p class="text-3xl"><i class="ri-add-fill"></i></p>
+            <a href="{{ route('payroll.create') }}" >Add Record</a>
+        </button>
+        
+        </div>
+    
+    
+    
+      </div>
+    
+    
+    <!--   <div class="w-1/5 align-right flex items-right justify-center nunito- space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+        <button id="print-table">
+            Print Records
+        </button>
+    </div> -->
     </div>
-    <div class="flex items-center space-x-4">
-
-
-
-
-    <!-- Add record Button -->
-    <button class="flex items-center justify-center nunito- space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
-    <p class="text-3xl"><i class="ri-add-fill"></i></p>
-        <a href="{{ route('payroll.create') }}" >Add Record</a>
-    </button>
+    
+    
+    <nav class="flex py-3" aria-label="Breadcrumb">
+      <ol class="inline-flex items-center space-x-1 md:space-x-3 nunito-">
+        <li class="inline-flex items-center">
+          <a href="#" class="inline-flex items-center text-3xl font-medium text-[#00000080] hover:text-blue-600">
+          Payrolls
+          </a>
+        </li>
+        <li>
+          <div class="flex items-center">
+            <p class="text-[#00000080] text-3xl"><i class="ri-arrow-right-wide-line"></i></p>
+            <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Employee payrolls</a>
+          </div>
+        </li>
+      </ol>
+    </nav>
+    
+    
+    <div class="w-full flex justify-end items-end pt-2 pb-2">
+      <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+            <span>Generate Report</span>
+        </button>
+      </div>
+    
+      <div class="w-full flex justify-between items-center md:space-x-0 space-x-8 py-2">
+    
+    <!-- Search Bar on the Left -->
+    <div class="w-[300px]">
+      <input
+      id="custom-search-input"
+        type="text"
+        placeholder="Search..."
+        class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]"
+      />
+    </div>
+    
+    <!-- Calendar Input on the Right -->
+    <div class="relative w-[300px] nunito-">
+      <button
+        id="calendarButton"
+        class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
+      >
+        <div class="flex items-center space-x-4">
+          <span class="iconify text-[#184E77]" data-icon="mdi:calendar-outline" style="font-size: 20px;"></span>
+          <div>
+            <span class="text-sm text-[#184E77]">Select a day</span>
+            <p id="selectedDate" class="text-lg font-bold">13.03.2021</p>
+          </div>
+        </div>
+        <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
+      </button>
+    
+      <!-- Hidden Calendar Input -->
+      <input
+        id="calendarInput"
+        type="text"
+        class="absolute z-10 opacity-0 pointer-events-none"
+      />
+    </div>
     
     </div>
-
-
-
-  </div>
-
-
-<!--   <div class="w-1/5 align-right flex items-right justify-center nunito- space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
-    <button id="print-table">
-        Print Records
-    </button>
-</div> -->
-</div>
-
-
-<nav class="flex py-3" aria-label="Breadcrumb">
-  <ol class="inline-flex items-center space-x-1 md:space-x-3 nunito-">
-    <li class="inline-flex items-center">
-      <a href="#" class="inline-flex items-center text-3xl font-medium text-[#00000080] hover:text-blue-600">
-      Payrolls
-      </a>
-    </li>
-    <li>
-      <div class="flex items-center">
-        <p class="text-[#00000080] text-3xl"><i class="ri-arrow-right-wide-line"></i></p>
-        <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Employee payrolls</a>
-      </div>
-    </li>
-  </ol>
-</nav>
-
-
-<div class="w-full flex justify-end items-end pt-2 pb-2">
-  <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
-        <span>Generate Report</span>
-    </button>
-  </div>
-
-  <div class="w-full flex justify-between items-center  py-2">
-
-<!-- Search Bar on the Left -->
-<div class="w-[300px]">
-  <input
-  id="custom-search-input"
-    type="text"
-    placeholder="Search..."
-    class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]"
-  />
-</div>
-
-<!-- Calendar Input on the Right -->
-<div class="relative w-[300px] nunito-">
-  <button
-    id="calendarButton"
-    class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
-  >
-    <div class="flex items-center space-x-4">
-      <span class="iconify text-[#184E77]" data-icon="mdi:calendar-outline" style="font-size: 20px;"></span>
-      <div>
-        <span class="text-sm text-[#184E77]">Select a day</span>
-        <p id="selectedDate" class="text-lg font-bold">13.03.2021</p>
-      </div>
+    
+    
+    
+    <table class="w-full nunito- border-separate" style="border-spacing: 0 12px; width: 100%;" id="attendance-table">
+      <thead class="w-full">
+        <tr class="bg-white">
+        <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Employee</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Month</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Salary</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Allowances</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Deductions</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Payable</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Work Hours</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Pay Date</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Status</th>
+    
+          <th class="text-xl w-1/2 text-black font-bold px-4 py-2 text-center align-left hidden">Actions</th>
+    
+        </tr>
+      </thead>
+      <tbody>
+      @foreach ($payrolls as $record)
+      <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500 ">
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl font-bold">
+      {{ $record->employee->first_name }} {{ $record->employee->last_name }}
+            <p class="text-sm">{{ $record->employee->id }}</p>
+      </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+      {{ $record->payroll_month }}
+      </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+      {{ $record->basic_salary }}
+      </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+    {{ number_format($record->total_allowances, 2) }}
+      </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+      {{ number_format($record->total_deductions, 2) }}
+      </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+      {{ $record->payable }}
+      </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+      {{ $record->total_hours }}
+      </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+      {{ $record->pay_date }}
+    
+      </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+    
+      
+      @if (strtolower($record->status ) === 'paid')
+    
+    <p class="text-[#47B439] border-2 border-[#47B439] bg-[#47B43933] rounded-xl px-2 py-1 shadow-sm">
+        Paid 
+    </p>
+    @elseif (strtolower($record->status ) === 'processing')
+    <p class="text-[#FFBF00] border-2 border-[#FFBF00] bg-[#FFBF0033] rounded-xl px-2 py-1 shadow-sm">
+        Processing
+    </p>
+    @endif
+      </td>
+     
+      <td class="text-left align-left  bg-[#D9D9D966] rounded-r-xl">
+      <div class="relative">
+        <!-- Trigger Button -->
+    
     </div>
-    <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
-  </button>
-
-  <!-- Hidden Calendar Input -->
-  <input
-    id="calendarInput"
-    type="text"
-    class="absolute z-10 opacity-0 pointer-events-none"
-  />
-</div>
-
-</div>
-
-
-
-<table class="w-full nunito- border-separate" style="border-spacing: 0 12px; width: 100%;" id="attendance-table">
-  <thead class="w-full">
-    <tr class="bg-white">
-    <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Employee</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Month</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Salary</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Allowances</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Deductions</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Payable</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Work Hours</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Pay Date</th>
-      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Status</th>
-
-      <th class="text-xl w-1/2 text-black font-bold px-4 py-2 text-center align-left hidden">Actions</th>
-
+    
+    
+    
+    
+    
+    <div class="relative inline-block text-center">
+            <!-- Toggle Button -->
+            <button id="dropdownButton"  class="dropdown-trigger p-2 rounded hover:bg-gray-300">
+            <span class="iconify" data-icon="qlementine-icons:menu-dots-16" style="width: 16px; height: 16px;"></span>
+        </button>
+    
+            <!-- Dropdown Menu -->
+            <div id="dropdown-menu" 
+                 class="absolute top-0 right-3 mt-12 w-30 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-10">
+                <ul class=" text-gray-700">
+                    <li><a href="{{ route('payroll.details', ['id' => $record->id]) }}" class="block px-2 py-2 hover:bg-gray-100" >
+                View</a></li>
+                    <li class="cursor-pointer" ><a onclick="openEditModal({{ $record->id}})"  class="block px-2 py-2 hover:bg-gray-100">Edit</a></li>
+                    <li class="bg-red">
+                      
+                    <form action="{{ route('incident.destroy', ['id' => $record->id]) }}" method="POST" class="m-0 p-0">
+    @csrf
+                @method('DELETE')
+                <button type="submit" 
+        class="block px-2 py-2 w-full rounded-xl bg-red-600 text-white hover:bg-red-700">
+        Delete
+    </button>
+                </form></li>
+                </ul>
+            </div>
+        </div>
+     
+      </td>
     </tr>
-  </thead>
-  <tbody>
-  @foreach ($payrolls as $record)
-  <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500 ">
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl font-bold">
-  {{ $record->employee->first_name }} {{ $record->employee->last_name }}
-        <p class="text-sm">{{ $record->employee->id }}</p>
-  </td>
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-  {{ $record->payroll_month }}
-  </td>
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-  {{ $record->basic_salary }}
-  </td>
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-{{ number_format($record->total_allowances, 2) }}
-  </td>
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-  {{ number_format($record->total_deductions, 2) }}
-  </td>
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-  {{ $record->payable }}
-  </td>
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-  {{ $record->total_hours }}
-  </td>
-  <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-  {{ $record->pay_date }}
-
-  </td>
-  <td class="text-xl text-black px-4 py-2 text-center align-middle bg-[#D9D9D966]">
-
-  
-  @if (strtolower($record->status ) === 'paid')
-
-<p class="text-[#47B439] border-2 border-[#47B439] bg-[#47B43933] rounded-xl px-2 py-1 shadow-sm">
-    Paid 
-</p>
-@elseif (strtolower($record->status ) === 'processing')
-<p class="text-[#FFBF00] border-2 border-[#FFBF00] bg-[#FFBF0033] rounded-xl px-2 py-1 shadow-sm">
-    Processing
-</p>
-@endif
-  </td>
- 
-  <td class="text-left align-left  bg-[#D9D9D966] rounded-r-xl">
-  <div class="relative">
-    <!-- Trigger Button -->
-
-</div>
-
-
-
-
-
-<div class="relative inline-block text-center">
-        <!-- Toggle Button -->
-        <button id="dropdownButton"  class="dropdown-trigger p-2 rounded hover:bg-gray-300">
-        <span class="iconify" data-icon="qlementine-icons:menu-dots-16" style="width: 16px; height: 16px;"></span>
-    </button>
-
-        <!-- Dropdown Menu -->
-        <div id="dropdown-menu" 
-             class="absolute top-0 right-3 mt-12 w-30 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-10">
-            <ul class=" text-gray-700">
-                <li><a href="{{ route('payroll.details', ['id' => $record->id]) }}" class="block px-2 py-2 hover:bg-gray-100" >
-            View</a></li>
-                <li class="cursor-pointer" ><a onclick="openEditModal({{ $record->id}})"  class="block px-2 py-2 hover:bg-gray-100">Edit</a></li>
-                <li class="bg-red">
-                  
-                <form action="{{ route('incident.destroy', ['id' => $record->id]) }}" method="POST" class="m-0 p-0">
-@csrf
-            @method('DELETE')
-            <button type="submit" 
-    class="block px-2 py-2 w-full rounded-xl bg-red-600 text-white hover:bg-red-700">
-    Delete
-</button>
-            </form></li>
-            </ul>
-        </div>
+    @endforeach
+      </tbody>
+    </table>
+    
+    
+    
+    
     </div>
- 
-  </td>
-</tr>
-@endforeach
-  </tbody>
-</table>
-
-
-
-
-</div>
-
-
-<!--View record form start-->
-<div id="view-attendance-modal-container" class=" fixed inset-0 bg-black bg-opacity-50 w-full opacity-0 transition-opacity duration-300 flex justify-center items-center hidden z-50">
-
-<div class="w-full flex justify-center items-center rounded-3xl">
-  <!-- Close Button -->
-  <div id="modal-container" class="w-1/3 flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
-    <button onclick="closeViewModal()" id="close-button" class="absolute top-4 right-4 text-black font-medium rounded-full text-xl p-4 inline-flex items-center">
-        <span class="iconify" data-icon="ic:baseline-close" style="width: 16px; height: 16px;"></span>
-    </button>
-    <div class="w-full flex flex-col justify-start items-center bg-white p-8 rounded-3xl space-y-8">
-      <div class="flex flex-col justify-center items-center space-y-4">
-        <p class="text-5xl text-black font-bold">Incident</p>
-        <p class="text-3xl text-[#00000080]">Enter the Information about Incidents</p>
-      </div>
-        <div class="w-full flex mx-auto pb-8 pt-8 px-16">
-            <div class="w-1/2 flex flex-col space-y-8">
-                <!-- Employee ID -->
-            <p class="text-xl font-bold text-black">Employee Name :</p>
-            <p class="text-xl font-bold text-black">Employee ID :</p>
-            <p class="text-xl font-bold text-black">Incident Type :</p>
-            <p class="text-xl font-bold text-black">Incident Date :</p>
-            <p class="text-xl font-bold text-black">Resolution Status :</p>
-            <p class="text-xl font-bold text-black">Description :</p>
-            <p class="text-xl font-bold text-black">Added on :</p>
-            <p class="text-xl font-bold text-black">Supporting Documents : </p>
+    
+    
+    <!--View record form start-->
+    <div id="view-attendance-modal-container" class=" fixed inset-0 bg-black bg-opacity-50 w-full opacity-0 transition-opacity duration-300 flex justify-center items-center hidden z-50">
+    
+    <div class="w-full flex justify-center items-center rounded-3xl">
+      <!-- Close Button -->
+      <div id="modal-container" class="w-1/3 flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
+        <button onclick="closeViewModal()" id="close-button" class="absolute top-4 right-4 text-black font-medium rounded-full text-xl p-4 inline-flex items-center">
+            <span class="iconify" data-icon="ic:baseline-close" style="width: 16px; height: 16px;"></span>
+        </button>
+        <div class="w-full flex flex-col justify-start items-center bg-white p-8 rounded-3xl space-y-8">
+          <div class="flex flex-col justify-center items-center space-y-4">
+            <p class="text-5xl text-black font-bold">Incident</p>
+            <p class="text-3xl text-[#00000080]">Enter the Information about Incidents</p>
+          </div>
+            <div class="w-full flex mx-auto pb-8 pt-8 px-16">
+                <div class="w-1/2 flex flex-col space-y-8">
+                    <!-- Employee ID -->
+                <p class="text-xl font-bold text-black">Employee Name :</p>
+                <p class="text-xl font-bold text-black">Employee ID :</p>
+                <p class="text-xl font-bold text-black">Incident Type :</p>
+                <p class="text-xl font-bold text-black">Incident Date :</p>
+                <p class="text-xl font-bold text-black">Resolution Status :</p>
+                <p class="text-xl font-bold text-black">Description :</p>
+                <p class="text-xl font-bold text-black">Added on :</p>
+                <p class="text-xl font-bold text-black">Supporting Documents : </p>
+                </div>
+                <div class="w-1/2 flex flex-col space-y-8">
+                <p class="text-xl font-bold text-black modal-employee-name"></p>
+    <p class="text-xl font-bold text-black modal-employee-id"></p>
+    <p class="text-xl font-bold text-black modal-incident-type"></p>
+    <p class="text-xl font-bold text-black modal-incident-date"></p>
+    <p class="text-xl font-bold text-black modal-resolution-status"></p>
+    <p class="text-xl font-bold text-black modal-description"></p>
+    <p class="text-xl font-bold text-black modal-created"></p>
+    <p class="text-xl font-bold text-black modal-supporting-document"></p>
+    
+    
+                </div>
+              
             </div>
-            <div class="w-1/2 flex flex-col space-y-8">
-            <p class="text-xl font-bold text-black modal-employee-name"></p>
-<p class="text-xl font-bold text-black modal-employee-id"></p>
-<p class="text-xl font-bold text-black modal-incident-type"></p>
-<p class="text-xl font-bold text-black modal-incident-date"></p>
-<p class="text-xl font-bold text-black modal-resolution-status"></p>
-<p class="text-xl font-bold text-black modal-description"></p>
-<p class="text-xl font-bold text-black modal-created"></p>
-<p class="text-xl font-bold text-black modal-supporting-document"></p>
-
-
+            <!-- Submit Button -->
+            <div class="w-full text-center px-16">
+              <button
+                type="submit"
+                class="w-full bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-white font-bold py-4 px-4 rounded-xl hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+              Done
+              </button>
             </div>
-          
-        </div>
-        <!-- Submit Button -->
-        <div class="w-full text-center px-16">
-          <button
-            type="submit"
-            class="w-full bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-white font-bold py-4 px-4 rounded-xl hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-          Done
-          </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-
-
-</div>
-<!--View record form end-->
+    
+    
+    
+    </div>
+    <!--View record form end-->
 
 <script>
 
