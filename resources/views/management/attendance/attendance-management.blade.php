@@ -294,7 +294,7 @@ function openEditModal(attendanceId) {
   $('#editAttendanceContent input').prop('disabled', false);
 });
     // Fetch content from the server
-    fetch(`http://127.0.0.1:8000/dashboard/attendance/create`)
+    fetch(`https://hr.jaan.lk/dashboard/attendance/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
