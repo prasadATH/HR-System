@@ -221,7 +221,7 @@ class EmployeeController extends Controller
     $search = $request->input('search');
 
     // Build the query with relationships
-    $query = Employee::with(['department', 'position']);
+    $query = Employee::with(['department']);
 
     // If a search query exists, filter results
     if ($search) {
@@ -232,10 +232,8 @@ class EmployeeController extends Controller
               ->orWhere('phone', 'LIKE', "%{$search}%")
               ->orWhereHas('department', function($q) use ($search) {
                   $q->where('name', 'LIKE', "%{$search}%");
-              })
-              ->orWhereHas('position', function($q) use ($search) {
-                  $q->where('title', 'LIKE', "%{$search}%");
               });
+              
         });
     }
 
@@ -245,6 +243,7 @@ class EmployeeController extends Controller
 
         return view('management.employee.employee-management', compact('search', 'employees'));
 }
+
 
     // Show the form to add a new employee
     public function create()
