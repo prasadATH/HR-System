@@ -135,7 +135,7 @@
             <!-- Rest of your employee card content -->
             <div class="w-full flex justify-center items-center">
                 <div class="w-1/2 flex justify-start items-center">
-                    <img src="{{ $employee->image ? asset('storage/' . $employee->image) : asset('build/assets/bg1.png') }}" class="w-32 h-32 rounded-full">
+                    <img src="{{ $employee->image ? asset('storage/' . $employee->image) : asset('/bg1.png') }}" class="w-32 h-32 rounded-full">
                 </div>
                 <div class="w-1/2 flex flex-col justify-center items-center space-y-8 pt-4">
                     <div class="w-full h-1/2 flex justify-center items-center">
