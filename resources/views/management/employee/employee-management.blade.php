@@ -3,7 +3,7 @@
 @section('title', 'Employee Management')
 
 @section('content')
-
+@if(session('success'))
 <script>
      
     document.addEventListener("DOMContentLoaded", () => {
