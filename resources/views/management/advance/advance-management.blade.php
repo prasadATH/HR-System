@@ -94,12 +94,13 @@
     <div class="w-full pt-1">
   <div class="flex items-center justify-between w-full">
     <div class="flex ">
-    <p class="text-6xl font-bold text-black nunito-">Advance</p>
+    <p class="md:text-6xl text-4xl font-bold text-black nunito-">Advance</p>
     </div>
     <div class="flex items-center space-x-4">
 
+
     <!-- Add Employee Button -->   
-    <button class="flex items-center justify-center space-x-2 px-10 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]" onclick="openAddModal()">
+    <button class="flex items-center justify-center space-x-2 px-10 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]" onclick="openAddModal()">
     <p class="text-3xl"><i class="ri-add-fill"></i></p>
         <span>Add Record</span>
     </button>
@@ -140,7 +141,7 @@
 
 
 <div class="w-full flex justify-end items-center">
-<div class="relative w-[300px] nunito-">
+<div class="relative w-[300px] nunito- z-10">
   <!-- Calendar Button -->
   <button
     id="calendarButton"
@@ -199,20 +200,20 @@
     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
     {{ $advance->duration }}
     </td>
-    <td class="text-xl text-[#3569C3] px-4 py-2 text-center align-middle bg-[#D9D9D966]">
+    <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
 
     
   @if (strtolower($advance->status ) === 'approved')
 
-<p class="text-[#47B439] border-2 border-[#47B439] bg-[#47B43933] rounded-xl px-2 py-1 shadow-sm">
+<p class="text-[#47B439] border-2 border-[#47B439] text-center bg-[#47B43933] rounded-xl px-2 py-1 shadow-sm">
     Approved 
 </p>
 @elseif (strtolower($advance->status ) === 'pending')
-<p class="text-[#FFBF00] border-2 border-[#FFBF00] bg-[#FFBF0033] rounded-xl px-2 py-1 shadow-sm">
+<p class="text-[#FFBF00] border-2 border-[#FFBF00] text-center bg-[#FFBF0033] rounded-xl px-2 py-1 shadow-sm">
     Pending
 </p>
 @elseif (strtolower($advance->status) === 'rejected')
-<p class="text-[#FF0000] border-2 border-[#FF0000] bg-[#FF000033] rounded-xl px-2 py-1 shadow-sm">
+<p class="text-[#FF0000] border-2 border-[#FF0000] text-center bg-[#FF000033] rounded-xl px-2 py-1 shadow-sm">
     Rejected
 </p>
 @endif
@@ -502,7 +503,7 @@ function openAddModal() {
 
     selectedAddFiles = new DataTransfer();
     // Fetch content from the server
-    fetch(`https://hr.jaan.lk/dashboard/advances/advance/create`)
+    fetch(`http://127.0.0.1:8000/dashboard/advances/advance/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
@@ -655,7 +656,7 @@ function openEditModal(leaveId) {
     selectedFiles = new DataTransfer();
     existingFilesList = [];
 
-    fetch(`https://hr.jaan.lk/dashboard/advances/advance/${leaveId}/edit`)
+    fetch(`http://127.0.0.1:8000/dashboard/advances/advance/${leaveId}/edit`)
         .then(response => response.text())
         .then(html => {
             modalContent.innerHTML = html;

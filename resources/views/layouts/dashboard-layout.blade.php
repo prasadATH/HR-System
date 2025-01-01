@@ -38,8 +38,8 @@
 </head>
 <body class="bg-gray-100">
 
-<div class="w-full flex h-auto bg-[#FFFFFF]">
-<div class="w-1/5 bg-[#D9D9D9] rounded-3xl pt-24 shadow-md p-8 flex flex-col justify-center items-center">
+<div class=" w-full flex h-auto bg-[#FFFFFF]">
+<div class="w-1/5 bg-[#D9D9D9] rounded-3xl pt-24 md:inline hidden shadow-md p-8 flex flex-col justify-center items-center">
   <!-- Main Menu -->
   <div class="w-5/6 mb-6 space-y-8">
     <h2 class="text-[#00000080] font-extrabold text-4xl mb-4 nunito-">MAIN MENU</h2>
@@ -49,9 +49,7 @@
         <div class="flex items-center w-full space-x-4">
        
         <span class="iconify" data-icon="ic:baseline-dashboard" style="width: 16px; height: 16px;"></span>
-            <span id="dashboard" class="{{request()->routeIs('dashboard.management') ? 'text-green-700': 'text-black' }} text-2xl text-black nunito-" style="font-weight: 700;">Dashboard</span>
-
-
+            <span id="dashboard" class="text-2xl text-black nunito-" style="font-weight: 700;">Dashboard</span>
 
             </div>
         </a>
@@ -71,7 +69,6 @@
             <span class="iconify" data-icon="ic:round-man" style="width: 16px; height: 16px;"></span>
             <p id="EmployeeText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">Employee</p>
             </div>
-       
         </button>
         </a>
 
@@ -95,7 +92,6 @@
 
     </button>
 
-      
 
 
     </li>
@@ -115,7 +111,7 @@
           <p id="ExpensesText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">Expenses</p>
           </a>
         </div>
-        
+
       </button>
 
     </li>
@@ -137,7 +133,10 @@
       </div>
         </button>
         
+        <div id="attendanceMenu" class="flex items-center hidden">
 
+
+  </div>
       </li>
       <li>
         <button class="flex items-center justify-between w-full space-x-2 text-gray-600 hover:text-blue-500 focus:outline-none" onclick="toggleMenu('leavesMenu'); toggleGradientText4()">
@@ -147,7 +146,6 @@
         <p id="LeaveText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">Leave</p>
       </a>    
       </div>
-   
         </button>
 
       </li>
@@ -158,7 +156,7 @@
       <span class="text-2xl font-bold text-black nunito-" style="font-weight: 700;">Company Structure</span></a></li>
       <a href="{{route('setting.management')}}" class="flex items-center space-x-2 text-gray-600 hover:text-blue-500">
       <span class="iconify" data-icon="proicons:settings" style="width: 16px; height: 16px;"></span>
-    <span class="text-2xl font-bold text-black nunito-">Settings</span>
+    <span class="text-2xl font-bold text-black nunito-" style="font-weight: 700;">Settings</span>
     </a>
   
     </ul>
@@ -174,20 +172,200 @@
 
 
         <!-- Main Content -->
-        <div class="w-4/5 flex flex-col p-8">
+        <div class="w-full flex flex-col p-8">
+          
             <div class="flex items-center justify-between  border-b border-gray-200">
-                <h1 class="text-3xl font-bold">@yield('title', 'Dashboard')</h1>
+              <div class="w-1/5 flex justify-start items-center md:hidden p-4 cursor-pointer" id="menuTrigger">
+                <p class="text-5xl"><i class="ri-menu-line"></i></p>
+              </div>
+                @yield('header-content')
             
-                <div class="w-1/7 flex space-y-2 space-x-8  pb-8 pl-8 pt-8 align-right justify-center">
+                <div class="w-full flex justify-between items-center space-y-2 space-x-8  pb-8 pl-8 pt-8 align-right">
+<!-- Menu Trigger -->
 
-    <div class="flex items-center justify-center w-24 h-24 p-4 border-2 border-black rounded-full mt-2">
-      <p class="text-5xl"><span class="iconify" data-icon="ic:round-notifications-active" style="width: 50px;"></span></p>
-    </div>
-    <div class="relative">
+
+<!-- Sidebar -->
+<div id="sidebarMenu" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-40">
+  <div class="absolute left-0 top-0 h-full w-1/3 md:w-1/2 bg-[#D9D9D9] rounded-r-lg shadow-lg p-4 nunito-">
+    <!-- Close Button -->
+    <button id="closeSidebar" class="text-gray-500 focus:outline-none mb-4">
+      <span class="iconify" data-icon="ic:round-close" style="font-size: 24px;"></span>
+    </button>
+    <!-- Sidebar Content -->
+    <h2 class="text-3xl font-bold text-[#00000080] mb-6">Main Menu</h2>
+    <ul class="space-y-8 text-xl" id="menu">
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="ic:baseline-dashboard" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('dashboard.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Dashboard
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="fluent-emoji-high-contrast:department-store" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('department.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Departments
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="ic:round-man" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('employee.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Employee
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="fluent:reciept-20-filled" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('payroll.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Payroll
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="majesticons:money" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('advance.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Advance
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="material-symbols-light:list-alt" style="width: 16px; height: 16px;"></span>
+        <li>
+        <a href="{{ route('expense.management') }}"
+           class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+          Expenses
+        </a>
+      </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="uil:calender" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('attendance.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Attendance
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="simple-line-icons:calender" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('leave.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Leave
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="material-symbols:event-list" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('incident.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Incident
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="hugeicons:structure-03" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('employees.hierarchy') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+             Company Structure
+          </a>
+        </li>
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="proicons:settings" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('setting.management') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+             Settings
+          </a>
+        </li>
+      </div>
+      
+    </ul>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuLinks = document.querySelectorAll(".menu-link");
+
+    // Add click event listener for gradient effect
+    menuLinks.forEach(link => {
+      link.addEventListener("click", function () {
+        // Remove gradient from all links
+        menuLinks.forEach(l => {
+          l.classList.remove(
+            "bg-gradient-to-r",
+            "from-[#184E77]",
+            "to-[#52B69A]",
+            "bg-clip-text",
+            "text-transparent"
+          );
+          l.classList.add("text-gray-800");
+        });
+
+        // Add gradient to clicked link
+        this.classList.remove("text-gray-800");
+        this.classList.add(
+          "bg-gradient-to-r",
+          "from-[#184E77]",
+          "to-[#52B69A]",
+          "bg-clip-text",
+          "text-transparent"
+        );
+      });
+    });
+  });
+</script>
+
+<script>
+  // Select elements
+  const menuTrigger = document.getElementById("menuTrigger");
+  const sidebarMenu = document.getElementById("sidebarMenu");
+  const closeSidebar = document.getElementById("closeSidebar");
+
+  // Show the sidebar menu
+  menuTrigger.addEventListener("click", () => {
+    sidebarMenu.classList.remove("hidden");
+  });
+
+  // Hide the sidebar menu
+  closeSidebar.addEventListener("click", () => {
+    sidebarMenu.classList.add("hidden");
+  });
+
+  // Hide the sidebar menu when clicking outside
+  sidebarMenu.addEventListener("click", (event) => {
+    if (event.target === sidebarMenu) {
+      sidebarMenu.classList.add("hidden");
+    }
+  });
+</script>
+
+    
+    <div class="relative w-full flex justify-end items-center space-x-4">
+      <div class="flex items-center justify-center md:w-24 md:h-24 w-16 h-16 md:p-4 border-2 border-black rounded-full">
+      
+        <p class="md:text-5xl text-4xl"><span class="iconify" data-icon="ic:round-notifications-active" style="width: 50px;"></span></p>
+      </div>
     <!-- Trigger for dropdown -->
     <div class="flex items-center justify-center space-x-2 cursor-pointer" onclick="toggleDropdown()">
     <!-- Rounded image -->
-    <img src="/bg1.png" class=" flex justify-center rounded-full w-24 h-24 object-cover"> <!-- Adjusted width and height for a square shape to maintain roundness -->
+    <img src="/bg1.png" class=" flex justify-center rounded-full md:w-24 md:h-24 w-16 h-16 object-cover"> <!-- Adjusted width and height for a square shape to maintain roundness -->
 
     <!-- Arrow icon -->
     <div class="flex items-center justify-center">
@@ -283,24 +461,6 @@ function toggleDropdown() {
 
 
 <script>
-   document.addEventListener('DOMContentLoaded', () => {
-    const menuItems = document.querySelectorAll('.menu-item');
-
-    menuItems.forEach(item => {
-      item.addEventListener('click', function (e) {
-        // Prevent default behavior if necessary
-        e.preventDefault();
-
-        // Remove the active class from all menu items
-        menuItems.forEach(menu => menu.classList.remove('text-blue-500', 'font-extrabold'));
-
-        // Add the active class to the clicked menu item
-        this.classList.add('text-blue-500', 'font-extrabold');
-      });
-    });
-  });
-
-
   function toggleGradientText() {
     const textElement = document.getElementById('payrollText');
     if (textElement.classList.contains('text-black')) {
