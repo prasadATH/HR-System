@@ -170,63 +170,63 @@
       
       </div>
 
-<script>
-  function toggleGradientText() {
-    const textElement = document.getElementById('payrollText');
-    if (textElement.classList.contains('text-black')) {
-      // Apply gradient
-      textElement.classList.remove('text-black');
-      textElement.classList.add('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
-    } else {
-      // Revert to black
-      textElement.classList.add('text-black');
-      textElement.classList.remove('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
-    }
-  }
-  
-  function toggleMenu(menuId) {
-    const menu = document.getElementById(menuId);
-    menu.classList.toggle('hidden');
-  }
-  const textElements = document.querySelectorAll('span.text-xl');
-
-textElements.forEach((element) => {
-    element.addEventListener('click', function () {
-        // Reset all text elements to black
-        textElements.forEach((el) => {
-            el.classList.remove('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
-            el.classList.add('text-black');
-        });
-
-        // Apply gradient to the clicked element
-        this.classList.remove('text-black');
-        this.classList.add('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
-    });
-});
-
-function openAddModal() {
-    const modal = new bootstrap.Modal(document.getElementById('editDepartmentModal'));
-    modal.show();
-
-    const modalContent = document.getElementById('editDepartmentContent');
-    modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
-
-    // Fetch content from the server
-    fetch(`https://hr.jaan.lk/management/department-management/create`)
-      .then(response => response.text())
-      .then(html => {
-        modalContent.innerHTML = html;
-
-         // Reinitialize any necessary scripts or event listeners if required
-      })
-      .catch(error => {
-        modalContent.innerHTML = '<div class="text-center py-4 text-danger"><p>Error loading content. Please try again later.</p></div>';
-        console.error('Error:', error);
+      <script>
+        function toggleGradientText() {
+          const textElement = document.getElementById('payrollText');
+          if (textElement.classList.contains('text-black')) {
+            // Apply gradient
+            textElement.classList.remove('text-black');
+            textElement.classList.add('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
+          } else {
+            // Revert to black
+            textElement.classList.add('text-black');
+            textElement.classList.remove('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
+          }
+        }
+        
+        function toggleMenu(menuId) {
+          const menu = document.getElementById(menuId);
+          menu.classList.toggle('hidden');
+        }
+        const textElements = document.querySelectorAll('span.text-xl');
+      
+      textElements.forEach((element) => {
+          element.addEventListener('click', function () {
+              // Reset all text elements to black
+              textElements.forEach((el) => {
+                  el.classList.remove('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
+                  el.classList.add('text-black');
+              });
+      
+              // Apply gradient to the clicked element
+              this.classList.remove('text-black');
+              this.classList.add('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
+          });
       });
-}
-
-</script>
-  
-
-
-@endsection
+      
+      function openAddModal() {
+          const modal = new bootstrap.Modal(document.getElementById('editDepartmentModal'));
+          modal.show();
+      
+          const modalContent = document.getElementById('editDepartmentContent');
+          modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
+      
+          // Fetch content from the server
+          fetch(`https://hr.jaan.lk/dashboard/departments/department/create`)
+            .then(response => response.text())
+            .then(html => {
+              modalContent.innerHTML = html;
+      
+               // Reinitialize any necessary scripts or event listeners if required
+            })
+            .catch(error => {
+              modalContent.innerHTML = '<div class="text-center py-4 text-danger"><p>Error loading content. Please try again later.</p></div>';
+              console.error('Error:', error);
+            });
+      }
+      
+      </script>
+        
+      
+      
+      @endsection

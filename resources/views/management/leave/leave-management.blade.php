@@ -93,13 +93,7 @@
                     </div>
                     <div class="flex items-center space-x-4">
                 
-                
-                    <!-- Filter Button -->
-                    <button class="flex items-center justify-between px-4 md:py-2 py-1 text-[#00000066] md:text-2xl text-xl bg-[#D9D9D980] border-2 border-[#D9D9D980] rounded-md hover:bg-gray-200">
-                        <p class="text-3xl"><i class="ri-filter-2-line"></i></p>
-                        <span>Filter</span>
-                        <p class="text-3xl text-[#00000066]"><i class="ri-arrow-down-s-line"></i></p>
-                    </button>
+        
                 
                     <!-- Add record Button -->
                 

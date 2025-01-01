@@ -186,7 +186,7 @@
 
 <!-- Sidebar -->
 <div id="sidebarMenu" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-40">
-  <div class="absolute left-0 top-0 h-full w-1/3 md:w-1/2 bg-[#D9D9D9] rounded-r-lg shadow-lg p-4 nunito-">
+  <div class="absolute left-0 top-0 h-full w-1/2 md:hidden bg-[#D9D9D9] rounded-r-lg shadow-lg p-4 nunito-">
     <!-- Close Button -->
     <button id="closeSidebar" class="text-gray-500 focus:outline-none mb-4">
       <span class="iconify" data-icon="ic:round-close" style="font-size: 24px;"></span>
