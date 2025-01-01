@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class DepartmentController extends Controller
 {
+    
     public function create()
     {
         return view('management.department.department-create');
@@ -50,7 +53,7 @@ class DepartmentController extends Controller
                 }
             }
         }
-        
+      
         // If department does not exist, create a new department
         $department = new Department();
         $department->department_id = $validated['department_id'];
@@ -62,5 +65,45 @@ class DepartmentController extends Controller
         return redirect()
             ->route('department.management')
             ->with('success', 'Department added successfully');
-    }        
+    }      
+    public function show($department_id) {
+        // Fetch the department and employees with branch details
+        $departments = DB::table('departments')
+            ->leftJoin('employees', 'departments.id', '=', 'employees.department_id')
+            ->select(
+                'departments.department_id',
+                'employees.department_id',
+                'departments.name',
+                'departments.branch',
+                'employees.full_name',
+                'employees.email',
+            )
+            ->where('departments.department_id', $department_id)
+            ->get()
+            ->groupBy('branch'); 
+ 
+            if ($departments->isEmpty()) {
+                return redirect()->back()->with('error', 'No department found with the given ID.');
+            }
+        
+        
+            return view('management.department.department-details', compact('departments'));
+    }
+    
+    
+  
+    public function deleteBranch($branch, $department_id){
+        try {
+            // Delete all employees in this branch of this department
+            $department = Department::findOrFail($department_id);
+            $department->delete();
+            
+            return redirect()->back()->with('success', 'Branch deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to delete branch');
+        }
+    }
+
+    
 }
+

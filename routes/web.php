@@ -172,4 +172,10 @@ Route::patch('/todos/{todo}', [DashboardController::class, 'updateTodoStatus'])-
 Route::middleware('auth')->prefix('dashboard/departments')->group(function () {
     Route::get('/department/create', [DepartmentController::class, 'create'])->name('department.create');
     Route::post('/department/store', [DepartmentController::class, 'store'])->name('department.store');
+    Route::get('/department/{department_id}', [DepartmentController::class, 'show'])->name('department.show');
+    Route::delete('/department/branch/{branch}/{department_id}', [DepartmentController::class, 'deleteBranch'])
+    ->name('department.branch.delete');
+    
 });
+
+
