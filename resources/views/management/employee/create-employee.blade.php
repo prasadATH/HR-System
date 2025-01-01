@@ -5,8 +5,10 @@
 @section('content')
 <div class="flex flex-col items-start justify-start w-full px-16">
     
+@if(session('success'))
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+     
+    document.addEventListener("DOMContentLoaded", () => {
         showNotification("{{ session('success') }}");
     });
 
@@ -57,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
             </ul>
         </div>
     @endif
-
     <nav class="flex px-5 py-3 mt-4 mb-4" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3">
         <li class="inline-flex items-center">
