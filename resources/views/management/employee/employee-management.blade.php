@@ -56,6 +56,27 @@
             </ul>
         </div>
     @endif
+
+<div class="w-full flex h-auto bg-[#FFFFFF]">
+    <div class="flex flex-col items-start justify-start w-full px-2">
+        <div class="w-full flex space-y-2 border-b-2 border-[#00000080] pb-8 pl-8 pt-8">
+            <form method="GET" action="{{ route('employees.search') }}" class="flex w-5/6 space-x-4">
+                <input 
+                    name="search" 
+                    id="input-field" 
+                    type="text" 
+                    placeholder="Search employee here" 
+                    class="w-full px-4 py-2 border-2 border-[#00000080] text-2xl text-[#00000080] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value="{{ request('search') }}" 
+                />
+                <button 
+                    type="submit" 
+                    class="text-white text-2xl px-6 py-2 bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]"
+                >
+                    Search
+                </button>
+            </form>
+        </div>
 <div class="w-full flex h-auto bg-[#FFFFFF]">
     <div class="flex flex-col items-start justify-start w-full px-2">
         <div class="w-full flex space-y-2 border-b-2 border-[#00000080] pb-8 pl-8 pt-8">
