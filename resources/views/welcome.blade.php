@@ -48,8 +48,7 @@
   
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.5.0/remixicon.css" integrity="sha512-6p+GTq7fjTHD/sdFPWHaFoALKeWOU9f9MPBoPnvJEWBkGS4PKVVbCpMps6IXnTiXghFbxlgDE8QRHc3MU91lJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    </head>
-    <section class="w-full h-screen">
+    </head><section class="w-full h-screen">
     
         <div class="w-full p-8 bg-white nunito-">
           <div class="w-full flex h-[100px] space-x-8">
@@ -79,9 +78,10 @@
               <p class="md:text-5xl text-xl font-bold text-white">You’ll love every moment of managing your team.</p>
               <!-- Call to Action -->
               <div class="w-full">
+                <a href="{{ route('register.form') }}">
                   <button class="bg-white text-2xl text-[#184E77] font-semibold px-8 py-3 rounded-full shadow-md hover:bg-blue-100 transition duration-200">
                       Create an account
-                  </button>
+                  </button></a>
               </div>
               
           </div>
@@ -90,17 +90,17 @@
           <div class="relative w-[500px] h-[500px]">
           <!-- Top Circle -->
           <div class="absolute top-10 left-10 w-96 h-96 bg-cover bg-center rounded-full shadow-lg"
-               style="background-image: url(./assetes/image/bg5.png)">
+               style="background-image: url(/bg5.png)">
           </div>
       
           <!-- Right Circle -->
           <div class="absolute top-20 right-0 w-96 h-96 bg-cover bg-center rounded-full shadow-lg"
-                style="background-image: url(./assetes/image/bg3.png)">
+                style="background-image: url(/bg3.png)">
           </div>
       
           <!-- Bottom Circle -->
           <div class="absolute bottom-0 left-40 w-96 h-96 bg-cover bg-center rounded-full shadow-lg"
-                style="background-image: url(./assetes/image/bg8.png)">
+                style="background-image: url(/bg8.png)">
           </div>
         </div>
       
@@ -111,7 +111,7 @@
           <div class="w-full md:h-[400px] h-[200px] flex flex-col justify-start items-center relative nunito-">
               <!-- Background Image -->
           <div class="absolute inset-0 z-0 opacity-80">
-              <img src="./assetes/image/bg5.png" alt="Background" class="w-full h-full object-cover">
+              <img src="/bg5.png" alt="Background" class="w-full h-full object-cover">
           </div>
           <!-- Main Content -->
           <div class="relative z-20 w-full h-full flex flex-col space-y-8 nunito- justify-center items-center md:px-64 px-12">
@@ -135,7 +135,7 @@
             <i class="ri-add-line toggle-icon h-5 w-5 text-gray-600 transition-transform duration-200"></i>
           </button>
           <div
-            class="answer-section pt-4 bg-[#184E7726] hidden px-4 text-black nunito- text-xl rounded-xl pb-4"
+            class="answer-section pt-4 bg-[#184E7726] hidden px-4 text-black nunito- text-xl"
           >
             <p class="mb-4">If you’re ready to manage your global team using Remote, you can sign up for a free account — no credit card is required.</p>
             <p class="mb-4">After answering some simple questions and verifying your email address, you’ll get access to the Remote platform where you can start adding, inviting, and managing your employees one at a time or in bulk.</p>
@@ -155,7 +155,7 @@
             <i class="ri-add-line toggle-icon h-5 w-5 text-gray-600 transition-transform duration-200"></i>
           </button>
           <div
-            class="answer-section pt-4 bg-[#184E7726] hidden px-4 text-black rounded-xl nunito- text-xl pb-4"
+            class="answer-section pt-4 bg-[#184E7726] hidden px-4 text-black nunito- text-xl"
           >
             <p class="mb-4">If you’re ready to manage your global team using Remote, you can sign up for a free account — no credit card is required.</p>
             <p class="mb-4">After answering some simple questions and verifying your email address, you’ll get access to the Remote platform where you can start adding, inviting, and managing your employees one at a time or in bulk.</p>
@@ -174,7 +174,7 @@
             <i class="ri-add-line toggle-icon h-5 w-5 text-gray-600 transition-transform duration-200"></i>
           </button>
           <div
-            class="answer-section pt-4 bg-[#184E7726] hidden px-4 rounded-xl text-black pb-4 nunito- text-xl"
+            class="answer-section pt-4 bg-[#184E7726] hidden px-4 text-black nunito- text-xl"
           >
             <p class="mb-4">If you’re ready to manage your global team using Remote, you can sign up for a free account — no credit card is required.</p>
             <p class="mb-4">After answering some simple questions and verifying your email address, you’ll get access to the Remote platform where you can start adding, inviting, and managing your employees one at a time or in bulk.</p>
@@ -193,7 +193,7 @@
             <i class="ri-add-line toggle-icon h-5 w-5 text-gray-600 transition-transform duration-200"></i>
           </button>
           <div
-            class="answer-section pt-4 bg-[#184E7726] hidden px-4 rounded-xl text-black nunito- pb-4 text-xl"
+            class="answer-section pt-4 bg-[#184E7726] hidden px-4 text-black nunito- text-xl"
           >
             <p class="mb-4">If you’re ready to manage your global team using Remote, you can sign up for a free account — no credit card is required.</p>
             <p class="mb-4">After answering some simple questions and verifying your email address, you’ll get access to the Remote platform where you can start adding, inviting, and managing your employees one at a time or in bulk.</p>
@@ -205,22 +205,7 @@
         </div>
       </div>
       </div>
-      
-      <style>
-              .custom-tab {
-                  clip-path: polygon(0 0, 85% 0, 75% 100%, 0% 100%);
-              }
-          </style>
-      <section class="flex flex-col justify-center items-center space-y-16 w-full py-16 bg-gradient-to-b from-[#184E77] to-[#52B69A]">
-              <div class="flex flex-col w-full justify-center items-center space-y-8 nunito-">
-                  <p class="md:text-6xl text-3xl text-center animate-right-slide text-white font-bold">Reviews for our</p> 
-                  <p class="md:text-6xl text-3xl text-center animate-right-slide text-white font-bold">Human Resources Management System</p> 
-              </div>
-              <div id="testimonialContainer" class=" grid md:grid-cols-3 grid-cols-1 gap-8 md:w-5/6 w-full place-items-center md:px-0 px-12">
-                  <!-- Cards will be dynamically injected here -->
-              </div>
-          </section>
-          <div class="w-full flex  justify-between items-center nunito- bg-[#F2FBFC] md:px-36 px-8">
+      <div class="w-full flex  justify-between items-center nunito- bg-[#F2FBFC] md:px-36 px-8">
       <div class="w-1/2 h-[200px] flex flex-col justify-center items-start nunito- space-y-8">
               <p class="text-black md:text-6xl text-3xl">Contact us</p>
               <p>Lorem ipsum dolor sit amet consectetur. Massa diam elementum urna hac sed duis.</p>
@@ -242,6 +227,20 @@
       </div>
       
           </div>
+      <style>
+              .custom-tab {
+                  clip-path: polygon(0 0, 85% 0, 75% 100%, 0% 100%);
+              }
+          </style>
+      <section class="flex flex-col justify-center items-center space-y-16 w-full py-16 bg-gradient-to-b from-[#184E77] to-[#52B69A]">
+              <div class="flex flex-col w-full justify-center items-center space-y-8 nunito-">
+                  <p class="md:text-6xl text-3xl text-center animate-right-slide text-white font-bold">Reviews for our</p> 
+                  <p class="md:text-6xl text-3xl text-center animate-right-slide text-white font-bold">Human Resources Management System</p> 
+              </div>
+              <div id="testimonialContainer" class=" grid md:grid-cols-3 grid-cols-1 gap-8 md:w-5/6 w-full place-items-center md:px-0 px-12">
+                  <!-- Cards will be dynamically injected here -->
+              </div>
+          </section>
           <script>
           const testimonials = [
             {
@@ -373,4 +372,6 @@
       </script>
       
       </section>
+      
+      
 </html>
