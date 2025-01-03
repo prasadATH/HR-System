@@ -180,9 +180,9 @@
                 <div class="w-full">
                     <select name="manager_id" id="manager_id" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" required>
                         <option value="">Select Manager</option>
-                        @foreach($employees->unique('manager_id') as $employees)
-                        <option value="{{ $employees->manager_id }}">{{ $employees->manager_id }}</option>
-                    @endforeach
+                        @foreach($employees->unique('employee_id') as $employee)
+            <option value="{{ $employee->id }}">{{ $employee->employee_id }} - {{ $employee->first_name }}</option>
+        @endforeach
                     </select>
                 </div>
                 <div class="w-full">
