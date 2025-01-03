@@ -66,19 +66,19 @@
     <div class="w-1/2 flex flex-col space-y-8">
         <div class="w-full flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Account Holder Name :</p>
-            <p class="text-2xl text-black font-bold">Sumanapala Athukorala Sumanapala</p>
+            <p class="text-2xl text-black font-bold">{{$payroll->bank_details->account_holder_name}}</p>
         </div>
         <div class="w-full flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Account No :</p>
-            <p class="text-2xl text-black font-bold">23456789345</p>
+            <p class="text-2xl text-black font-bold">{{$payroll->bank_details->account_number}}</p>
         </div>
         <div class="w-full flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Bank :</p>
-            <p class="text-2xl text-black font-bold">Sampath Bank </p>
+            <p class="text-2xl text-black font-bold">{{$payroll->bank_details->bank_name}}</p>
         </div>
         <div class="w-full flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Branch :</p>
-            <p class="text-2xl text-black font-bold">234 hrs</p>
+            <p class="text-2xl text-black font-bold">{{$payroll->bank_details->branch}}</p>
         </div>
     
     </div>

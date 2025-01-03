@@ -110,7 +110,7 @@ if (isset($validated['allowances'])) {
     // Display details of a specific payroll record
     public function show($id)
     {
-        $payroll = Payroll::with(['employee', 'allowances', 'deductions'])->findOrFail($id); // Load the related employee
+        $payroll = Payroll::with(['employee', 'allowances', 'deductions', 'bank_details'])->findOrFail($id); // Load the related employee
         return view('management.payroll.payroll-details', compact('payroll'));
     }
 
