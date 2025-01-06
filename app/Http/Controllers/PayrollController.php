@@ -20,6 +20,7 @@ class PayrollController extends Controller
 
     public function store(Request $request)
     {
+       // dd($request);
         try {
             // Begin a transaction to ensure data consistency
             DB::beginTransaction();
@@ -29,6 +30,7 @@ class PayrollController extends Controller
                 'employee-id' => 'required|exists:employees,id',
                 'salary_month' => 'required|date_format:Y-m',
                 'salary_amount' => 'required|numeric|min:0',
+                'bonus' => 'required|numeric|min:0',
                 'total_payed' => 'required|numeric|min:0',
                 'pay_date' => 'required|date',
                 'work-hours' => 'nullable|integer|min:0',
@@ -50,6 +52,7 @@ class PayrollController extends Controller
                 'pay_date' => $validated['pay_date'],
                 'total_hours' => $validated['work-hours'],
                 'tax' => $validated['tax_amount'] ?? 0,
+                'bonus' => $validated['bonus'] ?? 0,
                 'status' => $validated['payment_status'],
             ]);
     

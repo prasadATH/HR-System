@@ -90,11 +90,26 @@
         </a>
       </div>
 
-    </button>
 
 
 
     </li>
+
+    <li class="w-full space-y-4">
+      <button class="flex items-center justify-between w-full text-gray-600 hover:text-blue-500 focus:outline-none" onclick="toggleMenu('payrollMenu'); toggleGradientText()">
+   
+        <div class="flex items-center w-full space-x-4">
+          <span class="iconify" data-icon="fluent:reciept-20-filled" style="width: 16px; height: 16px;"></span>
+            <a href="{{ route('employee_contributions.index') }}"> 
+            <p id="payrollText" class="text-2xl font-bold text-black transition-all duration-300 cursor-pointer nunito-" style="font-weight: 700;">EPF/ETF</p>
+            </a>
+          </div>
+  
+      </button>
+  
+  
+  
+      </li>
     <!-- Loan -->
     <li class="mb-2">
       <a href="{{ route('advance.management') }}" class="flex items-center space-x-2 text-gray-600 hover:text-blue-500">
@@ -229,6 +244,17 @@
             Payroll
           </a>
         </li>
+        
+      </div>
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="fluent:reciept-20-filled" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('employee_contributions.index') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            EPF/ETF
+          </a>
+        </li>
+        
       </div>
       <div class="w-full flex space-x-4">
         <span class="iconify" data-icon="majesticons:money" style="width: 16px; height: 16px;"></span>

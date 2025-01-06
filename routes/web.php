@@ -13,6 +13,7 @@ use App\Http\Controllers\IncidentController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\EmployeeContributionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -179,3 +180,12 @@ Route::middleware('auth')->prefix('dashboard/departments')->group(function () {
 });
 
 
+Route::middleware('auth')->prefix('dashboard/contributions')->group(function () {
+    Route::get('/', [EmployeeContributionController::class, 'index'])->name('employee_contributions.index');
+    Route::get('/create', [EmployeeContributionController::class, 'create'])->name('employee_contributions.create');
+    Route::post('/store', [EmployeeContributionController::class, 'store'])->name('contribution.store');
+
+    Route::get('/contributions/{employeeId}', [EmployeeContributionController::class, 'getContributions']);
+
+    Route::post('/store-or-update/{id}', [EmployeeContributionController::class, 'storeOrUpdate'])->name('employee_contributions.store_or_update');
+});

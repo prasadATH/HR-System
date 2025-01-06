@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('pay_date');
             $table->integer('total_hours')->nullable();
             $table->decimal('tax', 10, 2)->nullable();
+            $table->decimal('bonus', 10, 2)->nullable();
             $table->string('status');
             $table->timestamps();
 
