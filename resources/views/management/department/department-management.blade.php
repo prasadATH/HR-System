@@ -223,7 +223,7 @@
           modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
       
           // Fetch content from the server
-          fetch(`http://127.0.0.1:8000/dashboard/departments/department/create`)
+          fetch(`https://hr.jaan.lk/dashboard/departments/department/create`)
             .then(response => response.text())
             .then(html => {
               modalContent.innerHTML = html;
