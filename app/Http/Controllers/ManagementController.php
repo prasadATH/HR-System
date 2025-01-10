@@ -12,6 +12,7 @@ use App\Models\Department;
 use App\Models\ExpenseClaim;
 use App\Models\Attendance;
 use App\Models\Incident;
+use App\Models\SalaryDetails;
 use Illuminate\Support\Facades\DB;
 
 class ManagementController extends Controller
@@ -27,16 +28,9 @@ class ManagementController extends Controller
     }
     public function payrollManagement()
     {
-        $payrolls = Payroll::with(['allowances', 'deductions', 'employee'])->get(); // Load related employee data
-       // dd($payrolls);
+      
 
-    foreach ($payrolls as $payroll) {
-        $totalAllowances = $payroll->allowances->sum('amount');
-        $totalDeductions = $payroll->deductions->sum('amount');
-
-        $payroll->total_allowances = $totalAllowances;
-        $payroll->total_deductions = $totalDeductions;
-    }
+    $payrolls = SalaryDetails::with('employee')->get();
 
     return view('management.payroll.payroll-management', compact('payrolls'));
     }

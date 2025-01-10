@@ -8,10 +8,12 @@ use App\Models\Allowance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\SalaryDetails;
+use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PayrollController extends Controller
 {
-    // Display the card view for payroll records
     public function create()
     {
       //  $payrolls = Payroll::with(['allowances', 'deductions','employee'])->get(); // Load related employee data
@@ -20,123 +22,185 @@ class PayrollController extends Controller
 
     public function store(Request $request)
     {
-       // dd($request);
+        // Validate the input data
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'required|integer|exists:employees,id',
+            'employee_name' => 'required|string|max:255',
+            'known_name' => 'nullable|string|max:255',
+            'epf_no' => 'nullable|string|max:255',
+            'pay_date' => 'required|date',
+            'payed_month' => 'required|string|max:255',
+            'basic' => 'required|numeric|min:0',
+            'budget_allowance' => 'nullable|numeric|min:0',
+            'gross_salary' => 'required|numeric|min:0',
+            'transport_allowance' => 'nullable|numeric|min:0',
+            'attendance_allowance' => 'nullable|numeric|min:0',
+            'phone_allowance' => 'nullable|numeric|min:0',
+            'production_bonus' => 'nullable|numeric|min:0',
+            'car_allowance' => 'nullable|numeric|min:0',
+            'loan_payment' => 'nullable|numeric|min:0',
+            'stamp_duty' => 'nullable|numeric|min:0',
+            'no_pay' => 'nullable|numeric|min:0',
+            'advance_payment' => 'nullable|numeric|min:0',
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+    
         try {
-            // Begin a transaction to ensure data consistency
-            DB::beginTransaction();
+            // Calculate deductions and net salary
+            $grossSalary = $request->gross_salary;
+            $noPayDeductions = ($request->no_pay ?? 0) * 1000;
+            $totalDeductions = (
+                ($request->epf_8_percent ?? 0) +
+                ($request->advance_payment ?? 0) +
+                ($request->loan_payment ?? 0) +
+                ($request->stamp_duty ?? 0) +
+                $noPayDeductions
+            );
     
-            // Validate the request data
-            $validated = $request->validate([
-                'employee-id' => 'required|exists:employees,id',
-                'salary_month' => 'required|date_format:Y-m',
-                'salary_amount' => 'required|numeric|min:0',
-                'bonus' => 'required|numeric|min:0',
-                'total_payed' => 'required|numeric|min:0',
-                'pay_date' => 'required|date',
-                'work-hours' => 'nullable|integer|min:0',
-                'tax_amount' => 'nullable|numeric|min:0',
-                'payment_status' => 'required|string|max:255',
-                'deductions' => 'array',
-                'deductions.*' => 'required|json', // Each deduction must be a valid JSON string
-                'allowances' => 'array',
-                'allowances.*' => 'required|json',
+            $totalEarnings = (
+                $grossSalary +
+                ($request->transport_allowance ?? 0) +
+                ($request->attendance_allowance ?? 0) +
+                ($request->phone_allowance ?? 0) +
+                ($request->car_allowance ?? 0) +
+                ($request->production_bonus ?? 0)
+            );
+    
+            $netSalary = $totalEarnings - $totalDeductions;
+    
+            // Calculate EPF 12% and ETF 3% based on gross salary
+            $epf12Percent = round($grossSalary * 0.12, 2);
+            $etf3Percent = round($grossSalary * 0.03, 2);
+    
+            // Save the data to the database
+            SalaryDetails::create([
+                'employee_id' => $request->employee_id,
+                'employee_name' => $request->employee_name,
+                'known_name' => $request->known_name,
+                'epf_no' => $request->epf_no,
+                'pay_date' => $request->pay_date,
+                'payed_month' => $request->payed_month,
+                'basic' => $request->basic,
+                'budget_allowance' => $request->budget_allowance,
+                'gross_salary' => $grossSalary,
+                'transport_allowance' => $request->transport_allowance,
+                'attendance_allowance' => $request->attendance_allowance,
+                'phone_allowance' => $request->phone_allowance,
+                'production_bonus' => $request->production_bonus,
+                'car_allowance' => $request->car_allowance,
+                'loan_payment' => $request->loan_payment,
+                'stamp_duty' => $request->stamp_duty,
+                'no_pay' => $request->no_pay,
+                'advance_payment' => $request->advance_payment,
+                'total_deductions' => $totalDeductions,
+                'total_earnings' => $totalEarnings,
+                'net_salary' => $netSalary,
+                'epf_8_percent' => $request->epf_8_percent,
+                'epf_12_percent' => $epf12Percent,
+                'etf_3_percent' => $etf3Percent,
             ]);
     
-            // Create the payroll record
-            $payroll = Payroll::create([
-                'employee_id' => $validated['employee-id'],
-                'payroll_month' => $validated['salary_month'],
-                'basic_salary' => $validated['salary_amount'],
-                'net_salary' => $validated['total_payed'],
-                'payable' => $validated['total_payed'] - ($validated['tax_amount'] ?? 0),
-                'pay_date' => $validated['pay_date'],
-                'total_hours' => $validated['work-hours'],
-                'tax' => $validated['tax_amount'] ?? 0,
-                'bonus' => $validated['bonus'] ?? 0,
-                'status' => $validated['payment_status'],
-            ]);
-    
-            // Add deductions
-       // Add deductions
-if (isset($validated['deductions'])) {
-    foreach ($validated['deductions'] as $deductionJson) {
-        $deduction = json_decode($deductionJson, true); // Decode JSON string
-        if ($deduction) { // Ensure the JSON was decoded successfully
-            Deduction::create([
-                'payroll_id' => $payroll->id,
-                'description' => $deduction['description'],
-                'amount' => $deduction['amount'],
-            ]);
-        }
-    }
-}
-
-// Add allowances
-if (isset($validated['allowances'])) {
-    foreach ($validated['allowances'] as $allowanceJson) {
-        $allowance = json_decode($allowanceJson, true); // Decode JSON string
-        if ($allowance) { // Ensure the JSON was decoded successfully
-            Allowance::create([
-                'payroll_id' => $payroll->id,
-                'description' => $allowance['description'],
-                'amount' => $allowance['amount'],
-            ]);
-        }
-    }
-}
-            // Commit the transaction
-            DB::commit();
-    
-            return redirect()->route('payroll.management')->with('success', 'Payroll record created successfully.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Rollback the transaction
-            DB::rollBack();
-    dd( $e->errors(), $request->all());
-            // Log the validation errors for debugging
-            Log::error('Validation Error: ', $e->errors());
-    
-            return redirect()->back()
-                ->withErrors($e->errors())
-                ->withInput();
+            return redirect()->route('management.payroll.payroll-management')->with('success', 'Payroll record saved successfully.');
         } catch (\Exception $e) {
-            // Rollback the transaction
-            DB::rollBack();
-    
-            // Log the exception for debugging
-            Log::error('Error storing payroll record: ' . $e->getMessage());
-    
-            return redirect()->back()
-                ->with('error', 'An error occurred while creating the payroll record. Please try again.')
-                ->withInput();
+            return redirect()->back()->with('error', 'Failed to save the payroll record.')->withInput();
         }
     }
-    // Display details of a specific payroll record
-    public function show($id)
+    
+
+    public function update(Request $request, $id)
     {
-        $payroll = Payroll::with(['employee', 'allowances', 'deductions', 'bank_details'])->findOrFail($id); // Load the related employee
-        return view('management.payroll.payroll-details', compact('payroll'));
+        // Validate the input fields
+        $validated = $request->validate([
+            'employee_id' => 'required|integer',
+            'employee_name' => 'required|string|max:255',
+            'pay_date' => 'required|date',
+            'payed_month' => 'required|string|max:255',
+            'basic' => 'required|numeric|min:0',
+            'budget_allowance' => 'nullable|numeric|min:0',
+            'advance_payment' => 'nullable|numeric|min:0',
+            'loan_payment' => 'nullable|numeric|min:0',
+            'stamp_duty' => 'nullable|numeric|min:0',
+            'no_pay' => 'nullable|numeric|min:0',
+        ]);
+
+        // Find the record by ID
+        $salaryDetail = SalaryDetails::findOrFail($id);
+
+        // Update the record with validated data
+        $salaryDetail->update([
+            'employee_id' => $validated['employee_id'],
+            'employee_name' => $validated['employee_name'],
+            'pay_date' => $validated['pay_date'],
+            'payed_month' => $validated['payed_month'],
+            'basic' => $validated['basic'],
+            'budget_allowance' => $validated['budget_allowance'],
+            'advance_payment' => $validated['advance_payment'],
+            'loan_payment' => $validated['loan_payment'],
+            'stamp_duty' => $validated['stamp_duty'],
+            'no_pay' => $validated['no_pay'],
+        ]);
+
+        // Redirect with success message
+        return redirect()->route('management.payroll.payroll-management')->with('success', 'Payroll record updated successfully!');
     }
 
     public function edit($id)
-{
-    $payroll = Payroll::with('employee')->findOrFail($id);
-    return view('management.payroll.payroll-edit', compact('payroll'));
-}
+    {
+        // Find the record by ID
+        $record = SalaryDetails::findOrFail($id);
 
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'basic_salary' => 'required|numeric',
-        'allowances' => 'nullable|numeric',
-        'deductions' => 'nullable|numeric',
-        'net_salary' => 'required|numeric',
-    ]);
+        // Return the edit form view with the record
+        return view('management.payroll.payroll-edit', compact('record'));
+    }
 
-    $payroll = Payroll::findOrFail($id);
-    $payroll->update($request->all());
+    // Display the card view for payroll records
+    public function index()
+    {
+        // Fetch payroll data with employee relationships
+        $payrolls = SalaryDetails::with('employee')->get();
 
-    return redirect()->route('dashboard.payroll')->with('success', 'Payroll updated successfully!');
-}
+        return view('payroll.index', compact('payrolls'));
+    }
+
+    public function updateAdvanceAndLoan(Request $request, $id)
+    {
+        // Validate input
+        $request->validate([
+            'advance_payment' => 'nullable|numeric|min:0',
+            'loan_payment' => 'nullable|numeric|min:0',
+        ]);
+
+        // Update advance and loan amounts
+        $record = SalaryDetails::findOrFail($id);
+        $record->advance_payment = $request->input('advance_payment', 0);
+        $record->loan_payment = $request->input('loan_payment', 0);
+        $record->save();
+
+        return response()->json(['success' => true, 'message' => 'Record updated successfully']);
+    }
+
+    public function viewPaysheet($id)
+    {
+        $record = SalaryDetails::with('employee')->findOrFail($id);
+
+        // Generate PDF view for paysheet
+        $pdf = PDF::loadView('management.payroll.paysheet', compact('record'));
+
+        return $pdf->download('Paysheet-' . $record->employee_name . '.pdf');
+    }
+
+    public function downloadAllPaysheets($month)
+    {
+        $records = SalaryDetails::where('payroll_month', $month)->get();
+
+        // Create a merged PDF
+        $pdf = PDF::loadView('payroll.all-paysheets', compact('records'));
+
+        return $pdf->download('All-Paysheets-' . $month . '.pdf');
+    }
 
 public function destroy($id)
 {

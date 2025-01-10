@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <div class="flex flex-col items-start justify-start w-full px-2">
+    <div id="content-section" class="flex flex-col items-start justify-start w-full px-2">
 
     <div class="w-full pt-1">
       <div class="flex items-center justify-between w-full">
@@ -12,18 +12,21 @@
         <p class="text-6xl font-bold text-black nunito-">Payroll</p>
         </div>
         <div class="flex items-center space-x-4">
-        <!-- Filter Button -->
-        <button class="flex items-center justify-between px-4 py-2 text-[#00000066] text-2xl bg-[#D9D9D980] border-2 border-[#D9D9D980] rounded-md hover:bg-gray-200">
-            <p class="text-3xl"><i class="ri-filter-2-line"></i></p>
-            <span>Filter</span>
-            <p class="text-3xl text-[#00000066]"><i class="ri-arrow-down-s-line"></i></p>
-        </button>
+
     
         <!-- Add Employee Button -->
         <button class="flex items-center justify-center nunito- space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
         <p class="text-3xl"><i class="ri-add-fill"></i></p>
             <span>Edit Payslip</span>
         </button>
+
+
+
+                <!-- Print Button -->
+                <button id="print-button" class="flex items-center justify-center nunito- space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#1B5A8A] to-[#60C3A8] rounded-xl shadow-sm hover:from-[#184E77] hover:to-[#52B69A]">
+                  <p class="text-3xl"><i class="ri-printer-fill"></i></p>
+                  <span>Print Payslip</span>
+              </button>
         </div>
     
       </div>
@@ -43,7 +46,7 @@
         </li>
       </ol>
     </nav>
-    <div class="w-full flex nunito- pt-8">
+    <div class="w-full flex justify-between items-center nunito- pt-8">
     <div class="w-1/2 flex flex-col space-y-8">
         <div class="w-full flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Employee Name :</p>
@@ -51,7 +54,7 @@
         </div>
         <div class="w-full flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Employee ID :</p>
-            <p class="text-2xl text-black font-bold">{{$payroll->employee->employee_id}} </p>
+            <p class="text-2xl text-black font-bold">{{$payroll->employee->id}} </p>
         </div>
         <div class="w-full flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Employee Department :</p>
@@ -63,22 +66,22 @@
         </div>
         
     </div>
-    <div class="w-1/2 flex flex-col space-y-8">
-        <div class="w-full flex flex-col space-y-4">
+    <div class="w-1/2 flex flex-col justify-end items-end space-y-8">
+        <div class="w-1/3 flex flex-col space-y-4 justify-end">
             <p class="text-2xl text-[#00000099] font-bold">Account Holder Name :</p>
-            <p class="text-2xl text-black font-bold">{{$payroll->bank_details->account_holder_name}}</p>
+            <p class="text-2xl text-black font-bold ">{{$payroll->employee->account_holder_name}}</p>
         </div>
-        <div class="w-full flex flex-col space-y-4">
+        <div class="w-1/3 flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Account No :</p>
-            <p class="text-2xl text-black font-bold">{{$payroll->bank_details->account_number}}</p>
+            <p class="text-2xl text-black font-bold">{{$payroll->employee->account_no}}</p>
         </div>
-        <div class="w-full flex flex-col space-y-4">
+        <div class="w-1/3 flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Bank :</p>
-            <p class="text-2xl text-black font-bold">{{$payroll->bank_details->bank_name}}</p>
+            <p class="text-2xl text-black font-bold">{{$payroll->employee->bank_name}}</p>
         </div>
-        <div class="w-full flex flex-col space-y-4">
+        <div class="w-1/3 flex flex-col space-y-4">
             <p class="text-2xl text-[#00000099] font-bold">Branch :</p>
-            <p class="text-2xl text-black font-bold">{{$payroll->bank_details->branch}}</p>
+            <p class="text-2xl text-black font-bold">{{$payroll->employee->branch_name}}</p>
         </div>
     
     </div>
@@ -118,15 +121,15 @@
         <tr>
           <td class="text-xl text-black px-4 py-2 text-left align-middle">
           Bonus</td>
-          <td class="text-xl text-black px-4 py-2 text-right align-middle">17,000 /=</td>
+          <td class="text-xl text-black px-4 py-2 text-right align-middle">{{ number_format($payroll->bonus, 2) }} /=</td>
           <td class="text-xl text-black px-4 py-2 text-right align-middle"></td>
         </tr>
         <tr>
           <td class="text-xl text-black px-4 py-2 text-left align-middle">
           Loan
           </td>
-          <td class="text-xl text-black px-4 py-2 text-right align-middle">17,000 /=</td>
-          <td class="text-xl text-black px-4 py-2 text-right align-middle">8,000/=</td>
+          <td class="text-xl text-black px-4 py-2 text-right align-middle"></td>
+          <td class="text-xl text-black px-4 py-2 text-right align-middle">{{ number_format($payroll->bonus, 2) }} /=</td>
         </tr>
         @foreach ($payroll->deductions as $deduction)
         <tr>
@@ -142,13 +145,13 @@
           Tax
           </td>
           <td class="text-xl text-black px-4 py-2 text-right align-middle"></td>
-          <td class="text-xl text-black px-4 py-2 text-right align-middle">8,000/=</td>
+          <td class="text-xl text-black px-4 py-2 text-right align-middle">{{ number_format($payroll->tax, 2) }} /=</td>
         </tr>
         <tr class="border border-[#00000033]">
           <td class="text-xl text-black px-4 py-2 text-left align-middle">
           Total
           </td>
-          <td class="text-xl text-black px-4 py-2 text-right align-middle">17,000/=</td>
+          <td class="text-xl text-black px-4 py-2 text-right align-middle">{{ number_format($payroll->payable, 2) }} /=</td>
           <td class="text-xl text-black px-4 py-2 text-right align-middle"></td>
         </tr>
       </tbody>
@@ -156,6 +159,28 @@
     
     </div>
     </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('print-button').addEventListener('click', printPayslip);
+});
+
+function printPayslip() {
+    const contentToPrint = document.getElementById('content-section');
+    if (!contentToPrint) {
+        console.error('Content section not found. Ensure the ID matches the element.');
+        return;
+    }
+    const originalContent = document.body.innerHTML; // Save the original page content
+
+    document.body.innerHTML = contentToPrint.outerHTML; // Replace body with only the content section
+    window.print(); // Trigger the print dialog
+    document.body.innerHTML = originalContent; // Restore the original page content
+    location.reload(); // Reload the page to reinitialize scripts and styles
+}
+
+  </script>
+  
     <style>
        td {
         position: relative; /* Required for pseudo-element positioning */

@@ -18,6 +18,8 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js">
+
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -38,7 +40,7 @@
 </head>
 <body class="bg-gray-100">
 
-<div class=" w-full flex h-auto bg-[#FFFFFF]">
+<div class=" w-full flex h-auto ">
 <div class="w-1/5 bg-[#D9D9D9] rounded-3xl pt-24 md:inline hidden shadow-md p-8 flex flex-col justify-center items-center">
   <!-- Main Menu -->
   <div class="w-5/6 mb-6 space-y-8">
@@ -187,7 +189,7 @@
 
 
         <!-- Main Content -->
-        <div class="w-full flex flex-col p-8">
+        <div class="w-4/5 flex flex-col p-8">
           
             <div class="flex items-center justify-between  border-b border-gray-200">
               <div class="w-1/5 flex justify-start items-center md:hidden p-4 cursor-pointer" id="menuTrigger">
@@ -417,7 +419,7 @@
 
 </div>
             </div>
-            <div class="pt-6">
+            <div class="pt-6 ">
                                   <!-- Notification -->
     <div id="notification" class="notification bg-success text-white p-3 rounded shadow">
         <span id="notification-message"></span>

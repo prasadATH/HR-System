@@ -32,6 +32,14 @@ body {
   user-select: auto !important;
 }
 
+
+#editDepartmentModal * {
+  pointer-events: auto !important;
+  user-select: auto !important;
+}
+
+
+
 #hierarchy-container {
   transform-origin: center; /* Scale from the center */
 }
@@ -122,8 +130,6 @@ body {
     text-align: center;
     
 
-    border-top-right-radius: 0.75rem /* 12px */;
-    border-bottom-right-radius: 0.75rem /* 12px */;
     padding: 0 !important;
 }
 
@@ -158,4 +164,41 @@ body {
 
 .dataTables_filter {
   display: none;
+}
+
+/* Style the container holding all months */
+.flatpickr-monthSelect-months {
+  display: grid; /* Use a grid layout for better alignment */
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 10px; /* Space between months */
+  padding: 10px;
+  background-color: #f8f9fa; /* Light background color */
+  border-radius: 8px; /* Rounded corners */
+}
+
+/* Style individual months */
+.flatpickr-monthSelect-month {
+  padding: 8px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid #ccc; /* Light border */
+  border-radius: 5px;
+  background-color: #ffffff; /* White background */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.flatpickr-monthSelect-month:hover {
+  background-color: #184E77; /* Change background on hover */
+  color: #ffffff; /* White text on hover */
+  border-color: #184E77; /* Darker border on hover */
+}
+
+/* Selected month */
+.flatpickr-monthSelect-month.selected {
+  background-color: #52B69A; /* Selected month background */
+  color: #ffffff; /* White text */
+  border-color: #52B69A; /* Border matches background */
 }

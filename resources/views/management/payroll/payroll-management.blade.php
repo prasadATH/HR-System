@@ -137,9 +137,18 @@
     
     
     <div class="w-full flex justify-end items-end pt-2 pb-2">
-      <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+      <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
             <span>Generate Report</span>
         </button>
+       
+        <button id="Export_spreadsheet" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+            <span>Export Spreadsheet</span>
+        </button>
+      
+        <button id="Export_payslips" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+            <span>Export payslips (ZIP)</span>
+        </button>
+       
       </div>
     
       <div class="w-full flex justify-between items-center md:space-x-0 space-x-8 py-2">
@@ -177,115 +186,111 @@
         class="absolute z-10 opacity-0 pointer-events-none"
       />
     </div>
-    
-    </div>
-    
-    
-    
-    <table class="w-full nunito- border-separate" style="border-spacing: 0 12px; width: 100%;" id="attendance-table">
-      <thead class="w-full">
-        <tr class="bg-white">
-        <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Employee</th>
-          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Month</th>
-          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Salary</th>
-          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Allowances</th>
-          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Deductions</th>
-          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Payable</th>
-          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Work Hours</th>
-          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Pay Date</th>
-          <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Status</th>
-    
-          <th class="text-xl w-1/2 text-black font-bold px-4 py-2 text-center align-left hidden">Actions</th>
-    
-        </tr>
-      </thead>
-      <tbody>
-      @foreach ($payrolls as $record)
-      <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500 ">
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl font-bold">
-      {{ $record->employee->first_name }} {{ $record->employee->last_name }}
-            <p class="text-sm">{{ $record->employee->id }}</p>
-      </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-      {{ $record->payroll_month }}
-      </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-      {{ $record->basic_salary }}
-      </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-    {{ number_format($record->total_allowances, 2) }}
-      </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-      {{ number_format($record->total_deductions, 2) }}
-      </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-      {{ $record->payable }}
-      </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-      {{ $record->total_hours }}
-      </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-      {{ $record->pay_date }}
-    
-      </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-    
-      
-      @if (strtolower($record->status ) === 'paid')
-    
-    <p class="text-[#47B439] border-2 border-[#47B439] bg-[#47B43933] rounded-xl px-2 py-1 shadow-sm">
-        Paid 
-    </p>
-    @elseif (strtolower($record->status ) === 'processing')
-    <p class="text-[#FFBF00] border-2 border-[#FFBF00] bg-[#FFBF0033] rounded-xl px-2 py-1 shadow-sm">
-        Processing
-    </p>
-    @endif
-      </td>
-     
-      <td class="text-left align-left  bg-[#D9D9D966] rounded-r-xl">
-      <div class="relative">
-        <!-- Trigger Button -->
-    
-    </div>
-    
-    
-    
-    
-    
-    <div class="relative inline-block text-center">
-            <!-- Toggle Button -->
-            <button id="dropdownButton"  class="dropdown-trigger p-2 rounded hover:bg-gray-300">
-            <span class="iconify" data-icon="qlementine-icons:menu-dots-16" style="width: 16px; height: 16px;"></span>
-        </button>
-    
-            <!-- Dropdown Menu -->
-            <div id="dropdown-menu" 
-                 class="absolute top-0 right-3 mt-12 w-30 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-10">
-                <ul class=" text-gray-700">
-                    <li><a href="{{ route('payroll.details', ['id' => $record->id]) }}" class="block px-2 py-2 hover:bg-gray-100" >
-                View</a></li>
-                    <li class="cursor-pointer" ><a onclick="openEditModal({{ $record->id}})"  class="block px-2 py-2 hover:bg-gray-100">Edit</a></li>
-                    <li class="bg-red">
-                      
-                    <form action="{{ route('incident.destroy', ['id' => $record->id]) }}" method="POST" class="m-0 p-0">
-    @csrf
-                @method('DELETE')
-                <button type="submit" 
-        class="block px-2 py-2 w-full rounded-xl bg-red-600 text-white hover:bg-red-700">
-        Delete
-    </button>
-                </form></li>
-                </ul>
+
+
+  <!-- Month Selector Input -->
+  <div class="relative w-[300px] nunito-">
+    <button
+        id="monthButton"
+        class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
+    >
+        <div class="flex items-center space-x-4">
+            <span class="iconify text-[#184E77]" data-icon="mdi:calendar-month-outline" style="font-size: 20px;"></span>
+            <div>
+                <span class="text-sm text-[#184E77]">Select a Month</span>
+                <p id="selectedMonth" class="text-lg font-bold">03.2021</p>
             </div>
         </div>
-     
-      </td>
-    </tr>
-    @endforeach
-      </tbody>
-    </table>
+        <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
+    </button>
+
+    <!-- Hidden Month Input -->
+    <input
+        id="monthInput"
+        type="text"
+        class="absolute z-10 opacity-0 pointer-events-none"
+    />
+</div>
     
+    </div>
+    
+    
+    
+<!-- Payroll Table -->
+<div class="overflow-x-auto" style="width:100%;" >
+    <table id="attendance-table" class="nunito border-separate" style="border-spacing: 0 12px;">
+        <thead>
+            <tr class="bg-white">
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Employee</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Known Name</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">EPF No</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Basic Salary</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Budget Allowance</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Gross Salary</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Transport Allowance</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Attendance Allowance</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Phone Allowance</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Production Bonus</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Car Allowance</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Loan Payment</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Total Earnings</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">EPF 8%</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">EPF 12%</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">ETF 3%</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Advance Payment</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Stamp Duty</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">No Pay</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Total Deductions</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Net Salary</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Loan Balance</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Pay Date</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Pay Month</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Status</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($payrolls as $record)
+            <tr>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->employee_name }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->known_name }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->epf_no }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->basic, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->budget_allowance, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->gross_salary, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->transport_allowance, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->attendance_allowance, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->phone_allowance, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->production_bonus, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->car_allowance, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->loan_payment, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->total_earnings, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->epf_8_percent, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->epf_12_percent, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->etf_3_percent, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->advance_payment, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->stamp_duty, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->no_pay, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->total_deductions, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->net_salary, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->loan_balance, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->pay_date }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->payed_month }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->status }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    <!-- Actions -->
+                    <button onclick="openViewModal({{ $record->id }})" class="text-blue-500">View</button>
+                    
+                     <a href="{{ route('payroll.edit', ['id' => $record->id]) }}" >  <button class="text-green-500">Edit</button></a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+
+
     
     
     
@@ -347,7 +352,7 @@
     </div>
     
     
-    
+    <iframe id="paysheet-pdf" style="display: none; width: 100%; height: 500px;"></iframe>
     </div>
     <!--View record form end-->
 
@@ -463,48 +468,7 @@ $(document).ready(function () {
             next: '<span class="custom-next-button">Next <i class="ri-arrow-right-s-line"></i></span>',
         },
     },
-    columnDefs: [
-        { 
-            targets: 0, 
-            className: 'employee-column' 
-        },
-        { 
-            targets: 1, 
-            className: 'month-column' 
-        },
-        { 
-            targets: 2, 
-            className: 'salary-column' 
-        },
-        { 
-            targets: 3, 
-            className: 'allowances-column' 
-        },
-        { 
-            targets: 4, 
-            className: 'deductions-column' 
-        },
-        { 
-            targets: 5, 
-            className: 'payable-column' 
-        },
-        { 
-            targets: 6, 
-            className: 'work-hours-column' 
-        },
-        { 
-            targets: 7, 
-            className: 'pay-date-column' 
-        },
-        { 
-            targets: 8, 
-            className: 'status-column' 
-        },
-        { 
-            targets: 9, 
-            className: 'actions-column' 
-        }
-    ]
+
     });
 
     // Attach Print functionality to the custom button
@@ -602,8 +566,33 @@ $(document).on('click', '.dataTables_paginate button', function () {
     });
 
     calendarButton.addEventListener("click", () => {
+        console.log("Calendar-month");
         calendarInput._flatpickr.open();
     });
+
+
+    const monthInput = document.getElementById("monthInput");
+        const selectedMonthDisplay = document.getElementById("selectedMonth");
+        const selectedMonth = document.getElementById("monthInput");
+        const monthButton = document.getElementById("monthButton");
+       // <p id="selectedMonth" class="text-lg font-bold">03.2021</p>
+
+        flatpickr(monthInput, {
+            dateFormat: "Y-m", // Month and Year
+            plugins: [new monthSelectPlugin({ shorthand: true, dateFormat: "Y-m" })],
+            onChange: function (selectedDates, dateStr) {
+                //console.log(dateStr);
+                selectedMonthDisplay.textContent = dateStr
+                selectedMonth.textContent = dateStr;
+                // Filter DataTable by Paid Month
+                table.search(dateStr).draw();
+            },
+        });
+
+        monthButton.addEventListener("click", () => {
+            monthInput._flatpickr.open();
+        });
+  
 
     table.draw('page');
 });
@@ -612,6 +601,8 @@ $(document).on('click', '.dataTables_paginate button', function () {
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('doc-files');
+    const selectedMonth = () => monthInput._flatpickr?.selectedDates[0]?.toISOString().slice(0, 7) || null;
+
     if (fileInput) {
         fileInput.addEventListener('change', function() {
             handleFileSelection(this);
@@ -622,44 +613,57 @@ document.addEventListener('DOMContentLoaded', function() {
     if (existingFilesData) {
         initializeExistingFiles(existingFilesData.value);
     }
+
+
+    document.getElementById('Export_spreadsheet').addEventListener('click', () => {
+       console.log(window.location.origin);
+        const month = document.getElementById('monthInput').value;
+      // alert(month);
+        if (!month) {
+            alert('Please select a month before exporting.');
+            return;
+        }
+        window.location.href = `${window.location.origin}/dashboard/payroll/payroll/export/spreadsheet?selected_month=${month}`;
+    });
+
+    document.getElementById('Export_payslips').addEventListener('click', () => {
+        const month = selectedMonth();
+        if (!month) {
+            alert('Please select a month before exporting.');
+            return;
+        }
+        window.location.href = `${window.location.origin}/dashboard/payroll/payroll/export/paysheets?selected_month=${month}`;
+    });
 });
 
-function openEditModal(incidentId) {
-    const modal = new bootstrap.Modal(document.getElementById('editAttendanceModal'));
-    modal.show();
+function openEditModal(id) {
+    document.getElementById('edit-modal').style.display = 'block';
+    document.getElementById('edit-form').onsubmit = function (event) {
+        event.preventDefault();
+        submitEditForm(id);
+    };
+}
 
-    const modalContent = document.getElementById('editAttendanceContent');
-    modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
-    // Fetch content from the server
-    fetch(`https://hr.jaan.lk/dashboard/incident/${incidentId}/edit`)
-      .then(response => response.text())
-      .then(html => {
-        modalContent.innerHTML = html;
-        setTimeout(() => {
+function submitEditForm(id) {
+    const formData = new FormData(document.getElementById('edit-form'));
 
-       
-                // Ensure file input works after content is loaded
-                const docFilesInput = document.getElementById('doc-files');
-                if (docFilesInput) {
-                    docFilesInput.addEventListener('change', function() {
-                        handleFileSelection(this);
-                    });
-
-
-                }
-
-                const existingFilesData = document.getElementById('existing-files-data');
-                if (existingFilesData) {
-               
-                    initializeExistingFiles(existingFilesData.value);
-                }
-            }, 100);
-      })
-      .catch(error => {
-        modalContent.innerHTML = '<div class="text-center py-4 text-danger"><p>Error loading content. Please try again later.</p></div>';
-        console.error('Error:', error);
-      });
-  }// Attendance Management Routes
+    fetch(`/payroll/${id}/update-advance-loan`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Error updating record');
+            }
+        });
+}
   let selectedAddFiles = new DataTransfer();
 
   function openAddModal() {
@@ -693,55 +697,10 @@ function openEditModal(incidentId) {
         });
 }
 
-
-function openViewModal(data) {
-    // Populate modal fields with the passed data
-    document.querySelector('#view-attendance-modal-container .modal-employee-name').textContent = data.employeeName;
-    document.querySelector('#view-attendance-modal-container .modal-employee-id').textContent = data.employeeId;
-    document.querySelector('#view-attendance-modal-container .modal-incident-type').textContent = data.type;
-    document.querySelector('#view-attendance-modal-container .modal-incident-date').textContent = data.IncidentDate;
-    document.querySelector('#view-attendance-modal-container .modal-resolution-status').textContent = data.Status;
-    document.querySelector('#view-attendance-modal-container .modal-created').textContent = data.created;
-    document.querySelector('#view-attendance-modal-container .modal-description').textContent = data.Description;
-
-
-
-    const supportingDocContainer = document.querySelector('#view-attendance-modal-container .modal-supporting-document');
-    supportingDocContainer.innerHTML = ''; // Clear previous content
-    
-    try {
-        const documents = JSON.parse(data.supportingDoc);
-        if (Array.isArray(documents) && documents.length > 0) {
-            const docList = document.createElement('ul');
-            docList.className = 'space-y-2';
-            
-            documents.forEach(doc => {
-                if (typeof doc === 'string') {
-                    const li = document.createElement('li');
-                    const link = document.createElement('a');
-                    link.href = `/storage/${doc}`;
-                    link.target = '_blank';
-                    link.className = 'text-blue-500 hover:text-blue-700 underline';
-                    link.textContent = doc.split('/').pop(); // Get filename from path
-                    li.appendChild(link);
-                    docList.appendChild(li);
-                }
-            });
-            
-            supportingDocContainer.appendChild(docList);
-        } else {
-            supportingDocContainer.textContent = 'No documents available';
-        }
-    } catch (e) {
-        supportingDocContainer.textContent = 'No documents available';
-    }
-
-    // Show the modal
-    const modal = document.getElementById('view-attendance-modal-container');
-    modal.classList.remove('hidden');
-    setTimeout(() => {
-        modal.classList.remove('opacity-0', 'scale-95');
-    }, 10);
+function openViewModal(id) {
+    const iframe = document.getElementById('paysheet-pdf');
+    iframe.src = `/dashboard/payroll/payroll/${id}/view-paysheet`;
+   // document.getElementById('view-modal').style.display = 'block';
 }
 
 function closeViewModal() {

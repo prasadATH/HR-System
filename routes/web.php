@@ -14,6 +14,7 @@ use App\Http\Controllers\LoanController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\EmployeeContributionController;
+use App\Http\Controllers\PayrollExportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,6 +111,15 @@ Route::middleware('auth')->prefix('dashboard/payroll')->group(function () {
     Route::get('/{id}/edit', [PayrollController::class, 'edit'])->name('payroll.edit');
     Route::put('/{id}', [PayrollController::class, 'update'])->name('payroll.update');
     Route::delete('/{id}', [PayrollController::class, 'destroy'])->name('payroll.destroy');
+
+    Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll.index');
+Route::post('/payroll/{id}/update-advance-loan', [PayrollController::class, 'updateAdvanceAndLoan'])->name('payroll.update-advance-loan');
+Route::get('/payroll/{id}/view-paysheet', [PayrollController::class, 'viewPaysheet'])->name('payroll.view-paysheet');
+Route::get('/payroll/download-all/{month}', [PayrollController::class, 'downloadAllPaysheets'])->name('payroll.download-all');
+
+Route::get('/payroll/export/spreadsheet', [PayrollExportController::class, 'exportSalarySpreadsheet'])->name('payroll.export.spreadsheet');
+Route::get('/payroll/export/paysheets', [PayrollExportController::class, 'downloadPaysheets'])->name('payroll.export.paysheets');
+
 });
 
 // Expense Management Routes
