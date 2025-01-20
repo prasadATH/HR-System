@@ -20,19 +20,25 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate the request
-            $validated = $request->validate([
-                'department_id' => 'required|string|max:255',
-                'name' => 'required|string|max:255',
-                'branch' => 'nullable|string|max:255',
-            ]);
+        $validated = $request->validate([
+            'department_id' => 'required|string|max:255',
+            'name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
+            'branch' => 'nullable|string|max:255|regex:/^[a-zA-Z\s]+$/',
+        ]);
 
-            logger('Validation passed');
+        logger('Validation passed');
+    } catch (ValidationException $e) {
+        logger('Validation failed', $e->errors());
 
-        } catch (ValidationException $e) {  // Simplified exception
-            logger('Validation failed', $e->errors());
-            dd($e->errors(),  $request->all());
-        }
+        // Inspect errors and request data
+        logger('Request data', $request->all());
+
+        // Optional: Customize error handling
+        return response()->json([
+            'errors' => $e->errors(),
+            'message' => 'Validation failed. Please check the input fields.',
+        ], 422);
+    }
 
         // Check if the department_id already exists
         $existingDepartments = Department::where('department_id', $request->department_id)->get();

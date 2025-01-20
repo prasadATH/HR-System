@@ -266,7 +266,7 @@
       modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
   
       // Fetch content from the server
-      fetch(`https://hr.jaan.lk/dashboard/attendance/${attendanceId}/edit`)
+      fetch(`http://127.0.0.1:8000/dashboard/attendance/${attendanceId}/edit`)
         .then(response => response.text())
         .then(html => {
           modalContent.innerHTML = html;
@@ -289,7 +289,7 @@
     $('#editAttendanceContent input').prop('disabled', false);
   });
       // Fetch content from the server
-      fetch(`https://hr.jaan.lk/dashboard/attendance/create`)
+      fetch(`http://127.0.0.1:8000/dashboard/attendance/create`)
         .then(response => response.text())
         .then(html => {
           modalContent.innerHTML = html;
