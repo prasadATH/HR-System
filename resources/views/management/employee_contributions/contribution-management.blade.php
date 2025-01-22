@@ -598,7 +598,7 @@ function openEditModal(incidentId) {
     const modalContent = document.getElementById('editAttendanceContent');
     modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
     // Fetch content from the server
-    fetch(`https://hr.jaan.lk/dashboard/incident/${incidentId}/edit`)
+    fetch(`${window.location.origin}/dashboard/incident/${incidentId}/edit`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;

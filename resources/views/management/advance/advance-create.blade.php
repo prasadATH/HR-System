@@ -8,17 +8,7 @@
       <form action="{{ route('advance.store') }}" method="POST" class="w-full mx-auto p-6 "  enctype="multipart/form-data">
       @csrf
       <div class="grid grid-cols-2 gap-4">
-          <!-- Employee ID -->
-          <div>
-            <label for="employee_name" class="block text-xl text-black font-bold">Employee Name :</label>
-            <input
-              type="text"
-              name = "employee_name"
-              id="employee_name"
-              placeholder="Enter your Employee Name"
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 text-[#0000008C] font-bold"
-            />
-          </div>
+
           <div>
             <label for="employment_ID" class="block text-xl text-black font-bold">Employee ID:</label>
             <input
@@ -63,7 +53,7 @@
           </div>
           <!-- Status -->
           <div>
-            <label for="duration" class="block text-xl text-black font-bold">Payment Duration :</label>
+            <label for="duration" class="block text-xl text-black font-bold">Payment Duration(Months):</label>
             <input
               type="text"
               id="duration"
@@ -72,17 +62,19 @@
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
           </div>
-          <!-- Status -->
-          <div>
-            <label for="status" class="block text-xl text-black font-bold">Approval Status :</label>
-            <input
-              type="text"
-              id="status"
-              name = "status"
-              placeholder="Enter the Status"
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
-            />
-          </div>
+
+              <!-- Approval Status -->
+              <div>
+                <label for="status" class="block text-xl text-black font-bold">Approval Status :</label>
+                <select
+                  id="status"
+                  name="status"
+                  class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-black focus:border-blue-500 font-bold text-[#0000008C]">
+                  <option value="approved">Approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
 
           <!-- Supporting Document -->
           <div>

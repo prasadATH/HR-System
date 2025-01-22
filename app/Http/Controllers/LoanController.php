@@ -20,7 +20,6 @@ class LoanController extends Controller
     
     try {
     $validated = $request->validate([
-        'employee_name' => 'required|string',
         'employment_ID' => 'required|string|max:255',
         'loan_amount' => 'required|numeric|min:0',
         'interest_rate' => 'nullable|numeric|min:0',
@@ -79,7 +78,7 @@ class LoanController extends Controller
     
     $advance = new Loan();
     $advance -> employee_id = $employee -> id;
-    $advance -> employee_name = $validated['employee_name'];
+    $advance -> employee_name = $employee -> full_name;
     $advance -> employment_ID = $validated['employment_ID'];
     $advance -> loan_amount = $validated['loan_amount'];
     $advance -> interest_rate = $validated['interest_rate'];

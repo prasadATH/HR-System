@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('bank_name');
             $table->string('branch');
             $table->string('account_number');
+            $table->string('bank_code');
+            $table->string('branch_code');
+        
+            $table->string('company_ref');
             $table->timestamps();
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');

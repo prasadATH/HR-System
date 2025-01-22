@@ -83,8 +83,8 @@
       <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
       
         <div class="modal-dialog modal-dialog-left " style="padding: 0;">
-         
-          <div class="rounded-3xl"  style="padding-top: 60px;"  id="editDepartmentContent">
+          <div class="modal-content p-0 rounded-3xl">
+          <div class="rounded-3xl" id="editDepartmentContent">
             <!-- Close Button -->
             <!-- Dynamically loaded content will be injected here -->
             <div class="text-center py-4">
@@ -215,33 +215,26 @@
           });
       });
       
-  function openAddModal() {
-    const modal = new bootstrap.Modal(document.getElementById('editDepartmentModal'));
-    modal.show();
-
-    const modalContent = document.getElementById('editDepartmentContent');
-    modalContent.innerHTML = '<div class="text-center"><p>Loading...</p></div>';
-
-    // Fetch content from the server
-    fetch(`http://127.0.0.1:8000/dashboard/departments/department/create`)
-        .then((response) => {
-            if (!response.ok) {
-                // If the response is not OK, throw an error
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .then((html) => {
-            modalContent.innerHTML = html;
-
-            // Reinitialize any necessary scripts or event listeners if required
-        })
-        .catch((error) => {
-            // Show an alert with the error message
-            alert(`Error loading content: ${error.message}`);
-            console.error('Error:', error);
-        });
-  }
+      function openAddModal() {
+          const modal = new bootstrap.Modal(document.getElementById('editDepartmentModal'));
+          modal.show();
+      
+          const modalContent = document.getElementById('editDepartmentContent');
+          modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
+      
+          // Fetch content from the server
+          fetch(`${window.location.origin}/dashboard/departments/department/create`)
+            .then(response => response.text())
+            .then(html => {
+              modalContent.innerHTML = html;
+      
+               // Reinitialize any necessary scripts or event listeners if required
+            })
+            .catch(error => {
+              modalContent.innerHTML = '<div class="text-center py-4 text-danger"><p>Error loading content. Please try again later.</p></div>';
+              console.error('Error:', error);
+            });
+      }
       
       </script>
         

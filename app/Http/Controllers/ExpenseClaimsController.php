@@ -23,7 +23,7 @@ class ExpenseClaimsController extends Controller
         try {
         // Validate the incoming request
         $request->validate([
-            'employee_id' => 'required|exists:employees,id', // Ensure employee exists
+            'employee_id' => 'required|string|max:255', // Ensure employee exists
             'expense_type' => 'required|string|max:255',
             'description' => 'nullable|string',
             'expense_date' => 'required|date',
@@ -41,7 +41,10 @@ class ExpenseClaimsController extends Controller
         dd($e->errors(),  $request->all());
     }
     $avatarPath = null;
-
+    $employee = Employee::where('employee_id', $request->employee_id)->first();
+    if (!$employee) {
+        return back()->withErrors(['employment_ID' => 'Invalid Employee ID.'])->withInput();
+    }
     try {
         
         $uploadedFiles = [];
@@ -70,7 +73,7 @@ class ExpenseClaimsController extends Controller
         
         $expense = new ExpenseClaim();
 
-        $expense -> employee_id = $request['employee_id'];
+        $expense -> employee_id =   $employee->id;
         $expense -> category = $request['expense_type'];
         $expense -> description = $request['description'];
         $expense -> approved_by = $request['approved_by'];
@@ -141,6 +144,11 @@ class ExpenseClaimsController extends Controller
             dd($e->errors(),  $request->all());
         }
 
+
+        $employee = Employee::where('employee_id', $request->employee_id)->first();
+        if (!$employee) {
+            return back()->withErrors(['employment_ID' => 'Invalid Employee ID.'])->withInput();
+        }
         // Retrieve the existing supporting documents for the incident
         $currentFiles = is_string($expense->supporting_documents) 
         ? json_decode($expense->supporting_documents, true) ?: [] 
@@ -179,7 +187,7 @@ class ExpenseClaimsController extends Controller
     
             // Update the incident record
             $expense->update([
-                'employee_id' => $request->input('employee_id'),
+                'employee_id' => $employee->id,
                 'category' => $request->input('expense_type'),
                 'supporting_documents' => !empty($finalFiles) ? json_encode($finalFiles) : null,
                 'description' => $request->input('description'),

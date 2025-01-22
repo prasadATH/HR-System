@@ -376,7 +376,7 @@ function openAddModal() {
 
     selectedAddFiles = new DataTransfer();
     // Fetch content from the server
-    fetch(`https://hr.jaan.lk/dashboard/leaves/leave/create`)
+    fetch(`${window.location.origin}/dashboard/leaves/leave/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
@@ -530,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
     existingFilesList = [];
 
     // Fetch content from the server
-    fetch(`https://hr.jaan.lk/dashboard/leaves/${leaveId}/edit`)
+    fetch(`${window.location.origin}/dashboard/leaves/${leaveId}/edit`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
