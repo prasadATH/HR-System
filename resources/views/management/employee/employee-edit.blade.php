@@ -197,7 +197,7 @@
                 <input type="text" name="employment_type" value="{{ $employee->employment_type }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
             </div>
             <div class="w-full">    
-                <input type="text" name="manager_id" value="{{ $employee->manager_id }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                <input type="text" name="manager_id" value="{{ $employee->manager_id ?? 'Null' }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
             </div>
 
                 <div class="w-full">
@@ -223,7 +223,7 @@
             </div>
             <div class="w-full flex space-x-8">
                 <p class="text-xl"><i class="ri-info-card-fill"></i></p>
-                <label for="age" class="text-xl">Age</label>
+                <label for="age" class="text-xl">NIC</label>
             </div>
             <div class="w-full flex space-x-8 pt-4">
                 <p class="text-xl"><i class="ri-info-card-fill"></i></p>
@@ -251,7 +251,7 @@
                 <input type="text" id="full_name" name="full_name" value="{{ $employee->full_name }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A] " required />
             </div>
             <div class="w-full">
-                <input type="number" id="age" name="age" value="{{ $employee->age }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                <input type="number" id="nic" name="nic" value="{{ $employee->nic }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
             </div>
             <div class="w-full">
                 <input type="email" id="email" name="email" value="{{ $employee->email }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />

@@ -18,6 +18,7 @@ class Employee extends Model
         'address',
         'date_of_birth',
         'age',
+        'nic',
         'gender',
         'title',
         'employment_type',

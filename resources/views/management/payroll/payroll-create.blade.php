@@ -23,7 +23,7 @@
                 <div class="flex items-center space-x-4">
                     <button class="flex items-center justify-center nunito- space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
                         <p class="text-3xl"><i class="ri-add-fill"></i></p>
-                        <span>Add Record</span>
+                        <span>Save</span>
                     </button>
                 </div>
             </div>

@@ -127,7 +127,7 @@
             <p class="text-xl">{{ $employee->department->name ?? 'Null'}}</p>
             <p class="text-xl">{{ $employee->department->branch ?? 'Null'}}</p>
             <p class="text-xl">{{ $employee->employment_type }}</p>
-            <p class="text-xl">{{ $employee->manager_id }}</p>
+            <p class="text-xl">{{ $employee->manager_id ?? 'Null'}}</p>
             <p class="text-xl">{{ $employee->probation_start_date }}</p>
             <p class="text-xl">{{ $employee->probation_period }}</p>
           
@@ -147,7 +147,7 @@
             </div>
             <div class="w-full flex space-x-8">
                 <p class="text-xl"><i class="ri-info-card-fill"></i></p>
-                <label for="age" class="text-xl">Age</label>
+                <label for="age" class="text-xl">NIC</label>
             </div>
             <div class="w-full flex space-x-8">
                 <p class="text-xl"><i class="ri-info-card-fill"></i></p>
@@ -172,7 +172,7 @@
         </div>
         <div class="w-3/4 space-y-4 pl-16 text-black font-bold">
         <p class="text-xl">{{ $employee->full_name }}</p>
-        <p class="text-xl">{{ $employee->age }}</p>
+        <p class="text-xl">{{ $employee->nic }}</p>
         <p class="text-xl">{{ $employee->email }}</p>
         <p class="text-xl">{{ $employee->phone }}</p>
         <p class="text-xl">{{ $employee->gender}}</p>

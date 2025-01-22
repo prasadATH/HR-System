@@ -7,6 +7,7 @@ use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Position;
 use App\Models\Education;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -52,11 +53,11 @@ class EmployeeController extends Controller
              'full_name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
              'first_name' => 'nullable|string|max:255|regex:/^[a-zA-Z\s]+$/',
              'last_name' => 'nullable|string|max:255|regex:/^[a-zA-Z\s]+$/',
-             'email' => 'required|email|unique:employees,email,' . $id, 
+             'email' => 'required|email|regex:/^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,6}$/|unique:employees,email,' . $id, 
              'phone' => 'nullable|string|max:15',
              'address' => 'nullable|string',
              'date_of_birth' => 'nullable|date',
-             'age' => 'nullable|integer',
+             'nic' => 'nullable|integer',
              'gender' => 'nullable|string',
              'title' => 'nullable|string|regex:/^[a-zA-Z\s]+$/',
              'employment_type' => 'nullable|string|regex:/^[a-zA-Z\s]+$/',
@@ -66,7 +67,7 @@ class EmployeeController extends Controller
              'branch' => 'required|string',
              'name' => 'required|string',
              'probation_start_date' => 'nullable|date',
-             'probation_period' => 'nullable|string|max:255',
+             'probation_period' => 'nullable|integer|min:1|max:365',
              'department_id' => 'nullable|exists:departments,id',
              'manager_id' => 'nullable|exists:employees,id',
              'education_id' => 'nullable|exists:education,id',
@@ -74,15 +75,15 @@ class EmployeeController extends Controller
              'employment_end_date' => 'nullable|date',
              'status' => 'nullable|string|max:255',
              'legal_documents' => 'sometimes|required|array', 
-             'account_holder_name' => 'required|string',
-             'bank_name' => 'required|string',
-             'account_no' => 'required|string',
+             'account_holder_name' => 'required|string|regex:/^[a-zA-Z\s]+$/',
+             'bank_name' => 'required|string|regex:/^[a-zA-Z\s]+$/',
+             'account_no' => 'required|integer|min:1|max:365',
              'branch_name' => 'required|string',
      
-             'degree' => 'nullable|string|max:255',
+             'degree' => 'nullable|string|max:255|',
              'institution' => 'nullable|string|max:255',
              'graduation_year' => 'nullable|integer',
-             'work_experience_years' => 'nullable|string|max:255',
+             'work_experience_years' => 'nullable|integer|min:1|max:365',
              'work_experience_role' => 'nullable|string|max:255',
              'work_experience_company' => 'nullable|string|max:255',
              'course_name' => 'nullable|string|max:255',
@@ -180,6 +181,7 @@ class EmployeeController extends Controller
          $employee->address = $validated['address'] ?? null;
          $employee->date_of_birth = $validated['date_of_birth'] ?? null;
          $employee->age = $validated['age'] ?? null;
+         $employee->nic = $validated['nic'] ?? null;
          $employee->gender = $validated['gender'] ?? null;
          $employee->title = $validated['title'] ?? null;
          $employee->employment_type = $validated['employment_type'] ?? null;
@@ -248,29 +250,31 @@ class EmployeeController extends Controller
     // Show the form to add a new employee
     public function create()
     {
+        $isFirstEmployee = Employee::count()===0;
         // Fetch all departments and positions
         $departments = Department::all();
         $employees = Employee::all();
         $education = Education::all();
     
         // Pass them to the view
-        return view('management.employee.create-employee', compact('departments', 'employees', 'education'));
+        return view('management.employee.create-employee', compact('departments', 'employees', 'education','isFirstEmployee'));
     }
 
     
 
     public function store(Request $request)
 { 
+    $isFirstEmployee = Employee::count()===0;
     // Validate the form data
     $validated = $request->validate([
         'full_name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
         'first_name' => 'nullable|string|max:255|regex:/^[a-zA-Z\s]+$/',
         'last_name' => 'nullable|string|max:255|regex:/^[a-zA-Z\s]+$/',
-        'email' => 'required|email|unique:employees,email',
+        'email' => 'required|email|regex:/^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,6}$/|unique:employees,email',
         'phone' => 'nullable|string|max:15',
         'address' => 'nullable|string',
         'date_of_birth' => 'nullable|date',
-        'age' => 'nullable|integer',
+        'nic' => 'nullable|integer',
         'gender' => 'nullable|string',
         'title' => 'nullable|string|regex:/^[a-zA-Z\s]+$/',
         'employment_type' => 'nullable|string|regex:/^[a-zA-Z\s]+$/',
@@ -280,23 +284,23 @@ class EmployeeController extends Controller
         'branch' => 'required|string',
         'name' => 'required|string',
         'probation_start_date' => 'nullable|date',
-        'probation_period' => 'nullable|string|max:255',
+        'probation_period' => 'nullable|integer',
         'department_id' => 'nullable|exists:departments,id',
-        'manager_id' => 'nullable|exists:employees,id',
+        'manager_id' => $isFirstEmployee ? 'nullable' : 'nullable|exists:employees,id',
         'education_id' => 'nullable|exists:education,id',
         'employment_start_date' => 'nullable|date',
         'employment_end_date' => 'nullable|date',
         'status' => 'nullable|string|max:255',
         'legal_documents' => 'required|array', 
-        'account_holder_name' => 'required|string',
-        'bank_name' => 'required|string',
-        'account_no' => 'required|string',
+        'account_holder_name' => 'required|string|regex:/^[a-zA-Z\s]+$/',
+        'bank_name' => 'required|string|regex:/^[a-zA-Z\s]+$/',
+        'account_no' => 'required|integer',
         'branch_name' => 'required|string',
 
-        'degree' => 'nullable|string|max:255',
+        'degree' => 'nullable|string|max:255|regex:/^[a-zA-Z\s]+$/',
         'institution' => 'nullable|string|max:255',
         'graduation_year' => 'nullable|integer',
-        'work_experience_years' => 'nullable|string|max:255',
+        'work_experience_years' => 'nullable|integer|min:1|max:365',
         'work_experience_role' => 'nullable|string|max:255',
         'work_experience_company' => 'nullable|string|max:255',
         'course_name' => 'nullable|string|max:255',
@@ -368,7 +372,13 @@ class EmployeeController extends Controller
     $employee->phone = $validated['phone'] ?? null;
     $employee->address = $validated['address'] ?? null;
     $employee->date_of_birth = $validated['date_of_birth'] ?? null;
-    $employee->age = $validated['age'] ?? null;
+    if (!empty($validated['date_of_birth'])) {
+        $dateOfBirth = Carbon::parse($validated['date_of_birth']); 
+        $employee->age = $dateOfBirth->age; 
+    } else {
+        $employee->age = null; 
+    }
+    $employee->nic = $validated['nic'] ?? null;
     $employee->gender = $validated['gender'] ?? null;
     $employee->title = $validated['title'] ?? null;
     $employee->employment_type = $validated['employment_type'] ?? null;
@@ -377,7 +387,11 @@ class EmployeeController extends Controller
     $employee->probation_start_date = $validated['probation_start_date'] ?? null;
     $employee->probation_period = $validated['probation_period'] ?? null;
     $employee->department_id = $department->id; 
-    $employee->manager_id = $validated['manager_id'] ?? null;
+    if ($isFirstEmployee) {
+        $employee->manager_id = $employee->id; 
+    } else {
+        $employee->manager_id = $validated['manager_id'] ?? null; 
+    }
     $employee->education_id = $education->id;
     $employee->employment_start_date = $validated['employment_start_date'] ?? null;
     $employee->employment_end_date = $validated['employment_end_date'] ?? null;

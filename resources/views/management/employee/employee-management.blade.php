@@ -82,7 +82,7 @@
 </div>
 <div class="w-full h-1/2 flex flex-col justify-start items-center">
 <p class=" text-[#00000080] nunito-">Employee ID</p>
-<p class="text-black nunito-" style="font-weight: 700;">{{ $employee->id }}</p>
+<p class="text-black nunito-" style="font-weight: 700;">{{ $employee->employee_id }}</p>
 </div>
 </div>
 </div>

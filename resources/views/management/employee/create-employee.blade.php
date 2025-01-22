@@ -145,7 +145,7 @@
                     <p class="text-xl"><i class="ri-info-card-fill"></i></p>
                     <p class="text-xl">Employment Type</p>
                 </div>
-                <div class="w-full flex space-x-8">
+                <div class="w-full flex space-x-8" @if($isFirstEmployee) style="display: none;" @endif>
                     <p class="text-xl"><i class="ri-info-card-fill"></i></p>
                     <p class="text-xl">Manager ID</p>
                 </div>
@@ -175,16 +175,23 @@
                     </select>
                 </div>
                 <div class="w-full">
-                <input type="text" name="employment_type" placeholder="Enter Employment Type" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
-                </div>
-                <div class="w-full mt-4">
-                    <select name="manager_id" id="manager_id" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" required>
-                        <option value="">Select Manager</option>
-                        @foreach($employees->unique('employee_id') as $employee)
-            <option value="{{ $employee->id }}">{{ $employee->employee_id }} - {{ $employee->first_name }}</option>
-        @endforeach
+                    <select id="employment_type" name="employment_type" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]">
+                        <option value="" disabled selected>Select Employmet Type</option>
+                        <option value="full time">Full Time</option>
+                        <option value="part time">Part Time</option>
                     </select>
                 </div>
+                <div class="w-full mt-4" @if($isFirstEmployee) style="display: none;" @endif>
+                <select name="manager_id" id="manager_id" 
+                    class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" 
+                    @if($isFirstEmployee) disabled @endif>
+                    <option value="">Select Manager</option>
+                    @foreach($employees->unique('employee_id') as $employee)
+                        <option value="{{ $employee->id }}">{{ $employee->employee_id }} - {{ $employee->first_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
                 <div class="w-full">
                     <input type="date" name="probation_start_date" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
@@ -208,7 +215,7 @@
                 </div>
                 <div class="w-full flex space-x-8">
                     <p class="text-xl"><i class="ri-info-card-fill"></i></p>
-                    <label for="age" class="text-xl">Age</label>
+                    <label for="nic" class="text-xl">NIC</label>
                 </div>
                 <div class="w-full flex space-x-8 ">
                     <p class="text-xl"><i class="ri-info-card-fill"></i></p>
@@ -236,7 +243,7 @@
                     <input type="text" id="full_name" name="full_name" placeholder="Enter Full Name" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A] " required />
                 </div>
                 <div class="w-full">
-                    <input type="number" id="age" name="age" placeholder="Enter Age" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="number" id="nic" name="nic" placeholder="Enter NIC" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
                     <input type="email" id="email" name="email" placeholder="Enter Email Address" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
@@ -336,13 +343,13 @@
                     <input type="text" id="course_name" name="course_name" placeholder="Enter Course Name" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
-                    <input type="text" id="training_provider" name="training_provider" placeholder="Enter Training Provider" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="text" id="training_provider" name="training_provider" placeholder="Enter Training Provider" class="w-full mt-4 p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
-                    <input type="date" id="completion_date" name="completion_date" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="date" id="completion_date" name="completion_date" class="w-full mt-2 p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
-                    <select id="certification_status" name="certification_status" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]">
+                    <select id="certification_status" name="certification_status" class="w-full mt-4 p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]">
                         <option value="" disabled selected>Select Certification Status</option>
                         <option value="merit">Merit</option>
                         <option value="distinction">Distinction</option>
