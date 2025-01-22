@@ -177,7 +177,7 @@
                 <div class="w-full">
                 <input type="text" name="employment_type" placeholder="Enter Employment Type" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
-                <div class="w-full">
+                <div class="w-full mt-4">
                     <select name="manager_id" id="manager_id" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" required>
                         <option value="">Select Manager</option>
                         @foreach($employees->unique('employee_id') as $employee)
@@ -189,7 +189,7 @@
                     <input type="date" name="probation_start_date" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
-                    <input type="text" name="probation_period" placeholder="Enter Probation Period (e.g., 6 Months)" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="text" name="probation_period" placeholder="Enter Probation Period" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
             </div>
     </div>
@@ -210,7 +210,7 @@
                     <p class="text-xl"><i class="ri-info-card-fill"></i></p>
                     <label for="age" class="text-xl">Age</label>
                 </div>
-                <div class="w-full flex space-x-8 pt-4">
+                <div class="w-full flex space-x-8 ">
                     <p class="text-xl"><i class="ri-info-card-fill"></i></p>
                     <label for="email" class="text-xl">Email Address</label>
                 </div>
@@ -222,7 +222,7 @@
                     <p class="text-xl"><i class="ri-info-card-fill"></i></p>
                     <label for="gender" class="text-xl">Gender</label>
                 </div>
-                <div class="w-full flex space-x-8 pt-4">
+                <div class="w-full flex space-x-8 ">
                     <p class="text-xl"><i class="ri-info-card-fill"></i></p>
                     <label for="date_of_birth" class="text-xl">Date of Birth</label>
                 </div>
@@ -290,18 +290,18 @@
             </div>
             <div class="w-3/4 space-y-4 pl-16 text-black font-bold">
                 <div class="w-full">
-                    <input type="text" id="degree" name="degree" placeholder="Enter Degree (e.g., BSc Software Engineering)" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="text" id="degree" name="degree" placeholder="Enter Degree Course" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
-                    <input type="text" id="institution" name="institution" placeholder="Enter Institution (e.g., University of Westminster)" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="text" id="institution" name="institution" placeholder="Enter Institution" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
-                    <input type="number" id="graduation_year" name="graduation_year" placeholder="Enter Graduation Year (e.g., 2024)" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="number" id="graduation_year" name="graduation_year" placeholder="Enter Graduation Year" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full flex flex-col space-y-2">
-                    <input type="text" id="work_experience_years" name="work_experience_years" placeholder="Enter Years of Work Experience (e.g., 2015 - 2020)" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
-                    <input type="text" id="work_experience_role" name="work_experience_role" placeholder="Enter Role (e.g., Project Manager)" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
-                    <input type="text" id="work_experience_company" name="work_experience_company" placeholder="Enter Company (e.g., IFS, Sri Lanka)" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="text" id="work_experience_years" name="work_experience_years" placeholder="Enter Years of Experience" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="text" id="work_experience_role" name="work_experience_role" placeholder="Enter Role " class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="text" id="work_experience_company" name="work_experience_company" placeholder="Enter Company " class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
             </div>
         </div> 

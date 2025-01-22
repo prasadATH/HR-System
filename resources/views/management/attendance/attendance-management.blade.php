@@ -289,7 +289,7 @@
     $('#editAttendanceContent input').prop('disabled', false);
   });
       // Fetch content from the server
-      fetch(`${window.location.origin}/dashboard/attendance/create`)
+      fetch(`https://hr.jaan.lk/dashboard/attendance/create`)
         .then(response => response.text())
         .then(html => {
           modalContent.innerHTML = html;

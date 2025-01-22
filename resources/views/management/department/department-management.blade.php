@@ -90,7 +90,7 @@
             <div class="text-center py-4">
               <p>Loading...</p>
             </div>
-          </div>
+        
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@
         @foreach ($departmentChunk as $department)
             <div class="border-2 border-[#00000080] p-8 space-y-4 h-[280px]">
               <div class="flex flex-col items-center justify-center w-full">
-                <p class="text-4xl text-black font-bold">{{ explode(' ', $department->name)[0] }}</p>
+                <p class="text-2xl text-black font-bold">{{ $department->name }}</p>
                 <p class="text-2xl text-[#00000099]">Department ID: {{ substr($department->department_id, 0, 5) }}</p>
               </div>
               <div class="flex flex-col w-full pt-4 space-y-2 border-l-4 border-[#34A0A4] pl-4">
@@ -223,7 +223,7 @@
           modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
       
           // Fetch content from the server
-          fetch(`${window.location.origin}/dashboard/departments/department/create`)
+          fetch(`https://hr.jaan.lk/dashboard/departments/department/create`)
             .then(response => response.text())
             .then(html => {
               modalContent.innerHTML = html;
