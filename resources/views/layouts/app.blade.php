@@ -6,6 +6,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="./assetes/css/root.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" href="{{ asset('browser_icon.png') }}" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">

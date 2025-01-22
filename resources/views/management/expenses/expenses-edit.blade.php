@@ -96,7 +96,7 @@
 
         
           <div>
-            <label for="doc-files" class="flex items-center justify-center px-4 py-2 bg-[#184E77] border-2 border-[#52B69A80] text-white rounded-md cursor-pointer hover:bg-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"> 
+            <label for="doc-files" class="flex items-center justify-start px-4 py-2 bg-[#184E77] border-2 border-[#52B69A80] text-white rounded-md cursor-pointer hover:bg-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"> 
                 <span class="iconify" data-icon="ic:sharp-upload" style="width: 16px; height: 16px;"></span>
                 <span class="ml-2">Upload Files</span>
             </label>
@@ -106,7 +106,7 @@
             <input type="hidden" id="existing-files-data" value='{{ $expense->supporting_documents }}'>
             <input type="hidden" name="existing_files" id="existing-files">
 
-            <div id="file-list" class="text-black text-sm w-full bg-[#D9D9D980] flex flex-col justify-end items-end rounded-b-xl pr-4 pt-4">
+            <div id="file-list" class="text-black text-sm w-full bg-[#D9D9D980] flex flex-col justify-start items-start rounded-b-xl pr-4 pt-4">
               <p>Attached Files:</p>
               <ul id="file-list-items" class="w-full px-4">
                   @php

@@ -192,7 +192,27 @@
     </div>
     
     <!-- Calendar Input on the Right -->
+
+    
     <div class="relative w-[300px] nunito-">
+
+
+  <!-- Approval Status Filter -->
+  <div class="w-full flex justify-end items-center mb-3 ">
+    <div class="relative flex justify-end  w-[300px] nunito- z-10">
+<select
+id="approvalStatusFilter"
+class="w-1/2  px-4 py-2  text-black border-2 border-[#184E77] rounded-xl shadow-sm"
+>
+<option value="">Select Status </option>
+<option value="Approved">Approved</option>
+<option value="Pending">Pending</option>
+<option value="Rejected">Rejected</option>
+</select>
+</div>
+ </div>
+
+
       <button
         id="calendarButton"
         class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
@@ -213,6 +233,15 @@
         type="text"
         class="absolute z-10 opacity-0 pointer-events-none"
       />
+
+      
+                      <!-- Reset Calendar Button -->
+    <button
+    id="resetCalendarButton"
+    class="px-4 py-2 text-white bg-red-600 rounded-xl shadow-sm hover:bg-red-700 mt-2"
+  >
+    Reset
+  </button>
     </div>
     
     </div>
@@ -228,6 +257,8 @@
           <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Amount</th>
           <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Supporting Document</th>
           <th class="text-xl text-black font-bold px-4 py-2 text-center align-middle">Status</th>
+          <th class="text-xl text-black font-bold px-4 py-2 text-center align-middle">Actions</th>
+
         </tr>
       </thead>
       <tbody>
@@ -235,8 +266,8 @@
       <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500"
     >
       <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl font-bold">
-      {{ $record->employee->first_name }} {{ $record->employee->last_name }}
-            <p class="text-sm">{{ $record->employee->id }}</p>
+        {{ $record->employee->full_name }}
+            <p class="text-sm">{{ $record->employee->employee_id }}</p>
       </td>
       <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
       {{ $record->submitted_date }}
@@ -244,6 +275,38 @@
       <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
       {{ $record->category }}
       </td>
+      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+        {{ $record->amount }}
+        </td>
+
+        <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+            @if(!empty($record->supporting_documents) && is_string($record->supporting_documents))
+              @php
+                $documents = json_decode($record->supporting_documents, true);
+                @endphp
+          
+              @if(is_array($documents))
+                <ul>
+                  @foreach ($documents as $document)
+                    @if(is_string($document))
+                      <li>
+                        @php
+                          $fileName = basename($document);
+                        @endphp
+                        <a href="{{ asset('storage/' . $document) }}" target="_blank" class="text-blue-500 underline document-link">
+                          {{ $fileName }}
+                        </a>
+                      </li>
+                    @endif
+                  @endforeach
+                </ul>
+              @else
+                <p class="text-gray-500">Invalid documents data</p>
+              @endif
+            @else
+              <p class="text-gray-500">No documents uploaded</p>
+            @endif
+            </td>
       <td class="text-xl text-black px-4 py-2 text-center align-middle bg-[#D9D9D966]">
     
     
@@ -263,34 +326,7 @@
     @endif
     
       </td>
-      <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
-      @if(!empty($record->supporting_documents) && is_string($record->supporting_documents))
-        @php
-          $documents = json_decode($record->supporting_documents, true);
-          @endphp
-    
-        @if(is_array($documents))
-          <ul>
-            @foreach ($documents as $document)
-              @if(is_string($document))
-                <li>
-                  @php
-                    $fileName = basename($document);
-                  @endphp
-                  <a href="{{ asset('storage/' . $document) }}" target="_blank" class="text-blue-500 underline document-link">
-                    {{ $fileName }}
-                  </a>
-                </li>
-              @endif
-            @endforeach
-          </ul>
-        @else
-          <p class="text-gray-500">Invalid documents data</p>
-        @endif
-      @else
-        <p class="text-gray-500">No documents uploaded</p>
-      @endif
-      </td>
+
      
       <td class="text-left align-left  bg-[#D9D9D966] rounded-r-xl">
       <div class="relative">
@@ -313,7 +349,7 @@
                  class="absolute top-0 right-3 mt-12 w-30 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-10">
                 <ul class=" text-gray-700">
                     <li><a href="#" class="block px-2 py-2 hover:bg-gray-100" onclick="openViewModal({
-                    employeeName: '{{ $record->employee->first_name }} {{ $record->employee->last_name }}',
+                    employeeName: '{{ $record->employee->full_name }}',
         employeeid: '{{ $record->employee->id }}',
         submitted_date: '{{ $record->submitted_date }}',
         amount: '{{ $record->amount }}',
@@ -397,7 +433,7 @@
             <!-- Submit Button -->
             <div class="w-full text-center px-16">
               <button
-                type="submit"
+                onclick="closeViewModal()"
                 class="w-1/3 bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-white font-bold py-4 px-4 rounded-xl hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
               Done
@@ -429,6 +465,18 @@ function formatDuration(seconds) {
 
 // Document hover tooltip functionality
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Add click listener to the modal background
+    const modalContainer = document.getElementById('view-attendance-modal-container');
+    const modalContent = document.getElementById('modal-container');
+    modalContainer.addEventListener('click', (event) => {
+        // Check if the click is on the modal background, not its content
+        if (!modalContent.contains(event.target)) {
+            closeViewModal();
+    }
+    });
+
+
     const documentLinks = document.querySelectorAll('.document-link');
     
     documentLinks.forEach(link => {
@@ -547,6 +595,10 @@ $(document).ready(function () {
         },
         { 
             targets: 5, 
+            className: 'status-column' 
+        },
+        { 
+            targets: 6, 
             className: 'actions-column' 
         }
     ]
@@ -562,6 +614,19 @@ $('#custom-search-input').on('keyup', function () {
     const searchTerm = $(this).val(); // Get the value of the search input
     table.search(searchTerm).draw(); // Trigger the DataTable search with the entered term
 });
+
+$('#resetCalendarButton').on('click', function () {
+    selectedDate.textContent = '13.03.2021'; // Reset displayed date
+    calendarInput._flatpickr.clear(); // Clear Flatpickr input
+    table.columns(3).search('').draw(); // Clear DataTable date filter
+  });
+
+  // Approval Status Filter
+  $('#approvalStatusFilter').on('change', function () {
+    const status = $(this).val();
+    table.columns(5).search(status).draw(); // Assuming status is in the 6th column (index 5)
+  });
+
 
 
 //pagination controls
@@ -676,7 +741,7 @@ function openEditModal(incidentId) {
     const modalContent = document.getElementById('editAttendanceContent');
     modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
     // Fetch content from the server
-    fetch(`https://hr.jaan.lk/dashboard/expenses/${incidentId}/edit`)
+    fetch(`${window.location.origin}/dashboard/expenses/${incidentId}/edit`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;

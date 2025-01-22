@@ -140,7 +140,20 @@
                 </div>
                   </div>
                 </div>
-                
+                                 <!-- Approval Status Filter -->
+                                 <div class="w-full flex justify-end items-center mb-3">
+                                    <div class="relative w-[300px] nunito- z-10">
+                    <select
+                      id="approvalStatusFilter"
+                      class="w-full px-4 py-2 text-black border-2 border-[#184E77] rounded-xl shadow-sm"
+                    >
+                      <option value="">Select Status</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </div>
+                                 </div>
                 
                 <div class="w-full flex justify-end items-center">
                 <div class="relative w-[300px] nunito- z-10">
@@ -165,7 +178,17 @@
                     type="text"
                     class="absolute z-10 opacity-0 pointer-events-none"
                   />
+
+                      <!-- Reset Calendar Button -->
+    <button
+    id="resetCalendarButton"
+    class="px-4 py-2 text-white bg-red-600 rounded-xl shadow-sm hover:bg-red-700 mt-2"
+  >
+    Reset
+  </button>
                 </div>
+
+
                 </div>
                 <div class="flex w-1/3 align-left">
                   <input id="custom-search-input" type="text" placeholder="Search record here" class="w-full px-4 py-2 border-2 border-[#00000080] text-2xl text-[#00000080] rounded-xl"/>
@@ -187,9 +210,10 @@
                   <tbody>
                     @foreach ($advances as $advance)
                     <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500">
-                    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl">
-                    {{ $advance->employee_name }} 
-                    </td>
+                        <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl font-bold">
+                            {{ $advance->employee->full_name }}
+                                <p class="text-sm">{{ $advance->employee->employee_id }}</p>
+                          </td>
                     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
                     {{ $advance->loan_amount }}
                     </td>
@@ -324,6 +348,7 @@
                             <p class="text-xl font-bold text-black">Employee ID :</p>
                             <p class="text-xl font-bold text-black">Advance Amount :</p>
                             <p class="text-xl font-bold text-black">Interest :</p>
+                            <p class="text-xl font-bold text-black">Advance Date :</p>
                             <p class="text-xl font-bold text-black">Payment Duration :</p>
                             <p class="text-xl font-bold text-black">Approval Status :</p>
                             <p class="text-xl font-bold text-black">Description : </p>
@@ -345,7 +370,7 @@
                         <!-- Submit Button -->
                         <div class="w-full text-center px-16">
                           <button
-                            type="submit"
+                            onclick="closeAddNewModal()"
                             class="w-full bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-white font-bold py-4 px-4 rounded-xl hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                           >
                           Done
@@ -361,6 +386,18 @@
 
   // Document hover tooltip functionality
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Add click listener to the modal background
+    const modalContainer = document.getElementById('view-advance-modal-container');
+    const modalContent = document.getElementById('modal-container');
+    modalContainer.addEventListener('click', (event) => {
+        // Check if the click is on the modal background, not its content
+        if (!modalContent.contains(event.target)) {
+        closeAddNewModal();
+    }
+    });
+
+
     const documentLinks = document.querySelectorAll('.document-link');
     
     documentLinks.forEach(link => {
@@ -446,7 +483,7 @@ function openViewModal(data) {
     document.querySelector('#view-advance-modal-container .modal-interest').textContent = data.Interest;
     document.querySelector('#view-advance-modal-container .modal-start-date').textContent = data.StartDate;
     document.querySelector('#view-advance-modal-container .modal-duration').textContent = data.Duration;
-    document.querySelector('#view-advance-modal-container .modal-status').textContent = data.status;
+    document.querySelector('#view-advance-modal-container .modal-status').textContent = data.Status;
     document.querySelector('#view-advance-modal-container .modal-description').textContent = data.Description;
     
     const supportingDocContainer = document.querySelector('#view-advance-modal-container .modal-supporting-doc');
@@ -505,7 +542,7 @@ function openAddModal() {
 
     selectedAddFiles = new DataTransfer();
     // Fetch content from the server
-    fetch(`https://hr.jaan.lk/dashboard/advances/advance/create`)
+    fetch(`${window.location.origin}/dashboard/advances/advance/create`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
@@ -658,7 +695,7 @@ function openEditModal(leaveId) {
     selectedFiles = new DataTransfer();
     existingFilesList = [];
 
-    fetch(`https://hr.jaan.lk/dashboard/advances/advance/${leaveId}/edit`)
+    fetch(`${window.location.origin}/dashboard/advances/advance/${leaveId}/edit`)
         .then(response => response.text())
         .then(html => {
             modalContent.innerHTML = html;
@@ -756,7 +793,18 @@ $('#custom-search-input').on('keyup', function () {
     table.search(searchTerm).draw(); // Trigger the DataTable search with the entered term
 });
 
+  // Reset Calendar Button
+  $('#resetCalendarButton').on('click', function () {
+    selectedDate.textContent = '13.03.2021'; // Reset displayed date
+    calendarInput._flatpickr.clear(); // Clear Flatpickr input
+    table.columns(3).search('').draw(); // Clear DataTable date filter
+  });
 
+  // Approval Status Filter
+  $('#approvalStatusFilter').on('change', function () {
+    const status = $(this).val();
+    table.columns(5).search(status).draw(); // Assuming status is in the 6th column (index 5)
+  });
 //pagination controls
 table.on('draw', function () {
     const pagination = $('.dataTables_paginate');

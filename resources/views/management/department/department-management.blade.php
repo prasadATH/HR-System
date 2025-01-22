@@ -83,8 +83,8 @@
       <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
       
         <div class="modal-dialog modal-dialog-left " style="padding: 0;">
-          <div class="modal-content ">
-          <div class="rounded-3xl" style="padding-top: 200px;" id="editDepartmentContent">
+          <div class="modal-content p-0 rounded-3xl">
+          <div class="rounded-3xl" id="editDepartmentContent">
             <!-- Close Button -->
             <!-- Dynamically loaded content will be injected here -->
             <div class="text-center py-4">
@@ -223,7 +223,7 @@
           modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
       
           // Fetch content from the server
-          fetch(`https://hr.jaan.lk/dashboard/departments/department/create`)
+          fetch(`${window.location.origin}/dashboard/departments/department/create`)
             .then(response => response.text())
             .then(html => {
               modalContent.innerHTML = html;

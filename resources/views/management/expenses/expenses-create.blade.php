@@ -40,7 +40,7 @@
           </div>
 
           <div>
-              <label for="expense_date" class="block text-xl text-black font-bold">Incident Date:</label>
+              <label for="expense_date" class="block text-xl text-black font-bold">Date:</label>
               <input
                   type="date"
                   id="expense_date"
@@ -63,16 +63,19 @@
             />
           </div>
 
+
+
+          
           <div>
-            <label for="expense_status" class="block text-xl text-black font-bold">Approval Status:</label>
-            <input
-              type="text"
+            <label for="expense_status" class="block text-xl text-black font-bold">Approval Status :</label>
+            <select
               id="expense_status"
               name="expense_status"
-              placeholder="Enter the status"
-
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-black focus:border-blue-500 font-bold text-[#0000008C]">
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+            </select>
           </div>
 
           

@@ -189,7 +189,7 @@
 
 
         <!-- Main Content -->
-        <div class="w-4/5 flex flex-col p-8">
+        <div class="w-4/5 flex flex-col ">
           
             <div class="flex items-center justify-between  border-b border-gray-200">
               <div class="w-1/5 flex justify-start items-center md:hidden p-4 cursor-pointer" id="menuTrigger">
@@ -402,7 +402,7 @@
 </div>
 
     <!-- Dropdown Menu -->
-    <div class="hidden absolute right-0 w-60 bg-white rounded-md shadow-lg mt-2" id="userDropdown">
+    <div class="hidden absolute right-0 top-8 w-60 bg-white rounded-md shadow-lg mt-4" id="userDropdown">
         <div class="py-2 px-4 text-gray-700 border-b">
         <div class="font-bold">
             Logged in as:
@@ -419,7 +419,7 @@
 
 </div>
             </div>
-            <div class="pt-6 ">
+            <div >
                                   <!-- Notification -->
     <div id="notification" class="notification bg-success text-white p-3 rounded shadow">
         <span id="notification-message"></span>

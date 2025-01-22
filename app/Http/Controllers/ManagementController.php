@@ -228,7 +228,7 @@ $todos = Todo::where('user_id', auth()->id())
 
     public function expenseManagement()
     {
-        $expenses = ExpenseClaim::paginate(15); // Fetch paginated data
+        $expenses = ExpenseClaim::with('employee')->paginate(15); // Fetch paginated data
      //   dd($expenses);
         return view('management.expenses.expenses-management', compact('expenses'));
     }
