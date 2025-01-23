@@ -12,7 +12,6 @@ class PayrollExportController extends Controller
     public function downloadPaysheets(Request $request)
     {
 
-
         $selectedMonth = $request->query('selected_month'); // Get the month from the query
         if (!$selectedMonth) {
             return back()->with('error', 'Please select a valid month.');

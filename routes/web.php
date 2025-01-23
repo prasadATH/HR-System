@@ -119,7 +119,12 @@ Route::get('/payroll/download-all/{month}', [PayrollController::class, 'download
 
 Route::get('/payroll/export/spreadsheet', [PayrollExportController::class, 'exportSalarySpreadsheet'])->name('payroll.export.spreadsheet');
 
+
+
+
 Route::get('/payroll/export/paysheets', [PayrollExportController::class, 'downloadPaysheets'])->name('payroll.export.paysheets');
+
+
 
 });
 

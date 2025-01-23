@@ -149,6 +149,8 @@
             <span>Export payslips (ZIP)</span>
         </button>
 
+
+
       </div>
 
       <div class="w-full flex justify-between items-center md:space-x-0 space-x-8 py-2">
@@ -190,24 +192,28 @@
 
   <!-- Month Selector Input -->
   <div class="relative w-[300px] nunito-">
-    <button
+    {{-- <button
         id="monthButton"
         class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
-    >
-        <div class="flex items-center space-x-4">
-            <span class="iconify text-[#184E77]" data-icon="mdi:calendar-month-outline" style="font-size: 20px;"></span>
+    > --}}
+        {{-- <div class="flex items-center space-x-4">
+            <span class="iconify text-[#184E77]" data-icon="mdi:calendar-month-outline" style="font-size: 20px;"></span> --}}
+
             <div>
                 <span class="text-sm text-[#184E77]">Select a Month</span>
-                <p id="selectedMonth" class="text-lg font-bold">03.2021</p>
+                {{-- <p id="selectedMonth" class="text-lg font-bold">03.2021</p> --}}
                 <!-- Add this in your HTML, possibly near your existing month-related elements -->
-<input
-type="month"
-id="monthSelector"
-class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]"
->
+
+
+                <input
+                    type="month"
+                    id="monthSelector"
+                    class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]"
+                >
+
             </div>
-        </div>
-        <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
+        {{-- </div> --}}
+        {{-- <span class="iconify text-black" data-icon="mdi:chevron-down"></span> --}}
     </button>
 
     <!-- Hidden Month Input -->
@@ -642,14 +648,21 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = `${window.location.origin}/dashboard/payroll/payroll/export/spreadsheet?selected_month=${month}`;
     });
 
+
+
     document.getElementById('Export_payslips').addEventListener('click', () => {
+
         const month = document.getElementById('monthSelector').value;
         if (!month) {
             alert('Please select a month before exporting.');
             return;
         }
         window.location.href = `${window.location.origin}/dashboard/payroll/payroll/export/paysheets?selected_month=${month}`;
+
     });
+
+
+
 });
 
 function openEditModal(id) {
