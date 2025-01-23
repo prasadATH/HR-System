@@ -25,8 +25,8 @@ class PayrollController extends Controller
         // Validate the input data
         $validator = Validator::make($request->all(), [
             'employee_id' => 'required|integer|exists:employees,id',
-            'employee_name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
-            'known_name' => 'nullable|string|max:255|regex:/^[a-zA-Z\s]+$/',
+            'employee_name' => 'required|string|max:255',
+            'known_name' => 'nullable|string|max:255',
             'epf_no' => 'nullable|integer',
             'pay_date' => 'required|date',
             'payed_month' => 'required|string|max:255',
@@ -43,11 +43,11 @@ class PayrollController extends Controller
             'no_pay' => 'nullable|numeric|min:0',
             'advance_payment' => 'nullable|numeric|min:0',
         ]);
-    
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-    
+
         try {
             // Calculate deductions and net salary
             $grossSalary = $request->gross_salary;
@@ -59,7 +59,7 @@ class PayrollController extends Controller
                 ($request->stamp_duty ?? 0) +
                 $noPayDeductions
             );
-    
+
             $totalEarnings = (
                 $grossSalary +
                 ($request->transport_allowance ?? 0) +
@@ -68,13 +68,13 @@ class PayrollController extends Controller
                 ($request->car_allowance ?? 0) +
                 ($request->production_bonus ?? 0)
             );
-    
+
             $netSalary = $totalEarnings - $totalDeductions;
-    
+
             // Calculate EPF 12% and ETF 3% based on gross salary
             $epf12Percent = round($grossSalary * 0.12, 2);
             $etf3Percent = round($grossSalary * 0.03, 2);
-    
+
             // Save the data to the database
             SalaryDetails::create([
                 'employee_id' => $request->employee_id,
@@ -102,20 +102,20 @@ class PayrollController extends Controller
                 'epf_12_percent' => $epf12Percent,
                 'etf_3_percent' => $etf3Percent,
             ]);
-    
+
             return redirect()->route('management.payroll.payroll-management')->with('success', 'Payroll record saved successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to save the payroll record.')->withInput();
         }
     }
-    
+
 
     public function update(Request $request, $id)
     {
         // Validate the input fields
         $validated = $request->validate([
             'employee_id' => 'required|integer',
-            'employee_name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
+            'employee_name' => 'required|string|max:255',
             'pay_date' => 'required|date',
             'payed_month' => 'required|string|max:255',
             'basic' => 'required|numeric|min:0',
@@ -144,7 +144,7 @@ class PayrollController extends Controller
         ]);
 
         // Redirect with success message
-        return redirect()->route('management.payroll.payroll-management')->with('success', 'Payroll record updated successfully!');
+        return redirect()->route('payroll.management')->with('success', 'Payroll record saved successfully.');
     }
 
     public function edit($id)

@@ -68,7 +68,7 @@
                     </div>
                     <div class="w-full">
                         <label for="payed_month" class="block text-xl text-black font-bold">Paid Month :</label>
-                        <input type="text" id="payed_month" name="payed_month" value="{{ $record->payed_month }}" placeholder="Enter Paid Month" class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl focus:ring-blue-500 focus:border-blue-500 text-xl" />
+                        <input type="month" id="payed_month" name="payed_month" value="{{ $record->payed_month }}" placeholder="Enter Paid Month" class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl focus:ring-blue-500 focus:border-blue-500 text-xl" />
                     </div>
                 </div>
             </div>

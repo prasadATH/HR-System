@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Http\Controllers;
 
 use App\Models\SalaryDetails;
@@ -11,6 +11,8 @@ class PayrollExportController extends Controller
 {
     public function downloadPaysheets(Request $request)
     {
+
+
         $selectedMonth = $request->query('selected_month'); // Get the month from the query
         if (!$selectedMonth) {
             return back()->with('error', 'Please select a valid month.');
@@ -49,7 +51,7 @@ class PayrollExportController extends Controller
         $employees = SalaryDetails::where('payed_month', $selectedMonth)->get();
       //  dd($employees);
         if ($employees->isEmpty()) {
-           
+
             return back()->with('error', 'No records found for the selected month.');
         }
 
@@ -58,14 +60,14 @@ class PayrollExportController extends Controller
 
         // Add column headings
         $writer->addHeader([
-            'Employee ID', 'Employee Name', 'Known Name', 'EPF No', 'Basic Salary', 
-            'Budget Allowance', 'Gross Salary', 'Transport Allowance', 'Attendance Allowance', 
-            'Phone Allowance', 'Production Bonus', 'Car Allowance', 'Loan Payment', 
-            'Total Earnings', 'EPF (8%)', 'EPF (12%)', 'ETF (3%)', 'Advance Payment', 
-            'Stamp Duty', 'No Pay', 'Total Deductions', 'Net Salary', 'Loan Balance', 
+            'Employee ID', 'Employee Name', 'Known Name', 'EPF No', 'Basic Salary',
+            'Budget Allowance', 'Gross Salary', 'Transport Allowance', 'Attendance Allowance',
+            'Phone Allowance', 'Production Bonus', 'Car Allowance', 'Loan Payment',
+            'Total Earnings', 'EPF (8%)', 'EPF (12%)', 'ETF (3%)', 'Advance Payment',
+            'Stamp Duty', 'No Pay', 'Total Deductions', 'Net Salary', 'Loan Balance',
             'Pay Date', 'Paid Month'
         ]);
-        
+
         // Add rows
         foreach ($employees as $record) {
             $writer->addRow([

@@ -76,8 +76,8 @@ Route::middleware('auth')->group(function () {
    Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
    Route::delete('/employee/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 
-   
-    
+
+
 
     Route::get('/employees/hierarchy', [EmployeeController::class, 'hierarchy'])->name('employees.hierarchy');
 
@@ -95,7 +95,7 @@ Route::prefix('management')->group(function () {
 
     Route::get('/main-dashboard', [ManagementController::class, 'viewDashboard'])->name('dashboard.management');
     Route::get('/count-dashboard', [DashboardController::class, 'getEmployeeCountByDepartment'])->name('count.management');
-    
+
     Route::get('/attendance-management', [ManagementController::class, 'attendanceManagement'])->name('attendance.management');
     Route::get('/setting-management', [ManagementController::class, 'settingManagement'])->name('setting.management');
 
@@ -118,6 +118,7 @@ Route::get('/payroll/{id}/view-paysheet', [PayrollController::class, 'viewPayshe
 Route::get('/payroll/download-all/{month}', [PayrollController::class, 'downloadAllPaysheets'])->name('payroll.download-all');
 
 Route::get('/payroll/export/spreadsheet', [PayrollExportController::class, 'exportSalarySpreadsheet'])->name('payroll.export.spreadsheet');
+
 Route::get('/payroll/export/paysheets', [PayrollExportController::class, 'downloadPaysheets'])->name('payroll.export.paysheets');
 
 });
@@ -186,7 +187,7 @@ Route::middleware('auth')->prefix('dashboard/departments')->group(function () {
     Route::get('/department/{department_id}', [DepartmentController::class, 'show'])->name('department.show');
     Route::delete('/department/branch/{branch}/{department_id}', [DepartmentController::class, 'deleteBranch'])
     ->name('department.branch.delete');
-    
+
 });
 
 

@@ -15,7 +15,7 @@
 
 @if(session('success'))
 <script>
-     
+
     document.addEventListener("DOMContentLoaded", () => {
         showNotification("{{ session('success') }}");
     });
@@ -73,7 +73,7 @@
 <!-- Edit Modal -->
 <div class="modal fade" id="editAttendanceModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
     <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
-    
+
       <div class="modal-dialog modal-dialog-left " style="padding: 0;">
         <div class="rounded-3xl" style="padding-top: 60px;" id="editAttendanceContent">
           <!-- Close Button -->
@@ -84,41 +84,41 @@
         </div>
       </div>
     </div>
-    
+
     <div class="flex flex-col items-start justify-start w-full px-2">
-    
+
     <div class="w-full pt-2">
       <div class="flex items-center justify-between w-full">
         <div class="flex ">
         <p class="md:text-6xl text-4xl font-bold text-black nunito-">Payroll</p>
         </div>
         <div class="flex items-center space-x-4">
-    
-    
+
+
         <!-- Filter Button -->
 
-    
+
         <!-- Add record Button -->
         <button class="flex items-center justify-center nunito- space-x-2 px-8 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
         <p class="text-3xl"><i class="ri-add-fill"></i></p>
             <a href="{{ route('payroll.create') }}" >Add Record</a>
         </button>
-        
+
         </div>
-    
-    
-    
+
+
+
       </div>
-    
-    
+
+
     <!--   <div class="w-1/5 align-right flex items-right justify-center nunito- space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
         <button id="print-table">
             Print Records
         </button>
     </div> -->
     </div>
-    
-    
+
+
     <nav class="flex py-3" aria-label="Breadcrumb">
       <ol class="inline-flex items-center space-x-1 md:space-x-3 nunito-">
         <li class="inline-flex items-center">
@@ -134,25 +134,25 @@
         </li>
       </ol>
     </nav>
-    
-    
+
+
     <div class="w-full flex justify-end items-end pt-2 pb-2">
       <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
             <span>Generate Report</span>
         </button>
-       
+
         <button id="Export_spreadsheet" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
             <span>Export Spreadsheet</span>
         </button>
-      
+
         <button id="Export_payslips" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
             <span>Export payslips (ZIP)</span>
         </button>
-       
+
       </div>
-    
+
       <div class="w-full flex justify-between items-center md:space-x-0 space-x-8 py-2">
-    
+
     <!-- Search Bar on the Left -->
     <div class="w-[300px]">
       <input
@@ -162,7 +162,7 @@
         class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]"
       />
     </div>
-    
+
     <!-- Calendar Input on the Right -->
     <div class="relative w-[300px] nunito-">
       <button
@@ -178,7 +178,7 @@
         </div>
         <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
       </button>
-    
+
       <!-- Hidden Calendar Input -->
       <input
         id="calendarInput"
@@ -199,6 +199,12 @@
             <div>
                 <span class="text-sm text-[#184E77]">Select a Month</span>
                 <p id="selectedMonth" class="text-lg font-bold">03.2021</p>
+                <!-- Add this in your HTML, possibly near your existing month-related elements -->
+<input
+type="month"
+id="monthSelector"
+class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]"
+>
             </div>
         </div>
         <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
@@ -211,11 +217,11 @@
         class="absolute z-10 opacity-0 pointer-events-none"
     />
 </div>
-    
+
     </div>
-    
-    
-    
+
+
+
 <!-- Payroll Table -->
 <div class="overflow-x-auto" style="width:100%;" >
     <table id="attendance-table" class="nunito border-separate" style="border-spacing: 0 12px;">
@@ -280,7 +286,7 @@
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
                     <!-- Actions -->
                     <button onclick="openViewModal({{ $record->id }})" class="text-blue-500">View</button>
-                    
+
                      <a href="{{ route('payroll.edit', ['id' => $record->id]) }}" >  <button class="text-green-500">Edit</button></a>
                 </td>
             </tr>
@@ -291,15 +297,15 @@
 
 
 
-    
-    
-    
+
+
+
     </div>
-    
-    
+
+
     <!--View record form start-->
     <div id="view-attendance-modal-container" class=" fixed inset-0 bg-black bg-opacity-50 w-full opacity-0 transition-opacity duration-300 flex justify-center items-center hidden z-50">
-    
+
     <div class="w-full flex justify-center items-center rounded-3xl">
       <!-- Close Button -->
       <div id="modal-container" class="w-1/3 flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
@@ -332,10 +338,10 @@
     <p class="text-xl font-bold text-black modal-description"></p>
     <p class="text-xl font-bold text-black modal-created"></p>
     <p class="text-xl font-bold text-black modal-supporting-document"></p>
-    
-    
+
+
                 </div>
-              
+
             </div>
             <!-- Submit Button -->
             <div class="w-full text-center px-16">
@@ -350,8 +356,8 @@
         </div>
       </div>
     </div>
-    
-    
+
+
     <iframe id="paysheet-pdf" style="display: none; width: 100%; height: 500px;"></iframe>
     </div>
     <!--View record form end-->
@@ -374,7 +380,7 @@ function formatDuration(seconds) {
 // Document hover tooltip functionality
 document.addEventListener('DOMContentLoaded', () => {
     const documentLinks = document.querySelectorAll('.document-link');
-    
+
     documentLinks.forEach(link => {
         // Create tooltip element
         const tooltip = document.createElement('div');
@@ -388,13 +394,13 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltip.style.zIndex = '100';
         tooltip.style.maxWidth = '300px';
         tooltip.style.wordWrap = 'break-word';
-        
+
         // Set full document name
         tooltip.textContent = link.getAttribute('data-full-name') || link.textContent;
-        
+
         // Append tooltip to body
         document.body.appendChild(tooltip);
-        
+
         // Event listeners for hover
         link.addEventListener('mouseenter', (e) => {
             const rect = link.getBoundingClientRect();
@@ -402,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tooltip.style.left = `${rect.left + window.scrollX}px`;
             tooltip.style.display = 'block';
         });
-        
+
         link.addEventListener('mouseleave', () => {
             tooltip.style.display = 'none';
         });
@@ -423,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       textElement.classList.remove('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
     }
   }
-  
+
   function toggleMenu(menuId) {
     const menu = document.getElementById(menuId);
     menu.classList.toggle('hidden');
@@ -449,8 +455,8 @@ $(document).ready(function () {
     var table = $('#attendance-table').DataTable({
       dom: '<"top"f>rt<"bottom"p><"clear">', // Custom layout: search box on top, pagination on bottom
     paging: true,
-    pageLength: 10, 
-    pagingType: 'simple', 
+    pageLength: 10,
+    pagingType: 'simple',
     searching: true,
         buttons: [
             {
@@ -469,6 +475,16 @@ $(document).ready(function () {
         },
     },
 
+
+
+    });
+
+    $('#monthSelector').on('change', function() {
+        var selectedMonth = $(this).val(); // Gets value in YYYY-MM format
+console.log(selectedMonth);
+        // Custom filtering function
+       // const searchTerm = $(this).val(); // Get the value of the search input
+        table.search(selectedMonth).draw();
     });
 
     // Attach Print functionality to the custom button
@@ -592,7 +608,7 @@ $(document).on('click', '.dataTables_paginate button', function () {
         monthButton.addEventListener("click", () => {
             monthInput._flatpickr.open();
         });
-  
+
 
     table.draw('page');
 });
@@ -616,8 +632,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     document.getElementById('Export_spreadsheet').addEventListener('click', () => {
-       console.log(window.location.origin);
-        const month = document.getElementById('monthInput').value;
+      // console.log(window.location.origin);
+        const month = document.getElementById('monthSelector').value;
       // alert(month);
         if (!month) {
             alert('Please select a month before exporting.');
@@ -627,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('Export_payslips').addEventListener('click', () => {
-        const month = selectedMonth();
+        const month = document.getElementById('monthSelector').value;
         if (!month) {
             alert('Please select a month before exporting.');
             return;
@@ -679,7 +695,7 @@ function submitEditForm(id) {
         .then(response => response.text())
         .then(html => {
             modalContent.innerHTML = html;
-            
+
             // Reinitialize any necessary scripts or event listeners
             setTimeout(() => {
                 // Ensure file input works after content is loaded
@@ -720,9 +736,9 @@ let selectedFiles = new DataTransfer();
 function initializeExistingFiles(existingFilesJson) {
   console.log(existingFilesJson);
     try {
-     
+
         existingFilesList = JSON.parse(existingFilesJson || '[]');
-       
+
         refreshFileList();
     } catch (error) {
         console.error('Error initializing existing files:', error);
@@ -828,7 +844,7 @@ function removeFileAdd(fileIdentifier, isFilePath) {
 // Handle new file selection
 function handleFileSelection(input) {
     const files = Array.from(input.files);
-    
+
     files.forEach(file => {
         // Check for duplicates
         const isDuplicateNew = Array.from(selectedFiles.files)
@@ -885,8 +901,8 @@ function addFileToDisplay(fileName, filePath, isExisting) {
     const fileListDisplay = document.getElementById('file-list-items');
     const listItem = document.createElement('li');
     listItem.className = 'flex items-center space-x-2 mb-2';
-    
-    listItem.innerHTML = isExisting ? 
+
+    listItem.innerHTML = isExisting ?
         `<span class="text-2xl">
             <i class="ri-file-pdf-2-fill"></i>
         </span>
@@ -897,7 +913,7 @@ function addFileToDisplay(fileName, filePath, isExisting) {
         </span>
         <span class="text-blue-500">${fileName}</span>
         <span onclick="removeFile('${fileName}', false)" class="text-red-500 cursor-pointer ml-2">✖</span>`;
-    
+
     fileListDisplay.appendChild(listItem);
 }
 
@@ -914,7 +930,7 @@ function removeFile(identifier, isExisting) {
         });
         selectedFiles = newDataTransfer;
     }
-    
+
     refreshFileList();
 }
 
@@ -944,12 +960,12 @@ dropdownTriggers.forEach(button => {
 
 // Close dropdowns when clicking anywhere outside
 window.addEventListener('click', () => {
-  
+
     document.querySelectorAll('#dropdown-menu').forEach(menu => {
         menu.classList.add('hidden');
     });
 });
 </script>
-  
-  
+
+
 @endsection
