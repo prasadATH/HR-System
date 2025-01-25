@@ -13,6 +13,79 @@
 
 @section('content')
 
+@if(session('success') )
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const successMessage = "{{ session('success') }}";
+        const errorMessage = "{{ session('error') }}";
+
+        if (successMessage) {
+            showNotification(successMessage, 'success');
+        }
+        if (errorMessage) {
+            showNotification(errorMessage, 'error');
+        }
+    });
+
+    async function showNotification(message) {
+        const notification = document.getElementById('notification');
+        const notificationMessage = document.getElementById('notification-message');
+
+        // Set the message
+        notificationMessage.textContent = message;
+        if (type === 'success') {
+            notification.style.backgroundColor = '#4CAF50'; // Green for success
+        } else if (type === 'error') {
+            notification.style.backgroundColor = '#F44336'; // Red for error
+        }
+        // Slide the notification down
+        setTimeout(() => {
+        // Slide the notification down
+        notification.style.top = '20px';
+
+        // Hide the notification after an additional 3 seconds
+        setTimeout(() => {
+            notification.style.top = '-100px';
+        }, 3000);
+    }, 5000);
+
+        // Optionally send the message to the backend
+        try {
+            const response = await fetch("{{ route('notify') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ message }),
+            });
+
+            if (!response.ok) {
+                console.error('Failed to send notification:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error sending notification:', error);
+        }
+    }
+    </script>
+            @endif
+@if($errors->any())
+                <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @if(session('error'))
+            <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+                <ul>
+                    {{session('error')}}
+                </ul>
+            </div>
+        @endif
+
 <div class="modal fade" id="editAttendanceModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
   <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
   
@@ -102,8 +175,14 @@
       type="text"
       class="absolute z-10 opacity-0 pointer-events-none"
     />
+    <button
+    id="resetCalendarButton"
+    class="px-4 py-2 text-white bg-red-600 rounded-xl shadow-sm hover:bg-red-700 mt-2"
+  >
+    Reset
+  </button>
   </div>
-  
+
   </div>
   <div class="flex w-1/3 align-left">
     <input id="custom-search-input" type="text" placeholder="Search record here" class="w-full px-4 py-2 border-2 border-[#00000080] text-2xl text-[#00000080] rounded-xl"/>
@@ -161,7 +240,7 @@
                class="absolute top-0 right-3 mt-12 w-30 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-10">
               <ul class=" text-gray-700">
                   <li><a href="#" class="block px-2 py-2 hover:bg-gray-100" onclick="openViewModal({
-          employeeName: '{{ $record->employee->first_name }} {{ $record->employee->last_name }}',
+          employeeName: '{{ $record->employee->full_name }}',
           employeeId: '{{ $record->id }}',
           checkIn: '{{ $record->clock_in_time }}',
           checkOut: '{{ $record->clock_out_time }}',
@@ -243,7 +322,7 @@
           <!-- Submit Button -->
           <div class="w-full text-center px-16">
             <button
-              type="submit"
+              onclick="closeAddNewModal()"
               class="w-full bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-white font-bold py-4 px-4 rounded-xl hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
             Done
@@ -289,7 +368,7 @@
     $('#editAttendanceContent input').prop('disabled', false);
   });
       // Fetch content from the server
-      fetch(`https://hr.jaan.lk/dashboard/attendance/create`)
+      fetch(`${window.location.origin}/dashboard/attendance/create`)
         .then(response => response.text())
         .then(html => {
           modalContent.innerHTML = html;
@@ -418,7 +497,11 @@
       table.search(searchTerm).draw(); // Trigger the DataTable search with the entered term
   });
   
-  
+  $('#resetCalendarButton').on('click', function () {
+    selectedDate.textContent = '13.03.2021'; // Reset displayed date
+    calendarInput._flatpickr.clear(); // Clear Flatpickr input
+    table.columns(3).search('').draw(); // Clear DataTable date filter
+  });
   //pagination controls
   table.on('draw', function () {
       const pagination = $('.dataTables_paginate');

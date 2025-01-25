@@ -12,16 +12,7 @@
       <form action="{{ route('leave.store') }}" method="POST" class="w-full mx-auto p-6 "  enctype="multipart/form-data">
         @csrf
         <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label for="employee_name" class="block text-xl text-black font-bold">Employee:</label>
-            <input
-              type="text"
-              id="employee_name"
-               name="employee_name"
-              placeholder="Enter employee name"
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
+        
 
           <div>
             <label for="employment_ID" class="block text-xl text-black font-bold">Employee ID:</label>
@@ -77,15 +68,18 @@
               />
           </div>
 
+
+            
           <div>
-            <label for="status" class="block text-xl text-black font-bold">Approval Status:</label>
-            <input
-              type="text"
+            <label for="status" class="block text-xl text-black font-bold">Approval Status :</label>
+            <select
               id="status"
               name="status"
-              placeholder="Enter the status"
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-black focus:border-blue-500 font-bold text-[#0000008C]">
+              <option value="approved">Approved</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+            </select>
           </div>
 
           <div>

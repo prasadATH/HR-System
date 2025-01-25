@@ -124,6 +124,8 @@ Route::get('/payroll/export/spreadsheet', [PayrollExportController::class, 'expo
 
 Route::get('/payroll/export/paysheets', [PayrollExportController::class, 'downloadPaysheets'])->name('payroll.export.paysheets');
 
+Route::get('/payroll/generate/paysheets', [PayrollExportController::class, 'generatePreviousMonth'])->name('payroll.generate.paysheets');
+
 
 
 });

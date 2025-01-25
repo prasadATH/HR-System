@@ -12,11 +12,18 @@
 
 @section('content')
 
-@if(session('success'))
+@if(session('success') )
 <script>
-     
     document.addEventListener("DOMContentLoaded", () => {
-        showNotification("{{ session('success') }}");
+        const successMessage = "{{ session('success') }}";
+        const errorMessage = "{{ session('error') }}";
+
+        if (successMessage) {
+            showNotification(successMessage, 'success');
+        }
+        if (errorMessage) {
+            showNotification(errorMessage, 'error');
+        }
     });
 
     async function showNotification(message) {
@@ -25,7 +32,11 @@
 
         // Set the message
         notificationMessage.textContent = message;
-
+        if (type === 'success') {
+            notification.style.backgroundColor = '#4CAF50'; // Green for success
+        } else if (type === 'error') {
+            notification.style.backgroundColor = '#F44336'; // Red for error
+        }
         // Slide the notification down
         setTimeout(() => {
         // Slide the notification down
@@ -66,6 +77,14 @@
                     </ul>
                 </div>
             @endif
+            @if(session('error'))
+            <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+                <ul>
+                    {{session('error')}}
+                </ul>
+            </div>
+        @endif
+
 
 
 
@@ -142,10 +161,26 @@
                     placeholder="Search..."
                     class="w-full px-4 py-2 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]"
                   />
-                </div>
                 
+                </div>
+         
                 <!-- Calendar Input on the Right -->
                 <div class="relative w-[300px] nunito-">
+           <!-- Approval Status Filter -->
+  <div class="w-full flex justify-end items-center mb-3 ">
+    <div class="relative flex justify-end  w-[300px] nunito- z-10">
+<select
+id="approvalStatusFilter"
+class="w-1/2  px-4 py-2  text-black border-2 border-[#184E77] rounded-xl shadow-sm"
+>
+<option value="">Select Status </option>
+<option value="Approved">Approved</option>
+<option value="Pending">Pending</option>
+<option value="Rejected">Rejected</option>
+</select>
+</div>
+ </div>
+                    
                   <button
                     id="calendarButton"
                     class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
@@ -166,6 +201,12 @@
                     type="text"
                     class="absolute z-10 opacity-0 pointer-events-none"
                   />
+                  <button
+                  id="resetCalendarButton"
+                  class="px-4 py-2 text-white bg-red-600 rounded-xl shadow-sm hover:bg-red-700 mt-2"
+                >
+                  Reset
+                </button>
                 </div>
                 
                 </div>
@@ -351,7 +392,7 @@
                         <!-- Submit Button -->
                         <div class="w-full text-center px-16">
                           <button
-                            type="submit"
+                            onclick="closeAddNewModal()"
                             class="w-full bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-white font-bold py-4 px-4 rounded-xl hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                           >
                           Done
@@ -716,6 +757,18 @@ $('#custom-search-input').on('keyup', function () {
     table.search(searchTerm).draw(); // Trigger the DataTable search with the entered term
 });
 
+
+  // Approval Status Filter
+  $('#approvalStatusFilter').on('change', function () {
+    const status = $(this).val();
+    table.columns(5).search(status).draw(); // Assuming status is in the 6th column (index 5)
+  });
+
+$('#resetCalendarButton').on('click', function () {
+    selectedDate.textContent = '13.03.2021'; // Reset displayed date
+    calendarInput._flatpickr.clear(); // Clear Flatpickr input
+    table.columns(3).search('').draw(); // Clear DataTable date filter
+  });
 //pagination controls
 table.on('draw', function () {
     const pagination = $('.dataTables_paginate');

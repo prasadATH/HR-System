@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SalaryDetails;
+use App\Models\Payroll;
 use Illuminate\Http\Request;
 use ZipArchive;
 use Spatie\SimpleExcel\SimpleExcelWriter;
@@ -17,7 +18,7 @@ class PayrollExportController extends Controller
             return back()->with('error', 'Please select a valid month.');
         }
 
-        $employees = SalaryDetails::where('payed_month', $selectedMonth)->get();
+        $employees = SalaryDetails::where('payed_month', $selectedMonth)->with('employee')->get();
 
         if ($employees->isEmpty()) {
             return back()->with('error', 'No records found for the selected month.');
@@ -39,6 +40,47 @@ class PayrollExportController extends Controller
 
         return back()->with('error', 'Failed to create zip file.');
     }
+
+    public function generatePreviousMonth(Request $request)
+{
+    $selectedMonth = $request->query('selected_month');
+    $previousMonth = date('Y-m', strtotime('-1 month', strtotime($selectedMonth)));
+
+    $payrolls = SalaryDetails::where('payed_month', $previousMonth)->get();
+
+    foreach ($payrolls as $payroll) {
+        SalaryDetails::create([
+            'employee_name' => $payroll->employee_name,
+            'employee_id' => $payroll->employee_id,
+            'known_name' => $payroll->known_name,
+            'epf_no' => $payroll->epf_no,
+            'basic' => $payroll->basic,
+            'budget_allowance' => $payroll->budget_allowance,
+            'gross_salary' => $payroll->gross_salary,
+            'transport_allowance' => $payroll->transport_allowance,
+            'attendance_allowance' => $payroll->attendance_allowance,
+            'phone_allowance' => $payroll->phone_allowance,
+            'production_bonus' => $payroll->production_bonus,
+            'car_allowance' => $payroll->car_allowance,
+            'loan_payment' => $payroll->loan_payment,
+            'total_earnings' => $payroll->total_earnings,
+            'epf_8_percent' => $payroll->epf_8_percent,
+            'epf_12_percent' => $payroll->epf_12_percent,
+            'etf_3_percent' => $payroll->etf_3_percent,
+            'advance_payment' => $payroll->advance_payment,
+            'stamp_duty' => $payroll->stamp_duty,
+            'no_pay' => $payroll->no_pay,
+            'total_deductions' => $payroll->total_deductions,
+            'net_salary' => $payroll->net_salary,
+            'loan_balance' => $payroll->loan_balance,
+            'pay_date' => now(),
+            'payed_month' => $selectedMonth,
+            'status' => $payroll->status,
+        ]);
+    }
+
+    return redirect()->route('payroll.index')->with('success', 'Records generated for the selected month.');
+}
 
     public function exportSalarySpreadsheet(Request $request)
     {//dd($request->all());

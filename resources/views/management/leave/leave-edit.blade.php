@@ -16,17 +16,7 @@
         @method('PUT')
         <div class="grid grid-cols-2 gap-4">
           <!-- Employee ID -->
-          <div>
-            <label for="employee_name" class="block text-xl text-black font-bold">Employee Name:</label>
-            <input
-              type="text"
-               name="employee_name"
-              id="employee_name"
-              value="{{ $leave->employee_name }} "
-              placeholder="Enter your Employee Name"
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
+          
 
           <div>
             <label for="employment_ID" class="block text-xl text-black font-bold">Employee ID:</label>

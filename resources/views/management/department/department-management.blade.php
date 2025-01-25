@@ -1,74 +1,13 @@
 @extends('layouts.dashboard-layout')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 @section('title', 'Department Management')
 
 @section('content')
+@if ($departments->isEmpty())
+    <p class="text-center">No departments found.</p>
+@endif
 
 
-@if(session('success'))
-<script>
-     
-    document.addEventListener("DOMContentLoaded", () => {
-        showNotification("{{ session('success') }}");
-    });
-
-    async function showNotification(message) {
-        const notification = document.getElementById('notification');
-        const notificationMessage = document.getElementById('notification-message');
-
-        // Set the message
-        notificationMessage.textContent = message;
-
-        // Slide the notification down
-        setTimeout(() => {
-        // Slide the notification down
-        notification.style.top = '20px';
-
-        // Hide the notification after an additional 3 seconds
-        setTimeout(() => {
-            notification.style.top = '-100px';
-        }, 3000);
-        }, 5000);
-
-        // Optionally send the message to the backend
-        try {
-            const response = await fetch("{{ route('notify') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: JSON.stringify({ message }),
-            });
-
-            if (!response.ok) {
-                console.error('Failed to send notification:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error sending notification:', error);
-        }
-    }
-    </script>
-
-    
-     @endif
-    @if($errors->any())
-        <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
-            <ul>
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
 
 <style>

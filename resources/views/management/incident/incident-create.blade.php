@@ -14,24 +14,14 @@
         @csrf
         
         <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label for="employee_name" class="block text-xl text-black font-bold">Employee:</label>
-            <input
-              type="text"
-              id="employee_name"
-               name="employee_name"
-              placeholder="Enter employee name"
 
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
 
           <div>
-            <label for="employment_ID" class="block text-xl text-black font-bold">Employee ID:</label>
+            <label for="employment_id" class="block text-xl text-black font-bold">Employee ID:</label>
             <input
               type="number"
-              id="employment_ID"
-              name="employee_id"
+              id="employment_id"
+              name="employment_id"
               placeholder="Enter employee id"
 
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
@@ -62,27 +52,21 @@
               />
           </div>
 
-          <div>
-            <label for="resolution_status" class="block text-xl text-black font-bold">Resolution Status:</label>
-            <input
-              type="text"
-              id="resolution_status"
-              name="resolution_status"
-              placeholder="Enter the status"
+  
 
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-          </div>
 
-          <input
-              type="text"
-              id="test_sub"
-              name="test_sub"
-              placeholder="Enter the status"
-
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
-
+                  <!-- Approval Status -->
+                  <div>
+                    <label for="resolution_status" class="block text-xl text-black font-bold">Resolution Status :</label>
+                    <select
+                      id="resolution_status"
+                      name="resolution_status"
+                      class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-black focus:border-blue-500 font-bold text-[#0000008C]">
+                      <option value="pending">Pending</option>
+                      <option value="resolved">Resolved</option>
+                    </select>
+                  </div>
+      
           
           <div>
             <label for="doc-files" class="flex items-center justify-center px-4 py-2 bg-[#184E77] border-2 border-[#52B69A80] text-white rounded-md cursor-pointer hover:bg-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"> 

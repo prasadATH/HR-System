@@ -18,7 +18,7 @@ public function store(Request $request)
 {  
     try {
         $validated = $request->validate([
-            'employee_name' => 'required|string',
+           
             'employment_ID' => 'required|string|max:255',
             'leave_type' => 'required|string|max:255',
             'start_date' => 'required|date',
@@ -31,7 +31,7 @@ public function store(Request $request)
     logger('Validation passed');
     } catch (\Illuminate\Validation\ValidationException $e) {
         logger('Validation failed', $e->errors());
-        dd($e->errors(),  $request->all());
+        return redirect()->route('leave.management')->with('error', 'Error adding record!'.$e->getMessage());
     }
     $employee = Employee::where('employee_id', $request->employment_ID)->first();
     if (!$employee) {
@@ -59,15 +59,13 @@ public function store(Request $request)
 
     } catch (\Exception $e) {
         // Dump the error message and stack trace for debugging
-        dd([
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString(),
-        ]);
+        return redirect()->route('leave.management')->with('error', 'Error adding record!'.$e);
+
     }
     
     $leave = new Leave();
     $leave -> employee_id = $employee -> id;
-    $leave -> employee_name = $validated['employee_name'];
+    $leave -> employee_name = $employee -> full_name;
     $leave -> employment_ID = $validated['employment_ID'];
     $leave -> leave_type = $validated['leave_type'];
     $leave -> approved_person = $validated['approved_person'];
@@ -101,7 +99,7 @@ public function store(Request $request)
 {
     $leave = Leave::findOrFail($id);
     $validated = $request->validate([
-            'employee_name' => 'required|string|max:255',
+        
             'employment_ID' => 'required|string|max:255',
             'leave_type' => 'required|string|max:255',
             'start_date' => 'required|date',
@@ -111,12 +109,13 @@ public function store(Request $request)
             'description' => 'nullable|string',
             'supporting_documents' => 'nullable|array',
         ]);
-        $leave->update($validated);
+     
 
         $employee = Employee::where('employee_id', $validated['employment_ID'])->first();
         if (!$employee) {
             return back()->withErrors(['employment_ID' => 'Invalid Employee ID.'])->withInput();
-        }
+        }else{
+           // $leave->update($validated);
 
         $start_date = \Carbon\Carbon::parse($validated['start_date']);
         $end_date = \Carbon\Carbon::parse($validated['end_date']);
@@ -152,7 +151,8 @@ public function store(Request $request)
     
 
 
-        $leave->employee_name = $request->employee_name;
+        $leave->employee_name = $employee->full_name;
+        $leave->employee_id = $employee->id;
         $leave->employment_ID = $request->employment_ID;
         $leave->leave_type = $request->leave_type;
         $leave->approved_person = $request->approved_person;
@@ -165,6 +165,8 @@ public function store(Request $request)
         
         $leave->save();
         return redirect()->route('leave.management')->with('success', 'Leave updated successfully.');
+
+}
 }
 
     public function destroy($id)

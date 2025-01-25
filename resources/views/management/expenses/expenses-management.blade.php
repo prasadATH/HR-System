@@ -13,11 +13,18 @@
 
 @section('content')
 
-@if(session('success'))
+@if(session('success') )
 <script>
-     
     document.addEventListener("DOMContentLoaded", () => {
-        showNotification("{{ session('success') }}");
+        const successMessage = "{{ session('success') }}";
+        const errorMessage = "{{ session('error') }}";
+
+        if (successMessage) {
+            showNotification(successMessage, 'success');
+        }
+        if (errorMessage) {
+            showNotification(errorMessage, 'error');
+        }
     });
 
     async function showNotification(message) {
@@ -26,7 +33,11 @@
 
         // Set the message
         notificationMessage.textContent = message;
-
+        if (type === 'success') {
+            notification.style.backgroundColor = '#4CAF50'; // Green for success
+        } else if (type === 'error') {
+            notification.style.backgroundColor = '#F44336'; // Red for error
+        }
         // Slide the notification down
         setTimeout(() => {
         // Slide the notification down
@@ -59,51 +70,23 @@
     </script>
             @endif
 @if($errors->any())
-
-<script>
-     
-    document.addEventListener("DOMContentLoaded", () => {
-        showNotification("{{ session('error') }}");
-    });
-
-    async function showNotification(message) {
-        const notification = document.getElementById('notification');
-        const notificationMessage = document.getElementById('notification-message');
-
-        // Set the message
-        notificationMessage.textContent = message;
-
-        // Slide the notification down
-        setTimeout(() => {
-        // Slide the notification down
-        notification.style.top = '20px';
-
-        // Hide the notification after an additional 3 seconds
-        setTimeout(() => {
-            notification.style.top = '-100px';
-        }, 3000);
-    }, 5000);
-
-        // Optionally send the message to the backend
-        try {
-            const response = await fetch("{{ route('notify') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: JSON.stringify({ message }),
-            });
-
-            if (!response.ok) {
-                console.error('Failed to send notification:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error sending notification:', error);
-        }
-    }
-    </script>
+                <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
+            @if(session('error'))
+            <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+                <ul>
+                    {{session('error')}}
+                </ul>
+            </div>
+        @endif
+
+
 
 
 <!--edit modal start -->

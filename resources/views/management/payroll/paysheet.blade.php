@@ -8,55 +8,73 @@
             margin: 20px;
             background-color: #f9f9f9;
         }
+        img{
+            display: inline !important;
+        }
         .payslip-container {
             max-width: 800px;
             margin: auto;
             background: #fff;
             padding: 20px;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        h1, h2 {
-            text-align: center;
-            margin: 0;
+        .header {
+            width: 100%;
+            display: flex !important;
+         
+            justify-content: space-between !important;
+            margin-bottom: 20px !important;
+        }
+        .header-logo {
+      
+            display: flex !important;
+      
+            justify-content: space-between!important;
+        }
+        .header-logo img {
+            max-height: 80px !important;
+            max-width: 200px !important;
+            width: auto !important;
+            height: auto !important;
+            object-fit: contain !important;
+        }
+        .company-details {
+          
+            text-align: right !important;
+        }
+        .company-details h1 {
+            margin: 0 !important;
+            font-size: 20px !important;
             color: #333;
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+        .company-details h2 {
+            margin: 0 !important;
+            font-size: 16px !important;
+            color: #666;
         }
-        h2 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #555;
+        .details {
+            margin-bottom: 20px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            font-size: 14px !important;
         }
-        .details-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .details-section div {
+        .details div {
             flex: 1;
         }
-        .details-section div p {
-            margin: 5px 0;
-            font-size: 14px;
-            color: #555;
-        }
-        .details-section div p span {
-            font-weight: bold;
-            color: #333;
+        .details p {
+            margin: 2px 0;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 14px;
         }
         th, td {
             border: 1px solid #ddd;
-            padding: 10px;
+            padding: 8px;
             text-align: left;
-            font-size: 14px;
         }
         th {
             background-color: #f4f4f4;
@@ -67,7 +85,7 @@
             text-align: right;
         }
         .totals-row {
-            background-color: #f9f9f9;
+            background-color: #f4f4f4;
             font-weight: bold;
         }
         .footer {
@@ -76,21 +94,43 @@
             font-size: 12px;
             color: #777;
         }
+        .signature {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature div {
+            text-align: center;
+            flex: 1;
+        }
+        .signature div p {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
     <div class="payslip-container">
-        <h1>Payslip</h1>
-        <h2>Month: {{ $record->payed_month }}</h2>
-
-        <div class="details-section">
-            <div>
-                <p><span>Employee Name:</span> {{ $record->employee_name }}</p>
-                <p><span>Employee ID:</span> {{ $record->employee_id }}</p>
+        <div class="header">
+            <div class="header-content">
+                <div class="header-logo">
+                    
+                   
+                    <img style="display: inline-block"  src="./logo.png" alt="Company Logo">
+                    <div style="display: inline-block; margin-left:40%; text-align:right; font-weight: bold;">Apex Aura INT (Pvt) Ltd<br/>823/E, Kaduwela Road,<br/> Malabe</br>Tel:011-3476476</br></div>
+                    
+                
+          
             </div>
+        </div>
+
+        <!-- Rest of the payslip remains the same -->
+        <div class="details">
             <div>
-                <p><span>Department:</span> {{ $record->department }}</p>
-                <p><span>Pay Date:</span> {{ $record->pay_date }}</p>
+                <p><strong>Employee Name:</strong> {{ $record->employee->full_name }}</p>
+                <p><strong>EPF No:</strong> #{{ $record->epf_no}}</p>
+                <p><strong>Designation:</strong> {{ $record->employee->title }}</p>
+                <p><strong>Joined Date:</strong> {{ $record->employee->employment_start_date }}</p>
+                <p><strong>Pay Slip for the Period of:</strong> {{ $record->payed_month }}</p>
             </div>
         </div>
 
@@ -98,88 +138,81 @@
             <thead>
                 <tr>
                     <th>Description</th>
-                    <th class="text-right">Earnings</th>
-                    <th class="text-right">Deductions</th>
+                    <th class="text-right">Amount (Rs.)</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Basic Salary</td>
                     <td class="text-right">{{ number_format($record->basic, 2) }}</td>
-                    <td></td>
                 </tr>
                 <tr>
                     <td>Budget Allowance</td>
                     <td class="text-right">{{ number_format($record->budget_allowance, 2) }}</td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>Gross Salary</td>
-                    <td class="text-right">{{ number_format($record->gross_salary, 2) }}</td>
-                    <td></td>
+                    <td>(Gross Salary)</td>
+                    <td class="text-right no-border">({{ number_format($record->gross_salary, 2) }})</td>
                 </tr>
                 <tr>
-                    <td>Transport Allowance</td>
+                    <td class="bold-row no-upper-border">Fixed Allowances</td>
+                </tr>
+                <tr>
+                    <td>Traveling Allowances</td>
                     <td class="text-right">{{ number_format($record->transport_allowance, 2) }}</td>
-                    <td></td>
                 </tr>
                 <tr>
                     <td>Attendance Allowance</td>
                     <td class="text-right">{{ number_format($record->attendance_allowance, 2) }}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Phone Allowance</td>
-                    <td class="text-right">{{ number_format($record->phone_allowance, 2) }}</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Production Bonus</td>
-                    <td class="text-right">{{ number_format($record->production_bonus, 2) }}</td>
-                    <td></td>
                 </tr>
                 <tr>
                     <td>Car Allowance</td>
                     <td class="text-right">{{ number_format($record->car_allowance, 2) }}</td>
-                    <td></td>
                 </tr>
                 <tr>
-                    <td>EPF (12%)</td>
-                    <td></td>
-                    <td class="text-right">{{ number_format($record->epf_12_percent, 2) }}</td>
+                    <td>Phone Allowance</td>
+                    <td class="text-right">{{ number_format($record->phone_allowance, 2) }}</td>
                 </tr>
                 <tr>
-                    <td>ETF (3%)</td>
-                    <td></td>
-                    <td class="text-right">{{ number_format($record->etf_3_percent, 2) }}</td>
+                    <td>Production Bonus</td>
+                    <td class="text-right">{{ number_format($record->production_bonus, 2) }}</td>
+                </tr>
+                <tr class="totals-row mt-2 underline-offset-0">
+                    <td>Total Earnings</td>
+                    <td class="text-right">{{ number_format($record->total_earnings, 2) }}</td>
+                </tr>
+                <tr class="bold-row no-upper-border">
+                    <td class="no-upper-border">Deductions</td>
                 </tr>
                 <tr>
-                    <td>Advance Payment</td>
-                    <td></td>
+                    <td>EPF</td>
+                    <td class="text-right">{{ number_format($record->epf_8_percent, 2) }}</td>
+                </tr>
+                <tr>
+                    <td>Advance</td>
                     <td class="text-right">{{ number_format($record->advance_payment, 2) }}</td>
                 </tr>
                 <tr>
-                    <td>Loan Payment</td>
-                    <td></td>
+                    <td>Loan (Remaining balance: {{ number_format($record->loan_balance, 2) }})</td>
                     <td class="text-right">{{ number_format($record->loan_payment, 2) }}</td>
                 </tr>
                 <tr class="totals-row">
-                    <td>Total Earnings</td>
-                    <td class="text-right">{{ number_format($record->total_earnings, 2) }}</td>
-                    <td></td>
-                </tr>
-                <tr class="totals-row">
                     <td>Total Deductions</td>
-                    <td></td>
                     <td class="text-right">{{ number_format($record->total_deductions, 2) }}</td>
                 </tr>
                 <tr class="totals-row">
-                    <td>Net Salary</td>
+                    <td>Net Pay</td>
                     <td class="text-right">{{ number_format($record->net_salary, 2) }}</td>
-                    <td></td>
                 </tr>
             </tbody>
         </table>
+
+        <div class="signature">
+            <div>
+                <p>_______________________</p>
+                <p>Authorized Signature</p>
+            </div>
+        </div>
 
         <div class="footer">
             <p>This is a computer-generated payslip. If you have any queries, contact HR.</p>

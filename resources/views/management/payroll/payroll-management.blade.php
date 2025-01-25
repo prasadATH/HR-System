@@ -68,7 +68,7 @@
                 </div>
             @endif
 
-
+         
 <!--edit modal start -->
 <!-- Edit Modal -->
 <div class="modal fade" id="editAttendanceModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
@@ -144,9 +144,13 @@
         <button id="Export_spreadsheet" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
             <span>Export Spreadsheet</span>
         </button>
+        
+        <button id="Generate_payslips" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+            <span>Generate Payslips</span>
+        </button>
 
         <button id="Export_payslips" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
-            <span>Export payslips (ZIP)</span>
+            <span>Export Payslips (ZIP)</span>
         </button>
 
 
@@ -646,6 +650,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         window.location.href = `${window.location.origin}/dashboard/payroll/payroll/export/spreadsheet?selected_month=${month}`;
+    });
+
+    document.getElementById('Generate_payslips').addEventListener('click', () => {
+      // console.log(window.location.origin);
+        const month = document.getElementById('monthSelector').value;
+      // alert(month);
+        if (!month) {
+            alert('Please select a month before exporting.');
+            return;
+        }
+        window.location.href = `${window.location.origin}/dashboard/payroll/payroll/generate/paysheets?selected_month=${month}`;
     });
 
 

@@ -37,8 +37,7 @@ class ExpenseClaimsController extends Controller
 //dd($request->all());
         logger('Validation passed');
     } catch (\Illuminate\Validation\ValidationException $e) {
-        logger('Validation failed', $e->errors());
-        dd($e->errors(),  $request->all());
+        return redirect()->route('expense.management')->with('error', 'A validation error occurred while adding the expense record.'.$e->getMessage());
     }
     $avatarPath = null;
     $employee = Employee::where('employee_id', $request->employee_id)->first();
@@ -63,10 +62,8 @@ class ExpenseClaimsController extends Controller
 
     } catch (\Exception $e) {
         // Dump the error message and stack trace for debugging
-        dd([
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString(),
-        ]);
+        return redirect()->route('expense.management')->with('error', 'An error occurred while adding the expense record.'.$e->getMessage());
+
     }
     
     try {
@@ -92,7 +89,7 @@ class ExpenseClaimsController extends Controller
     } catch (\Exception $e) {
         // Log the error and display a message
         \Log::error('Exception: ' . $e->getMessage());
-        return redirect()->route('expense.management')->with('error', 'An error occurred while adding the expense record.');
+        return redirect()->route('expense.management')->with('error', 'An error occurred while adding the expense record.'.$e->getMessage());
     }
 
   

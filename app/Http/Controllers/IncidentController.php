@@ -41,15 +41,14 @@ class IncidentController extends Controller
        //dd($request->all());
         // Validate input to ensure correct format
         $request->validate([
-            'employee_id' => 'required|exists:employees,id',
+            'employment_id' => 'required',
             'incident_type' => 'required|string|max:255',
             'description' => 'nullable|string',
             'supporting_documents' => 'nullable|array',
             'incident_date' => 'required|date',
             'resolution_status' => 'nullable|string|max:255',
         ]);
-
-        // Handle file uploads if supporting_documents exist
+   
         $uploadedFiles = [];
         if ($request->hasFile('supporting_documents')) {
             foreach ($request->file('supporting_documents') as $file) {
@@ -73,8 +72,10 @@ class IncidentController extends Controller
                 'incident_date' => $request->input('incident_date'),
                 'resolution_status' => $request->input('resolution_status'),
             ]);
- */
-            $incident -> employee_id = $request['employee_id'];
+ */     $employee = Employee::where('employee_id', $request['employment_id'])->first();
+        // Handle file uploads if supporting_documents exist
+      
+            $incident -> employee_id = $employee->id;
             $incident -> incident_type = $request['incident_type'];
             $incident -> resolution_status = $request['resolution_status'];
             $incident -> incident_date = $request['incident_date'];
@@ -86,9 +87,10 @@ class IncidentController extends Controller
 
             return redirect()->route('incident.management')->with('success', 'Incident added successfully!');
         } catch (\Exception $e) {
+           // dd($e->getMessage());
             // Log the error and display a message
             \Log::error('Exception: ' . $e->getMessage());
-            return redirect()->route('incident.management')->with('error', 'An error occurred while adding the incident record.');
+            return redirect()->route('incident.management')->with('error', $e->getMessage().'Please check your data any try again!');
         }
     }public function update(Request $request, $id)
     {
@@ -134,7 +136,9 @@ class IncidentController extends Controller
     $finalFiles = array_values(array_unique(array_merge($remainingFiles, $newFiles)));
     
 
-
+    $employee = Employee::where('employee_id', $request['employment_id'])->first();
+    // Handle file uploads if supporting_documents exist
+  
     
         try {
             // Merge existing documents with newly uploaded ones
@@ -142,6 +146,7 @@ class IncidentController extends Controller
     
             // Update the incident record
             $incident->update([
+                'employee_id' => $employee->id,
                 'incident_type' => $request->input('incident_type'),
                 'description' => $request->input('description'),
                 'supporting_documents' => !empty($finalFiles) ? json_encode($finalFiles) : null,

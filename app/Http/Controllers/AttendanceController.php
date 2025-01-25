@@ -31,7 +31,7 @@ class AttendanceController extends Controller
 {
     // Validate input to ensure correct format
     $request->validate([
-        'employee_id' => 'required|exists:employees,id',
+        'employee_id' => 'required',
         'date' => 'required|date',
 
         'total_work_hours' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
@@ -39,15 +39,19 @@ class AttendanceController extends Controller
         'late_by' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
     ]);
 
+
     // Convert HH:MM:SS to seconds
     $totalWorkSeconds = $this->convertToSeconds($request->input('total_work_hours'));
     $overtimeSeconds = $this->convertToSeconds($request->input('overtime_hours'));
     $lateBySeconds = $this->convertToSeconds($request->input('late_by'));
 
     try {
+        $employee = Employee::where('employee_id', $request['employee_id'])->first();
+        // Handle file uploads if supporting_documents exist
+      
         // Create the attendance record
         $attendance = Attendance::create([
-            'employee_id' => $request->input('employee_id'),
+            'employee_id' => $employee->employee_id,
             'date' => $request->input('date'),
             'clock_in_time' => $request->input('clock_in_time'),
             'clock_out_time' => $request->input('clock_out_time'),
@@ -56,64 +60,70 @@ class AttendanceController extends Controller
             'late_by_seconds' => $lateBySeconds,
             'status' => 'present', // Default status
         ]);
-
-        return redirect()->route('attendance.management')->with('success', 'Attendance added successfully!');
+    
+        return redirect()->route('attendance.management')->with('success', 'Attendance record added successfully!');
     } catch (\Illuminate\Database\QueryException $e) {
         // Log the error and display a message
         \Log::error('Query Exception: ' . $e->getMessage());
-        return redirect()->route('attendance.management')->with('error', 'Failed to add attendance record.');
+        return redirect()->route('attendance.management')->with('error', 'Failed to add attendance record.'.$e->getMessage());
     } catch (\Exception $e) {
         // Catch any other exceptions
         \Log::error('Exception: ' . $e->getMessage());
-        return redirect()->route('attendance.management')->with('error', 'An error occurred while adding the attendance record.');
+        return redirect()->route('attendance.management')->with('error', 'An error occurred while adding the attendance record.'.$e->getMessage());
     }
 }
 
 
-    public function update(Request $request, $id)
-    {
-        $attendance = Attendance::findOrFail($id);
-    
-        // Validate input to ensure correct format
-        $request->validate([
-            'total_work_hours' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
-            'overtime_hours' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
-            'late_by' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
+public function update(Request $request, $id)
+{
+    $attendance = Attendance::findOrFail($id);
+
+    // Validate input to ensure correct format
+    $request->validate([
+        'employee_id' => 'required|numeric',
+
+        'total_work_hours' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
+        'overtime_hours' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
+        'late_by' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
+        'date' => 'required|date',
+    ]);
+
+    // Convert HH:MM:SS to seconds
+    $totalWorkSeconds = $this->convertToSeconds($request->input('total_work_hours'));
+    $overtimeSeconds = $this->convertToSeconds($request->input('overtime_hours'));
+    $lateBySeconds = $this->convertToSeconds($request->input('late_by'));
+
+    try {
+        $employee = Employee::where('employee_id', $request['employee_id'])->first();
+        // 
+        // Update the attendance record
+        $isUpdated = $attendance->update([
+            'employee_id' => $employee->id,
+            'clock_in_time' => $request->input('clock_in_time'),
+            'clock_out_time' => $request->input('clock_out_time'),
+            'total_work_hours' => $totalWorkSeconds,
+            'overtime_seconds' => $overtimeSeconds,
+            'late_by_seconds' => $lateBySeconds,
+            'date' => $request->input('date'),
         ]);
-    
-        // Convert HH:MM:SS to seconds
-        $totalWorkSeconds = $this->convertToSeconds($request->input('total_work_hours'));
-        $overtimeSeconds = $this->convertToSeconds($request->input('overtime_hours'));
-        $lateBySeconds = $this->convertToSeconds($request->input('late_by'));
-    
-        try {
-            // Update the attendance record
-            $isUpdated = $attendance->update([
-                'clock_in_time' => $request->input('clock_in_time'),
-                'clock_out_time' => $request->input('clock_out_time'),
-                'total_work_hours' => $totalWorkSeconds,
-                'overtime_seconds' => $overtimeSeconds,
-                'late_by_seconds' => $lateBySeconds,
-                'date' => $request->input('date'),
-            ]);
-    //dd($attendance,"overtime",$overtimeSeconds);
-            // Check if the update was successful
-            if ($isUpdated) {
-                return redirect()->route('attendance.management')->with('success', 'Attendance updated successfully!');
-            } else {
-                return redirect()->route('attendance.management')->with('error', 'Failed to update attendance record.');
-            }
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Log the error and display a message
-            \Log::error('Query Exception: ' . $e->getMessage());
-            dd('Database Error: ' . $e->getMessage());
-        } catch (\Exception $e) {
-            // Catch any other exceptions
-            \Log::error('Exception: ' . $e->getMessage());
-            dd('Error: ' . $e->getMessage());
+
+        // Check if the update was successful
+        if ($isUpdated) {
+            return redirect()->route('attendance.management')->with('success', 'Attendance updated successfully!');
+        } else {
+            return redirect()->route('attendance.management')->with('error', 'Failed to update attendance record.');
         }
+    } catch (\Illuminate\Database\QueryException $e) {
+        // Log the error and display a message
+        \Log::error('Query Exception: ' . $e->getMessage());
+        return redirect()->route('attendance.management')->with('error', 'Database error occurred while updating attendance.'.$e->getMessage());
+    } catch (\Exception $e) {
+        // Catch any other exceptions
+        \Log::error('Exception: ' . $e->getMessage());
+        return redirect()->route('attendance.management')->with('error', 'An unexpected error occurred while updating attendance.'.$e->getMessage());
     }
-    
+}
+
     
     
     /**
