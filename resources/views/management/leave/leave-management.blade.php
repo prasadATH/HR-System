@@ -698,7 +698,7 @@ textElements.forEach((element) => {
             {
                 extend: 'print',
                 text: 'Print Table',
-                title: 'Attendance Report', // Optional title
+                title: 'Leave Report', // Optional title
                 exportOptions: {
                     columns: ':visible', // Export all visible columns
                 }

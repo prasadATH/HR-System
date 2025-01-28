@@ -472,7 +472,7 @@ $(document).ready(function () {
             {
                 extend: 'print',
                 text: 'Print Table',
-                title: 'Attendance Report', // Optional title
+                title: 'Payroll Report', // Optional title
                 exportOptions: {
                     columns: ':visible', // Export all visible columns
                 }

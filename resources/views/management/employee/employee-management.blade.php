@@ -69,7 +69,12 @@
         <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-8 items-center pt-8 pb-8">
 
 @foreach ($employees as $employee)
-<a href="{{ route('employee.show', $employee->employee_id) }}" class="block">
+@if ($employee->employee_id)
+    <a href="{{ route('employee.show', $employee->employee_id) }}" class="block">
+@else
+    <span class="text-gray-500">Employee details unavailable</span>
+@endif
+
 <div class="border-2 border-[#00000066] p-8 space-y-4 rounded-3xl">
 <div class="w-full flex justify-center items-center">
 <div class="w-1/2 flex justify-start items-center">

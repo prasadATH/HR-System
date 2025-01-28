@@ -27,6 +27,7 @@ body {
     background: none;
 }
 
+
 #editAttendanceModal * {
   pointer-events: auto !important;
   user-select: auto !important;

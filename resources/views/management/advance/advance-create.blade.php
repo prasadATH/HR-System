@@ -16,26 +16,29 @@
               id="employment_ID"
               name = "employment_ID"
               placeholder="Enter your Employee ID"
+              required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 text-[#0000008C] font-bold"
             />
           </div>
           <div>
             <label for="loan_amount" class="block text-xl text-black font-bold">Advance Amount :</label>
             <input
-              type="text"
+              type="number"
               id="loan_amount"
               name = "loan_amount"
               placeholder="Enter your Amount"
+              required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
           </div>
           <div>
-            <label for="interest_rate" class="block text-xl text-black font-bold">Interest :</label>
+            <label for="interest_rate" class="block text-xl text-black font-bold">Interest(%) :</label>
             <input
-              type="text"
+              type="number"
               id="interest_rate"
               name = "interest_rate"
               placeholder="Enter your Interest Rate"
+              required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
           </div>
@@ -48,6 +51,7 @@
               id="loan_start_date"
               name = "loan_start_date"
               placeholder="Enter the date here"
+              required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
           </div>
@@ -59,6 +63,7 @@
               id="duration"
               name = "duration"
               placeholder="Enter the duration"
+              required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
           </div>

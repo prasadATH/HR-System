@@ -19,13 +19,14 @@ class LoanController extends Controller
 {
     
     try {
+        
     $validated = $request->validate([
         'employment_ID' => 'required|string|max:255',
-        'loan_amount' => 'required|numeric|min:0',
+        'loan_amount' => 'required|integer|min:1',
         'interest_rate' => 'nullable|numeric|min:0',
         'loan_start_date' => 'required|date',
         'duration' => 'required|integer|min:1',
-        'status' => ['required',Rule::in(['pending', 'approved', 'rejected']),],
+        'status' => 'required|string',
         'description' => 'nullable|string',
         'advance_documents' => 'nullable|array',
     ]);            
@@ -106,7 +107,6 @@ class LoanController extends Controller
     {
     $advance = Loan::findOrFail($id);
     $validated = $request->validate([
-            'employee_name' => 'required|string|max:255',
             'employment_ID' => 'required|string|max:255',
             'loan_amount' => 'required|numeric|min:0',
             'interest_rate' => 'nullable|numeric|min:0',
@@ -166,8 +166,6 @@ class LoanController extends Controller
     
     $finalFiles = array_values(array_unique(array_merge($remainingFiles, $newFiles)));
     
-
-        $advance->employee_name = $request->employee_name;
         $advance->employment_ID = $request->employment_ID;
         $advance->loan_amount = $request->loan_amount;
         $advance->interest_rate = $request->interest_rate;
