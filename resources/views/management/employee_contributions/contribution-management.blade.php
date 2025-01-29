@@ -598,7 +598,7 @@ function openEditModal(incidentId) {
     const modalContent = document.getElementById('editAttendanceContent');
     modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
     // Fetch content from the server
-    fetch(`${window.location.origin}/dashboard/incident/${incidentId}/edit`)
+    fetch(`${window.location.origin}/dashboard/incident/${contributionId}/edit`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;
@@ -628,37 +628,6 @@ function openEditModal(incidentId) {
       });
   }// Attendance Management Routes
   let selectedAddFiles = new DataTransfer();
-
-  function openAddModal() {
-    // Initialize the modal
-    const modal = new bootstrap.Modal(document.getElementById('editAttendanceModal'));
-    modal.show();
-
-    const modalContent = document.getElementById('editAttendanceContent');
-    modalContent.innerHTML = '<div class="text-center"><p>Loading...</p></div>';
-
-    // Fetch content from the server
-    fetch("{{ route('incident.create') }}")
-        .then(response => response.text())
-        .then(html => {
-            modalContent.innerHTML = html;
-            
-            // Reinitialize any necessary scripts or event listeners
-            setTimeout(() => {
-                // Ensure file input works after content is loaded
-                const docFilesInput = document.getElementById('doc-files');
-                if (docFilesInput) {
-                    docFilesInput.addEventListener('change', function() {
-                      handleAddFileSelection(this);
-                    });
-                }
-            }, 100);
-        })
-        .catch(error => {
-            modalContent.innerHTML = '<div class="text-center py-4 text-danger"><p>Error loading content. Please try again later.</p></div>';
-            console.error('Error:', error);
-        });
-}
 
 
 function openViewModal(data) {

@@ -203,6 +203,7 @@ Route::middleware('auth')->prefix('dashboard/contributions')->group(function () 
     Route::get('/create', [EmployeeContributionController::class, 'create'])->name('employee_contributions.create');
     Route::post('/store', [EmployeeContributionController::class, 'store'])->name('contribution.store');
     Route::delete('/{id}', [EmployeeContributionController::class, 'destroy'])->name('contribution.destroy');
+    Route::get('/{id}/edit', [EmployeeContributionController::class, 'edit'])->name('contribution.edit');
 
     Route::get('/contributions/{employeeId}', [EmployeeContributionController::class, 'getContributions']);
 

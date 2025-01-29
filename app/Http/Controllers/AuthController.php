@@ -46,9 +46,10 @@ class AuthController extends Controller
 public function register(Request $request)
 {
     $request->validate([
-        'name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
-        'email' => 'required|email|unique:users,email|max:255|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|regex:/^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,6}$/|unique:users',
         'password' => 'required|min:8|confirmed',
+        'company_name' => 'required|string|max:255',
     ]);
 
     // Create the user
@@ -56,6 +57,8 @@ public function register(Request $request)
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
+        'company_name' => $request->company_name,
+        
     ]);
 
     // Log the user in and store session data
@@ -74,7 +77,7 @@ public function register(Request $request)
 public function login(Request $request)
 {
     $request->validate([
-        'email' => 'required|email',
+        'email' => 'required|email|regex:/^[\w\.-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]{2,6}$/',
         'password' => 'required',
     ]);
 
@@ -220,6 +223,7 @@ public function update(Request $request)
 
     return redirect()->back()->with('success', 'Profile updated successfully.');
 }
+
 public function deleteAccount(Request $request)
 {
     // Ensure the user is authenticated

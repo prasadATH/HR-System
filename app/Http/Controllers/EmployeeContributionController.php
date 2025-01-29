@@ -50,6 +50,12 @@ class EmployeeContributionController extends Controller
 
         return view('management.employee_contributions.form');
     }
+    public function edit($id)
+    {
+        $contribution = EmployeeContribution::with('employee')->findOrFail($id);
+        return response()->json($contribution);
+    }
+
 
     public function getContributions($employeeId)
 {
@@ -61,8 +67,8 @@ class EmployeeContributionController extends Controller
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
             'basic_salary' => 'required|numeric|min:0',
-            'epf_number' => 'nullable|string|max:255',
-            'etf_number' => 'nullable|string|max:255',
+            'epf_number' => 'nullable|string|max:255|unique:employee_contributions,epf_number',
+            'etf_number' => 'nullable|string|max:255|unique:employee_contributions,etf_number',
         ]);
 
         // Create or update the record in the database
@@ -83,8 +89,8 @@ class EmployeeContributionController extends Controller
     {
         $request->validate([
             'basic_salary' => 'required|numeric|min:0',
-            'epf_number' => 'nullable|string|max:255',
-            'etf_number' => 'nullable|string|max:255',
+            'epf_number' => 'nullable|string|max:255|unique:employee_contributions,epf_number',
+            'etf_number' => 'nullable|string|max:255|unique:employee_contributions,etf_number',
             'total_epf_contributed' => 'nullable|numeric|min:0',
             'total_etf_contributed' => 'nullable|numeric|min:0',
         ]);
@@ -112,5 +118,25 @@ class EmployeeContributionController extends Controller
         return redirect()->back()->with('error', 'Failed to delete contribution record: ' . $e->getMessage());
     }
 }
+
+public function getEmployeeDetails($id)
+{
+    // Find the employee
+    $employee = Employee::find($id);
+    
+    if (!$employee) {
+        return response()->json(['error' => 'Employee not found'], 404);
+    }
+
+    // Find or create employee contribution record
+    $contribution = SalaryDetails::firstOrNew(['employee_id' => $id]);
+
+    // Return employee data in JSON format
+    return response()->json([
+        'basic_salary' => $employee->basic_salary, // Assuming Employee has basic_salary
+        'epf_number' => $contribution->epf_number,
+    ]);
+}
+
 
 }

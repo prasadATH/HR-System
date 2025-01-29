@@ -52,8 +52,8 @@
                         @endif
     
                         <div class="mb-4">
-                            <label for="compname" class="block text-xl font-bold text-black nunito-">Company Name</label>
-                            <input type="text" name="compname" id="compname" class="w-full px-4 py-4 mt-1 border-2 border-[#1C1B1F80] rounded-xl focus:outline-none focus:ring focus:ring-indigo-300" required>
+                            <label for="company_name" class="block text-xl font-bold text-black nunito-">Company Name</label>
+                            <input type="text" name="company_name" id="company_name" class="w-full px-4 py-4 mt-1 border-2 border-[#1C1B1F80] rounded-xl focus:outline-none focus:ring focus:ring-indigo-300" required>
                         </div>
                         <div class="mb-6">
                             <label for="name" class="block text-xl font-bold text-black nunito-">Full Name</label>
@@ -123,8 +123,8 @@
                 @endif
     
                 <div class="mb-4">
-                    <label for="compname" class="block text-xl font-bold text-black nunito-">Company Name</label>
-                    <input type="text" name="compname" id="compname" class="w-full px-4 py-4 mt-1 border-2 border-[#1C1B1F80] rounded-xl focus:outline-none focus:ring focus:ring-indigo-300" required>
+                    <label for="company_name" class="block text-xl font-bold text-black nunito-">Company Name</label>
+                    <input type="text" name="company_name" id="company_name" class="w-full px-4 py-4 mt-1 border-2 border-[#1C1B1F80] rounded-xl focus:outline-none focus:ring focus:ring-indigo-300" required>
                 </div>
                 <div class="mb-6">
                     <label for="name" class="block text-xl font-bold text-black nunito-">Full Name</label>
@@ -145,7 +145,7 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-between mb-6">
-                    <div class="flex items-center">
+                    <div class="flex items-center" >
                         <div class="relative">
                             <input type="checkbox" id="terms" name="terms" class="h-8 w-8 appearance-none border border-[#1C1B1F] rounded focus:ring-indigo-500 checked:bg-gradient-to-r checked:from-[#184E77] checked:via-[#52B69A] checked:to-[#184E77] checked:boredr-gray-300">
                             <i class="ri-check-line absolute inset-0 m-auto text-white opacity-0 pointer-events-none" aria-hidden="true"></i>

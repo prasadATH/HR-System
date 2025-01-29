@@ -283,7 +283,7 @@ class EmployeeController extends Controller
         'description' => 'nullable|string|max:255',
         'branch' => 'required|string',
         'name' => 'required|string',
-        'probation_start_date' => 'nullable|date',
+        'probation_start_date' => 'required|date',
         'probation_period' => 'nullable|integer',
         'department_id' => 'nullable|exists:departments,id',
         'manager_id' => $isFirstEmployee ? 'nullable' : 'nullable|exists:employees,id',

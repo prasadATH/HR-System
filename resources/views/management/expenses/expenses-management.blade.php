@@ -397,7 +397,7 @@ class="w-1/2  px-4 py-2  text-black border-2 border-[#184E77] rounded-xl shadow-
                 <p class="text-xl font-bold text-black">Status :</p>
     
                 <p class="text-xl font-bold text-black">Description :</p>
-                <p class="text-xl font-bold text-black">Supporting Documents : </p>
+                <p class="text-xl font-bold text-black">Supporting Documents: </p>
                 </div>
                 <div class="w-1/2 flex flex-col space-y-8">
                 <p class="text-xl font-bold text-black modal-employee-name"></p>
