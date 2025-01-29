@@ -27,8 +27,8 @@ class ExpenseClaimsController extends Controller
             'expense_type' => 'required|string|max:255',
             'description' => 'nullable|string',
             'expense_date' => 'required|date',
-            'approved_by' => 'required|string|max:255',
-            'amount' => 'required|numeric',
+            'approved_by' => 'required|string|regex:/^[a-zA-Z\s]+$/|max:255',
+            'amount' => 'required|numeric|min:0',
             'expense_status' => 'required|in:pending,approved,rejected',
             'supporting_documents' => 'nullable|array', // Ensure avatar is an array
         ]);

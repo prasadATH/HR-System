@@ -9,7 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 
-@section('title', 'Payroll Management')
+@section('title', 'EPF/ETF Management')
 
 @section('content')
 
@@ -155,7 +155,7 @@
     </div>
     
     <!-- Calendar Input on the Right -->
-    <div class="relative w-[300px] nunito-">
+    <!--<div class="relative w-[300px] nunito-">
       <button
         id="calendarButton"
         class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
