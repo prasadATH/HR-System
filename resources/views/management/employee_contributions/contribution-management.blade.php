@@ -247,7 +247,7 @@
                     <li class="cursor-pointer" ><a onclick="openEditModal({{ $record->id}})"  class="block px-2 py-2 hover:bg-gray-100">Edit</a></li>
                     <li class="bg-red">
                       
-                    <form action="{{ route('incident.destroy', ['id' => $record->id]) }}" method="POST" class="m-0 p-0">
+                    <form action="{{ route('contribution.destroy', ['id' => $record->id]) }}" method="POST" class="m-0 p-0">
     @csrf
                 @method('DELETE')
                 <button type="submit" 

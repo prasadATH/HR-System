@@ -2,7 +2,7 @@
 
 @extends('layouts.dashboard-layout')
 
-@section('title', 'Add Payroll')
+@section('title', 'EPF/ETF Management')
 
 @section('content')
 @if($errors->any())

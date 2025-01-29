@@ -96,4 +96,21 @@ class EmployeeContributionController extends Controller
 
         return redirect()->route('employee_contributions.index')->with('success', 'Employee contribution updated successfully.');
     }
+
+    public function destroy($id)
+{
+    try {
+        // Find the record by ID
+        $contribution = EmployeeContribution::findOrFail($id);
+
+        // Delete the record
+        $contribution->delete();
+
+        // Return success response
+        return redirect()->route('employee_contributions.index')->with('success', 'Contribution record deleted successfully.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Failed to delete contribution record: ' . $e->getMessage());
+    }
+}
+
 }
