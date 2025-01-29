@@ -20,25 +20,19 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         try {
-        $validated = $request->validate([
-            'department_id' => 'required|string|max:255',
-            'name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
-            'branch' => 'nullable|string|max:255|regex:/^[a-zA-Z\s]+$/',
-        ]);
+            // Validate the request
+            $validated = $request->validate([
+                'department_id' => 'required|string|max:255',
+                'name' => 'required|string|max:255',
+                'branch' => 'nullable|string|max:255',
+            ]);
 
-        logger('Validation passed');
-    } catch (ValidationException $e) {
-        logger('Validation failed', $e->errors());
+            logger('Validation passed');
 
-        // Inspect errors and request data
-        logger('Request data', $request->all());
-
-        // Optional: Customize error handling
-        return response()->json([
-            'errors' => $e->errors(),
-            'message' => 'Validation failed. Please check the input fields.',
-        ], 422);
-    }
+        } catch (ValidationException $e) {  // Simplified exception
+            logger('Validation failed', $e->errors());
+            dd($e->errors(),  $request->all());
+        }
 
         // Check if the department_id already exists
         $existingDepartments = Department::where('department_id', $request->department_id)->get();
@@ -109,4 +103,6 @@ class DepartmentController extends Controller
             return redirect()->back()->with('error', 'Failed to delete branch');
         }
     }
+
+    
 }
