@@ -194,6 +194,7 @@ Route::middleware('auth')->prefix('dashboard/departments')->group(function () {
     Route::get('/department/{department_id}', [DepartmentController::class, 'show'])->name('department.show');
     Route::delete('/department/branch/{branch}/{department_id}', [DepartmentController::class, 'deleteBranch'])
     ->name('department.branch.delete');
+    Route::get('/searchdepartment', [DepartmentController::class, 'GetSearchDepartment'])->name('department.search');
 
 });
 
