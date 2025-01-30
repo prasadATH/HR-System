@@ -17,11 +17,11 @@
 
 
           <div>
-            <label for="employment_id" class="block text-xl text-black font-bold">Employee ID:</label>
+            <label for="employee_id" class="block text-xl text-black font-bold">Employee ID:</label>
             <input
-              type="number"
-              id="employment_id"
-              name="employment_id"
+              type="text"
+              id="employee_id"
+              name="employee_id"
               placeholder="Enter employee id"
 
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"

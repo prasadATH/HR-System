@@ -18,8 +18,8 @@
           <div>
             <label for="employment_ID" class="block text-xl text-black font-bold">Employee ID:</label>
             <input
-              type="number"
-              id="employment_ID"
+              type="text"
+              id="employee_id"
               name="employee_id"
               placeholder="Enter employee id"
 

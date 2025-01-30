@@ -41,7 +41,7 @@ class IncidentController extends Controller
        //dd($request->all());
         // Validate input to ensure correct format
         $request->validate([
-            'employment_id' => 'required',
+            'employee_id' => 'required',
             'incident_type' => 'required|string|max:255',
             'description' => 'nullable|string',
             'supporting_documents' => 'nullable|array',
@@ -72,7 +72,7 @@ class IncidentController extends Controller
                 'incident_date' => $request->input('incident_date'),
                 'resolution_status' => $request->input('resolution_status'),
             ]);
- */     $employee = Employee::where('employee_id', $request['employment_id'])->first();
+ */     $employee = Employee::where('employee_id', $request['employee_id'])->first();
         // Handle file uploads if supporting_documents exist
       
             $incident -> employee_id = $employee->id;
@@ -136,7 +136,7 @@ class IncidentController extends Controller
     $finalFiles = array_values(array_unique(array_merge($remainingFiles, $newFiles)));
     
 
-    $employee = Employee::where('employee_id', $request['employment_id'])->first();
+    $employee = Employee::where('employee_id', $request['employee_id'])->first();
     // Handle file uploads if supporting_documents exist
   
     

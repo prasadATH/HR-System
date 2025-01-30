@@ -206,7 +206,7 @@
   >
     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl font-bold">
     {{ $record->employee->first_name }} {{ $record->employee->last_name }}
-          <p class="text-sm">{{ $record->employee->id }}</p>
+          <p class="text-sm">{{ $record->employee->employee_id }}</p>
     </td>
     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
     {{ $record->date }}

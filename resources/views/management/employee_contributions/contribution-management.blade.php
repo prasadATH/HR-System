@@ -202,7 +202,7 @@
       <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500 ">
       <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl font-bold">
       {{ $record->employee->first_name }} {{ $record->employee->last_name }}
-            <p class="text-sm">{{ $record->employee->id }}</p>
+            <p class="text-sm">{{ $record->employee->employee_id }}</p>
       </td>
       <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
       {{ $record->basic_salary }}
@@ -591,14 +591,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function openEditModal(incidentId) {
+function openEditModal(ContributeId) {
     const modal = new bootstrap.Modal(document.getElementById('editAttendanceModal'));
     modal.show();
 
     const modalContent = document.getElementById('editAttendanceContent');
     modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
     // Fetch content from the server
-    fetch(`${window.location.origin}/dashboard/incident/${contributionId}/edit`)
+    fetch(`${window.location.origin}/dashboard/contributions/${ContributeId}/edit`)
       .then(response => response.text())
       .then(html => {
         modalContent.innerHTML = html;

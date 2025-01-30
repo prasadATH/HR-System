@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmployeeContribution;
 use App\Models\Employee;
 use App\Models\Payroll;
+use App\Models\SalaryDetails;
 use Illuminate\Http\Request;
 
 class EmployeeContributionController extends Controller
@@ -65,7 +66,7 @@ class EmployeeContributionController extends Controller
    public function store(Request $request)
     {
         $request->validate([
-            'employee_id' => 'required|exists:employees,id',
+           'employee_id' => 'required|exists:employees,id',
             'basic_salary' => 'required|numeric|min:0',
             'epf_number' => 'nullable|string|max:255|unique:employee_contributions,epf_number',
             'etf_number' => 'nullable|string|max:255|unique:employee_contributions,etf_number',

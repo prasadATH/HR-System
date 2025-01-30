@@ -19,7 +19,7 @@
           <div>
             <label for="employee_id" class="block text-xl text-black font-bold">Employee ID:</label>
             <input
-              type="number"
+              type="text"
               id="employee_id"
               name="employee_id"
               placeholder="Enter employee id"

@@ -17,11 +17,11 @@
    
 
           <div>
-            <label for="employment_id" class="block text-xl text-black font-bold">Employee ID:</label>
+            <label for="employee_id" class="block text-xl text-black font-bold">Employee ID:</label>
             <input
               type="number"
-              id="employment_id"
-              name="employment_id"
+              id="employee_id"
+              name="employee_id"
               placeholder="Enter employee id"
               value="{{ old('employee_id', $incident->employee_id) }}"
 
