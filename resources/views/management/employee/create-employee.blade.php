@@ -243,7 +243,7 @@
                     <input type="text" id="full_name" name="full_name" placeholder="Enter Full Name" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A] " required />
                 </div>
                 <div class="w-full">
-                    <input type="number" id="nic" name="nic" placeholder="Enter NIC" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                    <input type="text" id="nic" name="nic" placeholder="Enter NIC" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
                 </div>
                 <div class="w-full">
                     <input type="email" id="email" name="email" placeholder="Enter Email Address" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
