@@ -228,7 +228,7 @@ $todos = Todo::where('user_id', auth()->id())
 
     public function expenseManagement()
     {
-        $expenses = ExpenseClaim::with('employee')->paginate(16); // Fetch paginated data
+        $expenses = ExpenseClaim::with('employee')->get(); // Fetch paginated data
      //   dd($expenses);
         return view('management.expenses.expenses-management', compact('expenses'));
     }
@@ -236,7 +236,7 @@ $todos = Todo::where('user_id', auth()->id())
     
     public function incidentManagement()
     {
-        $incidents = Incident::paginate(16);
+        $incidents = Incident::all();
         return view('management.incident.incident-management', compact('incidents'));
     }
 
@@ -244,7 +244,7 @@ $todos = Todo::where('user_id', auth()->id())
 
     public function attendanceManagement()
     {
-        $attendance = Attendance::with(['employee'])->paginate(20); // Fetch paginated data
+        $attendance = Attendance::with(['employee'])->get(); // Fetch paginated data
      //   dd($expenses);
      $attendance->getCollection()->transform(function ($record) {
         $record->total_work_hours = $this->formatDuration($record->total_work_hours);
