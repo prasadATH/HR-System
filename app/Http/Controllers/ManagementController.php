@@ -244,18 +244,21 @@ $todos = Todo::where('user_id', auth()->id())
 
     public function attendanceManagement()
     {
-        $attendance = Attendance::with(['employee'])->get(); // Fetch paginated data
-     //   dd($expenses);
-     $attendance->getCollection()->transform(function ($record) {
-        $record->total_work_hours = $this->formatDuration($record->total_work_hours);
-        $record->overtime_hours = $this->formatDuration($record->overtime_seconds);
-        $record->late_by = $this->formatDuration($record->late_by_seconds);
-
-        return $record;
-    });
-
-    return view('management.attendance.attendance-management', compact('attendance'));
-}
+        // Fetch attendance records with employee details
+        $attendance = Attendance::with(['employee'])->get();
+    
+        // Transform the collection to format work hours, overtime, and late by duration
+        $attendance->transform(function ($record) {
+            $record->total_work_hours = $this->formatDuration($record->total_work_hours);
+            $record->overtime_hours = $this->formatDuration($record->overtime_hours); // Ensure correct column name
+            $record->late_by = $this->formatDuration($record->late_by); // Ensure correct column name
+    
+            return $record;
+        });
+    
+        return view('management.attendance.attendance-management', compact('attendance'));
+    }
+    
 
 public function advanceManagement()
 {
