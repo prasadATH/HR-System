@@ -24,7 +24,7 @@ class PayrollController extends Controller
     {
         // Validate the input data
         $validator = Validator::make($request->all(), [
-            'employee_id' => 'required|integer|exists:employees,id',
+           'employee_id' => 'required|exists:employees,employee_id',
             'employee_name' => 'required|string|max:255|regex:/^[a-zA-Z\s]+$/',
             'known_name' => 'nullable|string|max:255',
             'epf_no' => 'nullable|integer|unique:employee_salary_details,epf_no',

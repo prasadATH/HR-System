@@ -66,9 +66,11 @@
 <div class="w-1/2 flex flex-col justify-start items-start nunito- rounded-3xl">
         <div class="w-full flex flex-col jusity-start items-start bg-[#D9D9D980] px-4 pt-4 rounded-t-xl">
             <p class="text-3xl font-bold text-black">Legal Documents</p>
+            @if (!empty($employee->legal_documents) && is_array(json_decode($employee->legal_documents, true)))
+            @foreach (json_decode($employee->legal_documents, true) as $document)
             <div class="mt-4 space-y-2">
             <ul>
-                @foreach (json_decode($employee->legal_documents, true) as $document)
+               
                     <li>
                         <!-- Extract the file name from the path -->
                         <span class="text-2xl">
@@ -84,8 +86,10 @@
                         </a>
                     </li>
                 @endforeach
+                @endif
             </ul>
             </div>
+            
         </div>
     </div>
 </div>

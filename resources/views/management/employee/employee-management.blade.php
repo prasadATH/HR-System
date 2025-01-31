@@ -68,64 +68,69 @@
         <!-- Dynamic Employee Cards -->
         <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-8 items-center pt-8 pb-8">
 
-@foreach ($employees as $employee)
-@if ($employee->employee_id)
-    <a href="{{ route('employee.show', $employee->employee_id) }}" class="block">
-@else
-    <span class="text-gray-500">Employee details unavailable</span>
-@endif
-
-<div class="border-2 border-[#00000066] p-8 space-y-4 rounded-3xl">
-<div class="w-full flex justify-center items-center">
-<div class="w-1/2 flex justify-start items-center">
-<img src="{{ $employee->image ? asset('storage/' . $employee->image) : asset('/bg1.png') }}" class="w-32 h-32 rounded-full">
-</div>
-<div class="w-1/2 flex flex-col justify-center items-center space-y-8 pt-4">
-<div class="w-full h-1/2 flex justify-center items-center">
-<span class="px-6 py-1 text-sm font-medium rounded-xl
-           {{ $employee->current === 'Active' ? 'text-[#008526] bg-[#9ce99280] border border-[#47B439] rounded-xl' : 'text-[#ad0000] bg-[#ffb5b5] border-[#FF0000]' }}">
-    {{ $employee->current }}
-</span>
-
-</div>
-<div class="w-full h-1/2 flex flex-col justify-start items-center">
-<p class=" text-[#00000080] nunito-">Employee ID</p>
-<p class="text-black nunito-" style="font-weight: 700;">{{ $employee->employee_id }}</p>
-</div>
-</div>
-</div>
-<div class="w-full flex flex-col space-y-2 pt-4">
-<p class="text-4xl text-black nunito- font-bold" style="font-weight: 700;">{{ $employee->first_name }} {{ $employee->last_name }}</p>
-<p class="text-2xl nunito- text-[#00000080] font-bold" style="font-weight: 700;">{{ $employee->title }}</p>
-</div>
-<div class="w-full flex justify-between items-center">
-<div class="w-full flex flex-col">
-<p class="text-xl nunito- text-[#00000080] font-bold">Department</p>
-<p class="text-l nunito- text-black font-bold" style="font-weight: 700;">{{ explode(' ', $employee->department->name ?? '')[0] ?? 'No Department' }}</p>
-</div>
-<div class="w-full flex flex-col">
-<p class="text-xl nunito- text-[#00000080] font-bold">Hired Date </p>
-<p class="text-l nunito- text-black font-bold" style="font-weight: 700;">{{ $employee->probation_start_date }}</p>
-</div>
-
-</div>
-<div class="w-full flex flex-col justify-start items-start space-y-4">
-<div class="w-full flex justify-start items-center space-x-2">
-<div class="w-8 h-8 flex justify-center items-center border border-black rounded-full p-1">
-<p class="text-xl"><i class="ri-mail-line"></i></p>
-</div>
-<p class="text-black font-bold nunito-" style="font-weight: 600;">{{ $employee->email }}</p>
-</div>
-<div class="w-full flex justify-start items-center space-x-2">
-<div class="w-8 h-8 flex justify-center items-center border border-black rounded-full p-1">
-<p class="text-xl"><i class="ri-phone-line"></i></p>
-</div>
-<p class="text-black font-bold nunito-" style="font-weight: 600;">{{ $employee->phone }}</p>
-</div>
-</div>
-</div>
-</a>
-@endforeach
+        @foreach ($employees as $employee)
+    <a href="{{ route('employee.show', $employee->id) }}" class="block relative">
+        <div class="border-2 border-[#00000066] p-8 space-y-4 rounded-3xl relative">
+            <!-- Icon in top-right corner -->
+            <div class="absolute top-4 right-4">
+                <form action="{{ route('employee.destroy', $employee->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this employee?');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="text-black-600 hover:text-red-800">
+                        <i class="ri-delete-bin-line text-2xl"></i>
+                    </button>
+                </form>
+            </div>
+            <!-- Rest of your employee card content -->
+            <div class="w-full flex justify-center items-center">
+                <div class="w-1/2 flex justify-start items-center">
+                    <img src="{{ $employee->image ? asset('storage/' . $employee->image) : asset('build/assets/bg1.png') }}" class="w-32 h-32 rounded-full">
+                </div>
+                <div class="w-1/2 flex flex-col justify-center items-center space-y-8 pt-4">
+                    <div class="w-full h-1/2 flex justify-center items-center">
+                        <span class="px-6 py-1 text-sm font-medium rounded-xl
+                            {{ $employee->current === 'Active' ? 'text-[#008526] bg-[#9ce99280] border border-[#47B439] rounded-xl' : 'text-[#ad0000] bg-[#ffb5b5] border-[#FF0000]' }}">
+                            {{ $employee->current }}
+                        </span>
+                    </div>
+                    <div class="w-full h-1/2 flex flex-col justify-start items-center">
+                        <p class=" text-[#00000080] nunito-">Employee ID</p>
+                        <p class="text-black nunito-" style="font-weight: 700;">{{ $employee->id }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full flex flex-col space-y-2 pt-4">
+                <p class="text-4xl text-black nunito- font-bold" style="font-weight: 700;">{{ $employee->first_name }}</p>
+                <p class="text-4xl text-black nunito- font-bold" style="font-weight: 700;">{{ $employee->last_name }}</p>
+                <p class="text-2xl nunito- text-[#00000080] font-bold" style="font-weight: 700;">{{ $employee->title }}</p>
+            </div>
+            <div class="w-full flex justify-between items-center">
+                <div class="w-full flex flex-col">
+                    <p class="text-xl nunito- text-[#00000080] font-bold">Department</p>
+                    <p class="text-l nunito- text-black font-bold" style="font-weight: 700;">{{ explode(' ', $employee->department->name ?? '')[0] ?? 'No Department' }}</p>
+                </div>
+                <div class="w-full flex flex-col">
+                    <p class="text-xl nunito- text-[#00000080] font-bold">Hired Date </p>
+                    <p class="text-l nunito- text-black font-bold" style="font-weight: 700;">{{ $employee->probation_start_date }}</p>
+                </div>
+            </div>
+            <div class="w-full flex flex-col justify-start items-start space-y-4">
+                <div class="w-full flex justify-start items-center space-x-2">
+                    <div class="w-8 h-8 flex justify-center items-center border border-black rounded-full p-1">
+                        <p class="text-xl"><i class="ri-mail-line"></i></p>
+                    </div>
+                    <p class="text-black font-bold nunito-" style="font-weight: 600;">{{ $employee->email }}</p>
+                </div>
+                <div class="w-full flex justify-start items-center space-x-2">
+                    <div class="w-8 h-8 flex justify-center items-center border border-black rounded-full p-1">
+                        <p class="text-xl"><i class="ri-phone-line"></i></p>
+                    </div>
+                    <p class="text-black font-bold nunito-" style="font-weight: 600;">{{ $employee->phone }}</p>
+                </div>
+            </div>
+        </div>
+    </a>
+    @endforeach
 </div>
 
 
