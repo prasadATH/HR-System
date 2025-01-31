@@ -59,10 +59,10 @@ class EmployeeContributionController extends Controller
 
 
     public function getContributions($employeeId)
-{
-    $contributions = EmployeeContribution::where('employee_id', $employeeId)->get();
-    return response()->json($contributions);
-}
+    {
+        $contributions = EmployeeContribution::where('employee_id', $employeeId)->get();
+        return response()->json($contributions);
+    }
    public function store(Request $request)
     {
         $request->validate([
