@@ -251,7 +251,7 @@
                 <input type="text" id="full_name" name="full_name" value="{{ $employee->full_name }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A] " required />
             </div>
             <div class="w-full">
-                <input type="number" id="nic" name="nic" value="{{ $employee->nic }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
+                <input type="text" id="nic" name="nic" value="{{ $employee->nic }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />
             </div>
             <div class="w-full">
                 <input type="email" id="email" name="email" value="{{ $employee->email }}" class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" />

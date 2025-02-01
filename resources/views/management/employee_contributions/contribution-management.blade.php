@@ -94,15 +94,13 @@
         </div>
         <div class="flex items-center space-x-4">
     
-    
-        <!-- Filter Button -->
 
     
-        <!-- Add record Button -->
+        <!-- Add record Button 
         <button class="flex items-center justify-center nunito- space-x-2 px-8 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
         <p class="text-3xl"><i class="ri-add-fill"></i></p>
             <a href="{{ route('employee_contributions.create') }}" >Add Record</a>
-        </button>
+        </button> -->
         
         </div>
     
@@ -110,12 +108,6 @@
     
       </div>
     
-    
-    <!--   <div class="w-1/5 align-right flex items-right justify-center nunito- space-x-2 px-8 py-2 text-white text-2xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
-        <button id="print-table">
-            Print Records
-        </button>
-    </div> -->
     </div>
     
     
@@ -154,21 +146,7 @@
       />
     </div>
     
-    <!-- Calendar Input on the Right -->
-    <!--<div class="relative w-[300px] nunito-">
-      <button
-        id="calendarButton"
-        class="flex items-center justify-between w-full px-4 py-2 text-left text-black border-2 border-[#184E77] rounded-xl shadow-sm hover:bg-[#f0f8ff]"
-      >
-        <div class="flex items-center space-x-4">
-          <span class="iconify text-[#184E77]" data-icon="mdi:calendar-outline" style="font-size: 20px;"></span>
-          <div>
-            <span class="text-sm text-[#184E77]">Select a day</span>
-            <p id="selectedDate" class="text-lg font-bold">13.03.2021</p>
-          </div>
-        </div>
-        <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
-      </button>
+    
     
       <!-- Hidden Calendar Input -->
       <input
