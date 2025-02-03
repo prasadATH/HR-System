@@ -351,7 +351,7 @@ class EmployeeController extends Controller
     $education->course_name = $validated['course_name'];
     $education->training_provider = $validated['training_provider'];
     $education->completion_date = $validated['completion_date'];
-    $education->certification_status = $validated['certification_status'];
+    $education->certification_status = $validated['certification_status'] ?? null;
     $education->save();
 
 
