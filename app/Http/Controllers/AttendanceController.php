@@ -51,7 +51,7 @@ class AttendanceController extends Controller
       
         // Create the attendance record
         $attendance = Attendance::create([
-            'employee_id' => $employee->employee_id,
+            'employee_id' => $employee->id,
             'date' => $request->input('date'),
             'clock_in_time' => $request->input('clock_in_time'),
             'clock_out_time' => $request->input('clock_out_time'),
