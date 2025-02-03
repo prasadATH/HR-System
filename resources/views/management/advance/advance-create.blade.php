@@ -27,9 +27,13 @@
               id="loan_amount"
               name = "loan_amount"
               placeholder="Enter your Amount"
+              min="1"
+              step="0.01"
+              oninput="this.value = Math.abs(this.value) || ''"
               required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
+            <p id="loan_amount_error" class="text-red-600 text-sm mt-1 hidden">Loan amount must be a positive number.</p>
           </div>
           <div>
             <label for="interest_rate" class="block text-xl text-black font-bold">Interest(%) :</label>
@@ -38,6 +42,10 @@
               id="interest_rate"
               name = "interest_rate"
               placeholder="Enter your Interest Rate"
+              min="0.01"
+              max="100"
+              step="0.01" 
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/^(-)/g, '');"
               required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
@@ -59,10 +67,11 @@
           <div>
             <label for="duration" class="block text-xl text-black font-bold">Payment Duration(Months):</label>
             <input
-              type="text"
+              type="number"
               id="duration"
               name = "duration"
               placeholder="Enter the duration"
+              oninput="this.value = Math.abs(this.value) || ''"
               required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />

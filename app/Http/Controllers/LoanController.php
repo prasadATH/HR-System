@@ -22,8 +22,8 @@ class LoanController extends Controller
         
     $validated = $request->validate([
         'employment_ID' => 'required|string|max:255',
-        'loan_amount' => 'required|integer|min:1',
-        'interest_rate' => 'nullable|numeric|min:0',
+        'loan_amount' => 'required|numeric|min:0.01',
+        'interest_rate' => 'nullable|numeric|min:0.01|max:100',
         'loan_start_date' => 'required|date',
         'duration' => 'required|integer|min:1',
         'status' => 'required|string',
