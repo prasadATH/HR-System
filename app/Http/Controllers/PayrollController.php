@@ -112,6 +112,7 @@ class PayrollController extends Controller
 
     public function update(Request $request, $id)
     {
+        dd($request->all());
         // Validate the input fields
         $validated = $request->validate([
             'employee_id' => 'required|integer',
@@ -121,6 +122,7 @@ class PayrollController extends Controller
             'basic' => 'required|numeric|min:0',
             'budget_allowance' => 'nullable|numeric|min:0',
             'advance_payment' => 'nullable|numeric|min:0',
+            'ot_payment' => 'nullable|numeric|min:0',
             'loan_payment' => 'nullable|numeric|min:0',
             'stamp_duty' => 'nullable|numeric|min:0',
             'no_pay' => 'nullable|numeric|min:0',
@@ -138,11 +140,41 @@ class PayrollController extends Controller
             'basic' => $validated['basic'],
             'budget_allowance' => $validated['budget_allowance'],
             'advance_payment' => $validated['advance_payment'],
+            'ot_payment' => $validated['ot_payment'],
             'loan_payment' => $validated['loan_payment'],
             'stamp_duty' => $validated['stamp_duty'],
             'no_pay' => $validated['no_pay'],
         ]);
 
+
+         // Re-fetch the updated details
+    $salaryDetail = SalaryDetails::findOrFail($id);
+
+    // Recalculate total earnings
+    $totalEarnings = $salaryDetail->basic + $salaryDetail->budget_allowance + 
+                      ($salaryDetail->transport_allowance ?? 0) + 
+                      ($salaryDetail->attendance_allowance ?? 0) + 
+                      ($salaryDetail->phone_allowance ?? 0) + 
+                      ($salaryDetail->production_bonus ?? 0) + 
+                      ($salaryDetail->car_allowance ?? 0) + 
+                      ($salaryDetail->ot_payment ?? 0);
+
+    // Recalculate total deductions
+    $totalDeductions = ($salaryDetail->advance_payment ?? 0) + 
+                       ($salaryDetail->loan_payment ?? 0) + 
+                       ($salaryDetail->stamp_duty ?? 0) + 
+                       ($salaryDetail->no_pay ?? 0) + 
+                       ($salaryDetail->epf_8_percent ?? 0);
+
+    // Calculate net salary
+    $netSalary = $totalEarnings - $totalDeductions;
+
+    // Update total earnings, total deductions, and net salary
+    $salaryDetail->update([
+        'total_earnings' => $totalEarnings,
+        'total_deductions' => $totalDeductions,
+        'net_salary' => $netSalary,
+    ]);
         // Redirect with success message
         return redirect()->route('payroll.management')->with('success', 'Payroll record saved successfully.');
     }

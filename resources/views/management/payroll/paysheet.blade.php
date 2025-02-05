@@ -174,6 +174,10 @@
                     <td class="text-right">{{ number_format($record->phone_allowance, 2) }}</td>
                 </tr>
                 <tr>
+                    <td>OT</td>
+                    <td class="text-right">{{ number_format($record->ot_payment, 2) }}</td>
+                </tr>
+                <tr>
                     <td>Production Bonus</td>
                     <td class="text-right">{{ number_format($record->production_bonus, 2) }}</td>
                 </tr>

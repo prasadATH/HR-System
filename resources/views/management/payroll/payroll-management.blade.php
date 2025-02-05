@@ -268,7 +268,7 @@
         <tbody>
             @foreach ($payrolls as $record)
             <tr>
-                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->employee_name }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->employee_name }} {{ $record->employee_id }}</td>
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->known_name }}</td>
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ $record->epf_no }}</td>
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->basic, 2) }}</td>

@@ -27,7 +27,7 @@ class AttendanceController extends Controller
         return view('management.attendance.attendance-edit', compact('attendance', 'employee'));
     }
     
-    public function store(Request $request)
+  /*   public function store(Request $request)
 {
     // Validate input to ensure correct format
     $request->validate([
@@ -72,7 +72,70 @@ class AttendanceController extends Controller
         return redirect()->route('attendance.management')->with('error', 'An error occurred while adding the attendance record.'.$e->getMessage());
     }
 }
+ */
 
+ public function store(Request $request)
+ {
+     // Decode JSON input
+     $data = $request->json()->all();
+
+     // Ensure $data is always an array (wrap single object in array)
+     if (!is_array($data)) {
+         return response()->json(['error' => 'Invalid data format'], 400);
+     }
+
+     // If $data is a single object (not an array), wrap it in an array
+     if (isset($data['EmpId'])) {
+         $data = [$data];
+     }
+
+     // Process each record
+     foreach ($data as $entry) {
+         // Validate required fields
+         if (!isset($entry['EmpId']) || !isset($entry['AttTime'])) {
+             return response()->json(['error' => 'Missing required fields: EmpId or AttTime'], 400);
+         }
+
+         // Extract fields
+         $employeeId = $entry['EmpId'];
+         $attFullData = $entry['AttTime'];
+         $checkingStatus = $entry['CheckingStatus'] ?? 'present';
+         $verifyType = $entry['VerifyType'] ?? null;
+
+         // Ensure employee exists (you might need to adjust this check)
+         $employee = Employee::where('id', $employeeId)->first();
+         if (!$employee) {
+             return response()->json(['error' => "Employee ID {$employeeId} not found"], 404);
+         }
+
+         // Split AttFullData into date and time
+         [$attDate, $attTime] = explode(" ", $attFullData);
+
+         // Check if attendance record already exists
+         $existingRecord = Attendance::where('employee_id', $employeeId)
+             ->where('date', $attDate)
+             ->where('clock_in_time', $attTime)
+             ->first();
+
+         if ($existingRecord) {
+             // Skip if already exists
+             continue;
+         }
+
+         // Insert the new attendance record
+         Attendance::create([
+             'employee_id' => $employeeId,
+             'date' => $attDate,
+             'clock_in_time' => $attTime,
+             'status' => $checkingStatus,
+             'total_work_hours' => null, // Can be calculated later
+             'overtime_seconds' => null,
+             'late_by_seconds' => null,
+         ]);
+     }
+
+     return response()->json(['message' => 'Records added successfully'], 201);
+ }
 
 public function update(Request $request, $id)
 {

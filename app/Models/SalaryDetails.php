@@ -47,6 +47,7 @@ class SalaryDetails extends Model
         'loan_balance',
         'pay_date', // Newly added
         'payed_month', // Newly added
+        'ot_payment',
     ];
 
     /**

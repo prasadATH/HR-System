@@ -63,6 +63,7 @@ class PayrollExportController extends Controller
             'production_bonus' => $payroll->production_bonus,
             'car_allowance' => $payroll->car_allowance,
             'loan_payment' => $payroll->loan_payment,
+            'ot_payment' => $payroll->ot_payment,
             'total_earnings' => $payroll->total_earnings,
             'epf_8_percent' => $payroll->epf_8_percent,
             'epf_12_percent' => $payroll->epf_12_percent,
@@ -103,7 +104,7 @@ class PayrollExportController extends Controller
         $writer->addHeader([
             'Employee ID', 'Employee Name', 'Known Name', 'EPF No', 'Basic Salary',
             'Budget Allowance', 'Gross Salary', 'Transport Allowance', 'Attendance Allowance',
-            'Phone Allowance', 'Production Bonus', 'Car Allowance', 'Loan Payment',
+            'Phone Allowance', 'Production Bonus', 'Car Allowance', 'Loan Payment', 'ot_payment',
             'Total Earnings', 'EPF (8%)', 'EPF (12%)', 'ETF (3%)', 'Advance Payment',
             'Stamp Duty', 'No Pay', 'Total Deductions', 'Net Salary', 'Loan Balance',
             'Pay Date', 'Paid Month'
@@ -125,6 +126,7 @@ class PayrollExportController extends Controller
                 $record->production_bonus,
                 $record->car_allowance,
                 $record->loan_payment,
+                $record->ot_payment,
                 $record->total_earnings,
                 $record->epf_8_percent,
                 $record->epf_12_percent,

@@ -28,6 +28,7 @@ class CreateSalaryDetailsTable extends Migration
             $table->float('production_bonus', 10, 2)->nullable();
             $table->float('car_allowance', 10, 2)->nullable();
             $table->float('loan_payment', 10, 2)->nullable();
+            $table->float('ot_payment', 10, 2)->nullable();
             $table->float('total_earnings', 10, 2);
             $table->float('epf_8_percent', 10, 2)->nullable();
             $table->float('epf_12_percent', 10, 2)->nullable();

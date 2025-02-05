@@ -85,8 +85,21 @@
                             <input type="number" id="basic" name="basic" value="{{ $record->basic }}" oninput="calculateNetSalary()" class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl focus:ring-blue-500 focus:border-blue-500 text-xl" />
                         </div>
                         <div>
+                            <input type="hidden" id="net" name="net" value="{{ $record->net_salary }}" class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl focus:ring-blue-500 focus:border-blue-500 text-xl" />
+                        </div>
+                        <div>
                             <label for="budget_allowance" class="block text-xl text-black font-bold">Budget Allowance :</label>
                             <input type="number" id="budget_allowance" name="budget_allowance" value="{{ $record->budget_allowance }}" oninput="calculateNetSalary()" class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl focus:ring-blue-500 focus:border-blue-500 text-xl" />
+                        </div>
+
+                        <div>
+                            <label for="ot_hours" class="block text-xl text-black font-bold">OT Hours :</label>
+                            <input type="number" id="ot_hours" name="ot_hours" value="{{ $record->ot_hours ?? 0 }}" oninput="calculateOTPayment()" class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl text-xl" />
+                        </div>
+
+                        <div>
+                            <label for="ot_payment" class="block text-xl text-black font-bold">OT Payment Amount :</label>
+                            <input type="number" id="ot_payment" name="ot_payment" value="{{ $record->ot_payment ?? 0 }}" value="0" readonly class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl text-xl bg-gray-200" />
                         </div>
                     </div>
                     <div class="w-1/2 flex flex-col space-y-4">
@@ -138,11 +151,25 @@
         const loanPayment = parseFloat(document.getElementById('loan_payment').value) || 0;
         const stampDuty = parseFloat(document.getElementById('stamp_duty').value) || 0;
         const noPay = parseFloat(document.getElementById('no_pay').value) || 0;
+        const otpay = parseFloat(document.getElementById('ot_payment').value) || 0;
 
         const totalDeductions = advancePayment + loanPayment + stampDuty + (noPay * 1000);
-        const netSalary = basic + budgetAllowance - totalDeductions;
+        const netSalary = basic + budgetAllowance + otpay- totalDeductions;
 
         document.getElementById('net_salary').value = netSalary.toFixed(2);
+    }
+
+    function calculateOTPayment() {
+        const basic = parseFloat(document.getElementById('basic').value) || 0;
+        const budgetAllowance = parseFloat(document.getElementById('budget_allowance').value) || 0;
+
+        const gross = basic+budgetAllowance;
+        const otHours = parseFloat(document.getElementById('ot_hours').value) || 0;
+        const otRate = 0.0041667327; // 0.41667327% as a decimal
+        const otPayment = otHours * (gross * otRate);
+        document.getElementById('ot_payment').value = otPayment.toFixed(2);
+
+        calculateNetSalary();
     }
 </script>
 @endsection
