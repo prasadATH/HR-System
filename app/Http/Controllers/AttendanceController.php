@@ -75,7 +75,7 @@ class AttendanceController extends Controller
  */
 
  public function store(Request $request)
- {
+ {dd('test finger',);
      // Decode JSON input
      $data = $request->json()->all();
 
