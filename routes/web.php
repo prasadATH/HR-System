@@ -161,6 +161,8 @@ Route::middleware('auth')->prefix('dashboard/attendance')->group(function () {
     Route::delete('/{id}', [AttendanceController::class, 'destroy'])->name('attendance.destroy');
 });
 
+Route::post('/attendance/store', [AttendanceController::class, 'store']);
+
 // Attendance Management Routes
 Route::middleware('auth')->prefix('dashboard/incident')->group(function () {
     Route::get('/create', [IncidentController::class, 'create'])->name('incident.create');
