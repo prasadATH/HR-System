@@ -31,7 +31,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/attendance/store', [AttendanceController::class, 'store']);
 
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login.form');
