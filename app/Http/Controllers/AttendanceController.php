@@ -78,64 +78,80 @@ class AttendanceController extends Controller
  {
      // Decode JSON input
      $data = $request->json()->all();
-
-     // Ensure $data is always an array (wrap single object in array)
+ 
+     // Ensure $data is always an array
      if (!is_array($data)) {
          return response()->json(['error' => 'Invalid data format'], 400);
      }
-
-     // If $data is a single object (not an array), wrap it in an array
+ 
+     // If $data is a single object, wrap it in an array
      if (isset($data['EmpId'])) {
          $data = [$data];
      }
-
+ 
      // Process each record
      foreach ($data as $entry) {
          // Validate required fields
          if (!isset($entry['EmpId']) || !isset($entry['AttTime'])) {
              return response()->json(['error' => 'Missing required fields: EmpId or AttTime'], 400);
          }
-
+ 
          // Extract fields
          $employeeId = $entry['EmpId'];
          $attFullData = $entry['AttTime'];
-         $checkingStatus = $entry['CheckingStatus'] ?? 'present';
-         $verifyType = $entry['VerifyType'] ?? null;
-
-         // Ensure employee exists (you might need to adjust this check)
+ 
+         // Ensure employee exists
          $employee = Employee::where('id', $employeeId)->first();
          if (!$employee) {
              return response()->json(['error' => "Employee ID {$employeeId} not found"], 404);
          }
-
+ 
          // Split AttFullData into date and time
          [$attDate, $attTime] = explode(" ", $attFullData);
-
-         // Check if attendance record already exists
-         $existingRecord = Attendance::where('employee_id', $employeeId)
+         
+         // Check existing attendance for the day
+         $attendanceRecord = Attendance::where('employee_id', $employeeId)
              ->where('date', $attDate)
-             ->where('clock_in_time', $attTime)
              ->first();
-
-         if ($existingRecord) {
-             // Skip if already exists
-             continue;
+ 
+         if (!$attendanceRecord) {
+             // First entry of the day - set as clock-in
+             $lateBySeconds = max(0, strtotime($attTime) - strtotime('08:45:00'));
+             
+             Attendance::create([
+                 'employee_id' => $employeeId,
+                 'date' => $attDate,
+                 'clock_in_time' => $attTime,
+                 'clock_out_time' => null,
+                 'status' => 1,
+                 'total_work_hours' => null,
+                 'overtime_seconds' => null,
+                 'late_by_seconds' => $lateBySeconds,
+             ]);
+         } else {
+             // Second entry - set as clock-out
+             if ($attendanceRecord->clock_out_time === null) {
+                 $overtimeSeconds = max(0, strtotime($attTime) - strtotime('17:00:00'));
+ 
+                 // Calculate total work hours
+                 $clockInTime = strtotime($attendanceRecord->clock_in_time);
+                 $clockOutTime = strtotime($attTime);
+                 $totalWorkHours = max(0, ($clockOutTime - $clockInTime) / 3600); // Convert seconds to hours
+                 
+                 // Update record with clock-out time and calculated values
+                 $attendanceRecord->update([
+                     'clock_out_time' => $attTime,
+                     'status' => 1,
+                     'total_work_hours' => round($totalWorkHours, 2),
+                     'overtime_seconds' => $overtimeSeconds,
+                 ]);
+             }
          }
-
-         // Insert the new attendance record
-         Attendance::create([
-             'employee_id' => $employeeId,
-             'date' => $attDate,
-             'clock_in_time' => $attTime,
-             'status' => $checkingStatus,
-             'total_work_hours' => null, // Can be calculated later
-             'overtime_seconds' => null,
-             'late_by_seconds' => null,
-         ]);
      }
-
-     return response()->json(['message' => 'Records added successfully'], 201);
+ 
+     return response()->json(['message' => 'Records processed successfully'], 201);
  }
+ 
 
 public function update(Request $request, $id)
 {
