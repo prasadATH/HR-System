@@ -5,6 +5,9 @@ use App\Models\Attendance;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 
+use Carbon\Carbon;
+
+
 class AttendanceController extends Controller
 {
     public function create()
@@ -108,16 +111,23 @@ class AttendanceController extends Controller
  
          // Split AttFullData into date and time
          [$attDate, $attTime] = explode(" ", $attFullData);
-         
-         // Check existing attendance for the day
+ 
+         // Convert to Carbon objects
+         $attTimeCarbon = Carbon::parse($attFullData); // Marked attendance time
+         $lateThreshold = Carbon::createFromTime(8, 45, 0);
+         $overtimeThreshold = Carbon::createFromTime(17, 0, 0);
+ 
+         // Check if attendance already exists for the day
          $attendanceRecord = Attendance::where('employee_id', $employeeId)
              ->where('date', $attDate)
              ->first();
  
          if (!$attendanceRecord) {
              // First entry of the day - set as clock-in
-             $lateBySeconds = max(0, strtotime($attTime) - strtotime('08:45:00'));
-             
+             $lateBySeconds = $attTimeCarbon->greaterThan($lateThreshold)
+                 ? $attTimeCarbon->diffInSeconds($lateThreshold)
+                 : 0;
+ 
              Attendance::create([
                  'employee_id' => $employeeId,
                  'date' => $attDate,
@@ -129,29 +139,30 @@ class AttendanceController extends Controller
                  'late_by_seconds' => $lateBySeconds,
              ]);
          } else {
-             // Second entry - set as clock-out
-             if ($attendanceRecord->clock_out_time === null) {
-                 $overtimeSeconds = max(0, strtotime($attTime) - strtotime('17:00:00'));
+             // Update clock-out time with the latest timestamp
+             $clockInTimeCarbon = Carbon::parse($attendanceRecord->clock_in_time);
+             $clockOutTimeCarbon = $attTimeCarbon; // Latest clock-out time
  
-                 // Calculate total work hours
-                 $clockInTime = strtotime($attendanceRecord->clock_in_time);
-                 $clockOutTime = strtotime($attTime);
-                 $totalWorkHours = max(0, ($clockOutTime - $clockInTime) / 3600); // Convert seconds to hours
-                 
-                 // Update record with clock-out time and calculated values
-                 $attendanceRecord->update([
-                     'clock_out_time' => $attTime,
-                     'status' => 1,
-                     'total_work_hours' => round($totalWorkHours, 2),
-                     'overtime_seconds' => $overtimeSeconds,
-                 ]);
-             }
+             // Calculate total work hours
+             $totalWorkHours = $clockInTimeCarbon->diffInSeconds($clockOutTimeCarbon) / 3600; // Convert to hours
+ 
+             // Calculate overtime
+             $overtimeSeconds = $clockOutTimeCarbon->greaterThan($overtimeThreshold)
+                 ? $clockOutTimeCarbon->diffInSeconds($overtimeThreshold)
+                 : 0;
+ 
+             // Update existing record
+             $attendanceRecord->update([
+                 'clock_out_time' => $attTime,
+                 'status' => 1,
+                 'total_work_hours' => $totalWorkHours, // No rounding off
+                 'overtime_seconds' => $overtimeSeconds,
+             ]);
          }
      }
  
      return response()->json(['message' => 'Records processed successfully'], 201);
  }
- 
 
 public function update(Request $request, $id)
 {

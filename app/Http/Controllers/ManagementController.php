@@ -253,6 +253,7 @@ $todos = Todo::where('user_id', auth()->id())
             $record->overtime_hours = $this->formatDuration($record->overtime_hours); // Ensure correct column name
             $record->late_by = $this->formatDuration($record->late_by); // Ensure correct column name
     
+         
             return $record;
         });
     

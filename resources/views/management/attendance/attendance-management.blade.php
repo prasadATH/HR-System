@@ -246,7 +246,7 @@
           checkOut: '{{ $record->clock_out_time }}',
           totalWorkHours: '{{ $record->total_work_hours }}',
           overtimeHours: '{{ $record->overtime_hours }}',
-          lateBy: '{{ $record->late_by }}',
+          lateBy: '{{ $record->late_by_hours }}',
           date: '{{ $record->date }}'
   
               })">
