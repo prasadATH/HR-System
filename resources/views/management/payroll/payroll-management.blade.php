@@ -145,6 +145,10 @@
             <span>Export Spreadsheet</span>
         </button>
         
+        <button id="Export_bank_document" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+            <span>Export Bank Document</span>
+        </button>
+        
         <button id="Generate_payslips" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
             <span>Generate Payslips</span>
         </button>
