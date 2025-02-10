@@ -112,7 +112,7 @@ class PayrollController extends Controller
 
     public function update(Request $request, $id)
     {
-        dd($request->all());
+        //dd($request->all());
         // Validate the input fields
         $validated = $request->validate([
             'employee_id' => 'required|integer',
