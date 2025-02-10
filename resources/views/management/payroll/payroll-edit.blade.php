@@ -166,7 +166,7 @@
         const gross = basic+budgetAllowance;
         const otHours = parseFloat(document.getElementById('ot_hours').value) || 0;
         const otRate = 0.0041667327; // 0.41667327% as a decimal
-        const otPayment = otHours * (gross * otRate);
+        const otPayment = otHours * (gross * 1.5 * otRate);
         document.getElementById('ot_payment').value = otPayment.toFixed(2);
 
         calculateNetSalary();
