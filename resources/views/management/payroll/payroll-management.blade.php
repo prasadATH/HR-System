@@ -378,7 +378,16 @@
 
 <script>
 
+document.getElementById('Export_bank_document').addEventListener('click', () => {
+    const month = document.getElementById('monthSelector').value;
 
+    if (!month) {
+        alert('Please select a month before exporting.');
+        return;
+    }
+alert(`${window.location.origin}`);
+    window.location.href = `${window.location.origin}/dashboard/payroll/payroll/export-bank-details?selected_month=${month}`;
+});
 
 function formatDuration(seconds) {
     // Calculate hours, minutes, and seconds

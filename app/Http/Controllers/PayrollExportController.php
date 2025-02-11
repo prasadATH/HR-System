@@ -7,9 +7,37 @@ use Illuminate\Http\Request;
 use ZipArchive;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
+use App\Exports\BankDetailsExport;
 
 class PayrollExportController extends Controller
 {
+
+    public function export(Request $request)
+    {
+        $selectedMonth = $request->query('selected_month');
+
+        if (!$selectedMonth) {
+            return back()->withErrors(['error' => 'Please select a month to export.']);
+        }
+        $payrolls = DB::table('employee_salary_details')
+        ->join('bank_details', 'employee_salary_details.employee_id', '=', 'bank_details.employee_id')
+        ->where('employee_salary_details.payed_month', '=', $selectedMonth)
+        ->select(
+            'bank_details.company_ref',
+            'bank_details.account_holder_name as beneficiary_name',
+            'bank_details.account_number',
+            'bank_details.bank_code',
+            'bank_details.branch_code',
+            'employee_salary_details.net_salary'
+        )
+        ->get();
+
+     
+  // ✅ Export the payroll data to an Excel file
+  return Excel::download(new BankDetailsExport($payrolls), 'bank_details.xlsx');
+    }
     public function downloadPaysheets(Request $request)
     {
 
