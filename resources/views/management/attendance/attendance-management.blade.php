@@ -205,7 +205,7 @@
     <tr class="hover:shadow-popup hover:rounded-xl hover:scale-101 hover:bg-white transition duration-300 hover:border-r-4 hover:border-b-4 hover:border-gray-500 "
   >
     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966] rounded-l-xl font-bold">
-    {{ $record->employee->first_name }} {{ $record->employee->last_name }}
+    {{ $record->employee->full_name }}
           <p class="text-sm">{{ $record->employee->employee_id }}</p>
     </td>
     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
@@ -241,7 +241,7 @@
               <ul class=" text-gray-700">
                   <li><a href="#" class="block px-2 py-2 hover:bg-gray-100" onclick="openViewModal({
           employeeName: '{{ $record->employee->full_name }}',
-          employeeId: '{{ $record->id }}',
+          employeeId: '{{ $record->employee->id }}',
           checkIn: '{{ $record->clock_in_time }}',
           checkOut: '{{ $record->clock_out_time }}',
           totalWorkHours: '{{ $record->total_work_hours }}',
@@ -437,6 +437,7 @@
       paging: true,
       pageLength: 10, 
       pagingType: 'simple', 
+      order: [[1, 'desc']], 
       searching: true,
           buttons: [
               {

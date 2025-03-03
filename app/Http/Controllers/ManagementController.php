@@ -250,8 +250,8 @@ $todos = Todo::where('user_id', auth()->id())
         // Transform the collection to format work hours, overtime, and late by duration
         $attendance->transform(function ($record) {
             $record->total_work_hours = $this->formatDuration($record->total_work_hours);
-            $record->overtime_hours = $this->formatDuration($record->overtime_hours); // Ensure correct column name
-            $record->late_by = $this->formatDuration($record->late_by); // Ensure correct column name
+            $record->overtime_hours = $this->formatDuration($record->overtime_seconds); // Ensure correct column name
+            $record->late_by = $this->formatDuration($record->late_by_seconds); // Ensure correct column name
     
          
             return $record;
