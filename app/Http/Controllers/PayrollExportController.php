@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SalaryDetails;
+use App\Models\Attendance;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
 use ZipArchive;
@@ -69,47 +70,96 @@ class PayrollExportController extends Controller
         return back()->with('error', 'Failed to create zip file.');
     }
 
-    public function generatePreviousMonth(Request $request)
-{
-    $selectedMonth = $request->query('selected_month');
-    $previousMonth = date('Y-m', strtotime('-1 month', strtotime($selectedMonth)));
-
-    $payrolls = SalaryDetails::where('payed_month', $previousMonth)->get();
-
-    foreach ($payrolls as $payroll) {
-        SalaryDetails::create([
-            'employee_name' => $payroll->employee_name,
-            'employee_id' => $payroll->employee_id,
-            'known_name' => $payroll->known_name,
-            'epf_no' => $payroll->epf_no,
-            'basic' => $payroll->basic,
-            'budget_allowance' => $payroll->budget_allowance,
-            'gross_salary' => $payroll->gross_salary,
-            'transport_allowance' => $payroll->transport_allowance,
-            'attendance_allowance' => $payroll->attendance_allowance,
-            'phone_allowance' => $payroll->phone_allowance,
-            'production_bonus' => $payroll->production_bonus,
-            'car_allowance' => $payroll->car_allowance,
-            'loan_payment' => $payroll->loan_payment,
-            'ot_payment' => $payroll->ot_payment,
-            'total_earnings' => $payroll->total_earnings,
-            'epf_8_percent' => $payroll->epf_8_percent,
-            'epf_12_percent' => $payroll->epf_12_percent,
-            'etf_3_percent' => $payroll->etf_3_percent,
-            'advance_payment' => $payroll->advance_payment,
-            'stamp_duty' => $payroll->stamp_duty,
-            'no_pay' => $payroll->no_pay,
-            'total_deductions' => $payroll->total_deductions,
-            'net_salary' => $payroll->net_salary,
-            'loan_balance' => $payroll->loan_balance,
-            'pay_date' => now(),
-            'payed_month' => $selectedMonth,
-            'status' => $payroll->status,
-        ]);
+    public function generatePreviousMonth(Request $request) 
+    {
+        $selectedMonth = $request->query('selected_month');
+        $previousMonth = date('Y-m', strtotime('-1 month', strtotime($selectedMonth)));
+    
+        $payrolls = SalaryDetails::where('payed_month', $previousMonth)->get();
+    
+        foreach ($payrolls as $payroll) {
+            // Calculate new loan and advance balances after deductions
+            $newLoanBalance = max(0, $payroll->loan_balance - $payroll->loan_payment);
+            $newAdvanceBalance = max(0, $payroll->advance_balance - $payroll->advance_payment);
+    
+            // Get attendance records for OT calculation (from 5th of last month to 5th of current month)
+            $startDate = date('Y-m-05', strtotime('-1 month', strtotime($selectedMonth)));
+            $endDate = date('Y-m-05', strtotime($selectedMonth));
+    
+            $attendanceRecords = Attendance::where('employee_id', $payroll->employee_id)
+                ->whereBetween('date', [$startDate, $endDate])
+                ->get();
+    
+            // Calculate total OT hours and late_by hours
+            $totalOTHours = $attendanceRecords->sum('overtime_seconds') / 3600;
+            $totalLateByHours = $attendanceRecords->sum('late_by_seconds') / 3600;
+    
+            // Deduct late hours from OT hours
+            $finalOTHours = max(0, $totalOTHours - $totalLateByHours);
+    
+            // Calculate OT Payment
+            $grossSalary = $payroll->basic + $payroll->budget_allowance;
+            $otRate = 0.0041667327; // 0.41667327% as a decimal
+            $otPayment = $finalOTHours * ($grossSalary * 1.5 * $otRate);
+    
+            // Calculate deductions and net salary
+            $noPayDeductions = ($payroll->no_pay ?? 0) * 1000;
+            $totalDeductions = (
+                ($payroll->epf_8_percent ?? 0) +
+                ($payroll->advance_payment ?? 0) +
+                ($payroll->loan_payment ?? 0) +
+                ($payroll->stamp_duty ?? 0) +
+                $noPayDeductions
+            );
+    
+            $totalEarnings = (
+                $grossSalary +
+                ($payroll->transport_allowance ?? 0) +
+                ($payroll->attendance_allowance ?? 0) +
+                ($payroll->phone_allowance ?? 0) +
+                ($payroll->car_allowance ?? 0) +
+                ($payroll->production_bonus ?? 0) +
+                $otPayment // Adding OT payment to earnings
+            );
+    
+            $netSalary = $totalEarnings - $totalDeductions;
+         //   dd($netSalary);
+            // Create new salary record
+            SalaryDetails::create([
+                'employee_name' => $payroll->employee_name,
+                'employee_id' => $payroll->employee_id,
+                'known_name' => $payroll->known_name,
+                'epf_no' => $payroll->epf_no,
+                'basic' => $payroll->basic,
+                'budget_allowance' => $payroll->budget_allowance,
+                'gross_salary' => $payroll->gross_salary,
+                'transport_allowance' => $payroll->transport_allowance,
+                'attendance_allowance' => $payroll->attendance_allowance,
+                'phone_allowance' => $payroll->phone_allowance,
+                'production_bonus' => $payroll->production_bonus,
+                'car_allowance' => $payroll->car_allowance,
+                'loan_payment' => $payroll->loan_payment,
+                'advance_payment' => $payroll->advance_payment,
+                'ot_payment' => $otPayment,
+                'total_earnings' => $totalEarnings,
+                'epf_8_percent' => $payroll->epf_8_percent,
+                'epf_12_percent' => $payroll->epf_12_percent,
+                'etf_3_percent' => $payroll->etf_3_percent,
+                'stamp_duty' => $payroll->stamp_duty,
+                'no_pay' => $payroll->no_pay,
+                'total_deductions' => $totalDeductions,
+                'net_salary' => $netSalary,
+                'loan_balance' => $newLoanBalance,
+                'advance_balance' => $newAdvanceBalance,
+                'pay_date' => now(),
+                'payed_month' => $selectedMonth,
+                'status' => $payroll->status,
+            ]);
+        }
+    
+        return redirect()->route('payroll.management')->with('success', 'Records generated for the selected month.');
     }
-
-    return redirect()->route('payroll.index')->with('success', 'Records generated for the selected month.');
-}
+    
 
     public function exportSalarySpreadsheet(Request $request)
     {//dd($request->all());

@@ -480,6 +480,7 @@ $(document).ready(function () {
     paging: true,
     pageLength: 10,
     pagingType: 'simple',
+    order: [[2, 'asc']], 
     searching: true,
         buttons: [
             {
