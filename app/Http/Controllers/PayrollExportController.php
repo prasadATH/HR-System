@@ -103,13 +103,12 @@ class PayrollExportController extends Controller
             $otPayment = $finalOTHours * ($grossSalary * 1.5 * $otRate);
     
             // Calculate deductions and net salary
-            $noPayDeductions = ($payroll->no_pay ?? 0) * 1000;
+            //$noPayDeductions = ($payroll->no_pay ?? 0) * 1000;
             $totalDeductions = (
                 ($payroll->epf_8_percent ?? 0) +
                 ($payroll->advance_payment ?? 0) +
                 ($payroll->loan_payment ?? 0) +
-                ($payroll->stamp_duty ?? 0) +
-                $noPayDeductions
+                ($payroll->stamp_duty ?? 0)
             );
     
             $totalEarnings = (
