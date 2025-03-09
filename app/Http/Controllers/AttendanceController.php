@@ -115,7 +115,7 @@ class AttendanceController extends Controller
          // Convert to Carbon objects
          $attTimeCarbon = Carbon::parse($attFullData); // Marked attendance time
          $lateThreshold = Carbon::createFromTime(8, 45, 0);
-         $overtimeThreshold = Carbon::createFromTime(17, 0, 0);
+         $overtimeThreshold = Carbon::createFromTime(16, 45, 0);
  
          // Check if attendance already exists for the day
          $attendanceRecord = Attendance::where('employee_id', $employeeId)
@@ -164,55 +164,74 @@ class AttendanceController extends Controller
      return response()->json(['message' => 'Records processed successfully'], 201);
  }
 
-public function update(Request $request, $id)
-{
-    $attendance = Attendance::findOrFail($id);
+ public function update(Request $request, $id)
+ {
+     $attendance = Attendance::findOrFail($id);
 
-    // Validate input to ensure correct format
-    $request->validate([
-        'employee_id' => 'required|numeric',
+     // Validate input to ensure correct format
+     $request->validate([
+         'employee_id' => 'required|numeric',
+         'clock_in_time' => 'required',
+         'clock_out_time' => 'required',
+         'date' => 'required|date',
+     ]);
 
-        'total_work_hours' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
-        'overtime_hours' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
-        'late_by' => ['nullable', 'regex:/^([0-9]+):([0-5][0-9]):([0-5][0-9])$/'],
-        'date' => 'required|date',
-    ]);
+     // Convert clock-in and clock-out times to Carbon instances
+     $clockInTime = Carbon::parse($request->input('clock_in_time'));
+     $clockOutTime = Carbon::parse($request->input('clock_out_time'));
+     
+     // Ensure valid clock-in and clock-out times
+     if ($clockInTime->greaterThanOrEqualTo($clockOutTime)) {
+         return redirect()->route('attendance.management')->with('error', 'Clock-out time must be after clock-in time.');
+     }
 
-    // Convert HH:MM:SS to seconds
-    $totalWorkSeconds = $this->convertToSeconds($request->input('total_work_hours'));
-    $overtimeSeconds = $this->convertToSeconds($request->input('overtime_hours'));
-    $lateBySeconds = $this->convertToSeconds($request->input('late_by'));
+     // Calculate total work hours in seconds
+     $totalWorkSeconds = $clockInTime->diffInSeconds($clockOutTime);
+     
+     // Define thresholds
+     $lateThreshold = Carbon::createFromTime(8, 45, 0); // 8:45 AM late threshold
+     $overtimeThreshold = Carbon::createFromTime(16, 45, 0); // 5:00 PM end of regular work
+     
+     // Calculate late by seconds
+     $lateBySeconds = $clockInTime->greaterThan($lateThreshold)
+         ? $clockInTime->diffInSeconds($lateThreshold)
+         : 0;
 
-    try {
-        $employee = Employee::where('employee_id', $request['employee_id'])->first();
-        // 
-        // Update the attendance record
-        $isUpdated = $attendance->update([
-            'employee_id' => $employee->id,
-            'clock_in_time' => $request->input('clock_in_time'),
-            'clock_out_time' => $request->input('clock_out_time'),
-            'total_work_hours' => $totalWorkSeconds,
-            'overtime_seconds' => $overtimeSeconds,
-            'late_by_seconds' => $lateBySeconds,
-            'date' => $request->input('date'),
-        ]);
+     // Calculate overtime seconds
+     $overtimeSeconds = $clockOutTime->greaterThan($overtimeThreshold)
+         ? $clockOutTime->diffInSeconds($overtimeThreshold)
+         : 0;
+     
+     try {
+         $employee = Employee::where('employee_id', $request['employee_id'])->first();
+         
+         // Update the attendance record
+         $isUpdated = $attendance->update([
+             'employee_id' => $employee->id,
+             'clock_in_time' => $request->input('clock_in_time'),
+             'clock_out_time' => $request->input('clock_out_time'),
+             'total_work_hours' => $totalWorkSeconds, // Total work in seconds
+             'overtime_seconds' => $overtimeSeconds, // Overtime in seconds
+             'late_by_seconds' => $lateBySeconds, // Late by in seconds
+             'date' => $request->input('date'),
+         ]);
 
-        // Check if the update was successful
-        if ($isUpdated) {
-            return redirect()->route('attendance.management')->with('success', 'Attendance updated successfully!');
-        } else {
-            return redirect()->route('attendance.management')->with('error', 'Failed to update attendance record.');
-        }
-    } catch (\Illuminate\Database\QueryException $e) {
-        // Log the error and display a message
-        \Log::error('Query Exception: ' . $e->getMessage());
-        return redirect()->route('attendance.management')->with('error', 'Database error occurred while updating attendance.'.$e->getMessage());
-    } catch (\Exception $e) {
-        // Catch any other exceptions
-        \Log::error('Exception: ' . $e->getMessage());
-        return redirect()->route('attendance.management')->with('error', 'An unexpected error occurred while updating attendance.'.$e->getMessage());
-    }
-}
+         // Check if the update was successful
+         if ($isUpdated) {
+             return redirect()->route('attendance.management')->with('success', 'Attendance updated successfully!');
+         } else {
+             return redirect()->route('attendance.management')->with('error', 'Failed to update attendance record.');
+         }
+     } catch (\Illuminate\Database\QueryException $e) {
+         // Log the error and display a message
+         \Log::error('Query Exception: ' . $e->getMessage());
+         return redirect()->route('attendance.management')->with('error', 'Database error occurred while updating attendance.' . $e->getMessage());
+     } catch (\Exception $e) {
+         // Catch any other exceptions
+         \Log::error('Exception: ' . $e->getMessage());
+         return redirect()->route('attendance.management')->with('error', 'An unexpected error occurred while updating attendance.' . $e->getMessage());
+     }
+ }
 
     
     
