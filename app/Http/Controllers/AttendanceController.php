@@ -116,7 +116,7 @@ class AttendanceController extends Controller
          $attTimeCarbon = Carbon::parse($attFullData); // Marked attendance time
          $lateThreshold = Carbon::createFromTime(8, 45, 0);
          $overtimeThreshold = Carbon::createFromTime(16, 45, 0);
- 
+         $workHoursThreshold = 8; // Standard working hours
          // Check if attendance already exists for the day
          $attendanceRecord = Attendance::where('employee_id', $employeeId)
              ->where('date', $attDate)
@@ -145,11 +145,13 @@ class AttendanceController extends Controller
  
              // Calculate total work hours
              $totalWorkHours = $clockInTimeCarbon->diffInSeconds($clockOutTimeCarbon) / 3600; // Convert to hours
+
+             // Calculate overtime only if total work hours exceed 8
+             $overtimeSeconds = 0;
+             if ($totalWorkHours > $workHoursThreshold) {
+                 $overtimeSeconds = ($totalWorkHours - $workHoursThreshold) * 3600; // Convert excess hours to seconds
+             }
  
-             // Calculate overtime
-             $overtimeSeconds = $clockOutTimeCarbon->greaterThan($overtimeThreshold)
-                 ? $clockOutTimeCarbon->diffInSeconds($overtimeThreshold)
-                 : 0;
  
              // Update existing record
              $attendanceRecord->update([
@@ -190,16 +192,16 @@ class AttendanceController extends Controller
      
      // Define thresholds
      $lateThreshold = Carbon::createFromTime(8, 45, 0); // 8:45 AM late threshold
-     $overtimeThreshold = Carbon::createFromTime(16, 45, 0); // 5:00 PM end of regular work
+     $regularWorkSeconds = 8 * 3600; // 8 hours in seconds
      
      // Calculate late by seconds
      $lateBySeconds = $clockInTime->greaterThan($lateThreshold)
          ? $clockInTime->diffInSeconds($lateThreshold)
          : 0;
 
-     // Calculate overtime seconds
-     $overtimeSeconds = $clockOutTime->greaterThan($overtimeThreshold)
-         ? $clockOutTime->diffInSeconds($overtimeThreshold)
+     // Calculate overtime seconds (only if total work exceeds 8 hours)
+     $overtimeSeconds = $totalWorkSeconds > $regularWorkSeconds
+         ? $totalWorkSeconds - $regularWorkSeconds
          : 0;
      
      try {
