@@ -95,7 +95,7 @@ class PayrollExportController extends Controller
             $totalLateByHours = $attendanceRecords->sum('late_by_seconds') / 3600;
     
             // Deduct late hours from OT hours
-            $finalOTHours = max(0, $totalOTHours - $totalLateByHours);
+            $finalOTHours = max(0, $totalOTHours);
     
             // Calculate OT Payment
             $grossSalary = $payroll->basic + $payroll->budget_allowance;
@@ -122,7 +122,7 @@ class PayrollExportController extends Controller
             );
     
             $netSalary = $totalEarnings - $totalDeductions;
-         //   dd($netSalary);
+            dd($netSalary);
             // Create new salary record
             SalaryDetails::create([
                 'employee_name' => $payroll->employee_name,
