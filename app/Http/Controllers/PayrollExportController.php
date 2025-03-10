@@ -82,14 +82,14 @@ class PayrollExportController extends Controller
             $newLoanBalance = max(0, $payroll->loan_balance - $payroll->loan_payment);
             $newAdvanceBalance = max(0, $payroll->advance_balance - $payroll->advance_payment);
     
-            // Get attendance records for OT calculation (from 5th of last month to 5th of current month)
-            $startDate = date('Y-m-05', strtotime('-1 month', strtotime($selectedMonth)));
-            $endDate = date('Y-m-05', strtotime($selectedMonth));
-    
+        // Get attendance records for OT calculation (from 5th of selected month to 5th of next month)
+        $startDate = date('Y-m-05', strtotime($selectedMonth));
+        $endDate = date('Y-m-05', strtotime('+1 month', strtotime($selectedMonth)));
+          //  dd($startDate);
             $attendanceRecords = Attendance::where('employee_id', $payroll->employee_id)
                 ->whereBetween('date', [$startDate, $endDate])
                 ->get();
-    
+   // dd($attendanceRecords);
             // Calculate total OT hours and late_by hours
             $totalOTHours = $attendanceRecords->sum('overtime_seconds') / 3600;
             $totalLateByHours = $attendanceRecords->sum('late_by_seconds') / 3600;
@@ -122,7 +122,7 @@ class PayrollExportController extends Controller
             );
     
             $netSalary = $totalEarnings - $totalDeductions;
-            dd($netSalary);
+           // dd($netSalary);
             // Create new salary record
             SalaryDetails::create([
                 'employee_name' => $payroll->employee_name,
