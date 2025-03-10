@@ -253,6 +253,8 @@
                 <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Production Bonus</th>
                 <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Car Allowance</th>
                 <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Loan Payment</th>
+                <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">OT Payment</th>
+
                 <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Total Earnings</th>
                 <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">EPF 8%</th>
                 <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">EPF 12%</th>
@@ -284,6 +286,8 @@
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->production_bonus, 2) }}</td>
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->car_allowance, 2) }}</td>
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->loan_payment, 2) }}</td>
+                <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->ot_payment, 2) }}</td>
+
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->total_earnings, 2) }}</td>
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->epf_8_percent, 2) }}</td>
                 <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">{{ number_format($record->epf_12_percent, 2) }}</td>
@@ -508,7 +512,7 @@ $(document).ready(function () {
 console.log(selectedMonth);
         // Custom filtering function
        // const searchTerm = $(this).val(); // Get the value of the search input
-        table.search(selectedMonth).draw();
+       table.columns(24).search(selectedMonth).draw();
     });
 
     // Attach Print functionality to the custom button
