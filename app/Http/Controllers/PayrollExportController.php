@@ -104,13 +104,24 @@ class PayrollExportController extends Controller
     
             // Calculate deductions and net salary
             //$noPayDeductions = ($payroll->no_pay ?? 0) * 1000;
-            $totalDeductions = (
-                ($payroll->epf_8_percent ?? 0) +
-                ($payroll->advance_payment ?? 0) +
-                ($payroll->loan_payment ?? 0) +
-                ($payroll->stamp_duty ?? 0)
-            );
-    
+            if($newLoanBalance >0){
+                $totalDeductions = (
+                    ($payroll->epf_8_percent ?? 0) +
+                    ($payroll->loan_payment ?? 0) +
+                    ($payroll->stamp_duty ?? 0)
+                );
+        
+
+            }else{
+                $totalDeductions = (
+                    ($payroll->epf_8_percent ?? 0) +
+                    ($payroll->epf_8_percent ?? 0) +
+                    ($payroll->stamp_duty ?? 0)
+                );
+        
+
+            }
+         
             $totalEarnings = (
                 $grossSalary +
                 ($payroll->transport_allowance ?? 0) +
@@ -138,7 +149,7 @@ class PayrollExportController extends Controller
                 'production_bonus' => $payroll->production_bonus,
                 'car_allowance' => $payroll->car_allowance,
                 'loan_payment' => $payroll->loan_payment,
-                'advance_payment' => $payroll->advance_payment,
+                'advance_payment' => 0,
                 'ot_payment' => $otPayment,
                 'total_earnings' => $totalEarnings,
                 'epf_8_percent' => $payroll->epf_8_percent,
