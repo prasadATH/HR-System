@@ -18,7 +18,7 @@
       </div>
       <div class="w-full mx-auto p-6 ">
 
-    <form action="{{ route('attendance.store') }}" method="POST" class="w-full mx-auto p-6 ">
+    <form action="{{ route('attendance.storemanual') }}" method="POST" class="w-full mx-auto p-6 ">
         @csrf
    
         <div class="grid grid-cols-2 gap-4">

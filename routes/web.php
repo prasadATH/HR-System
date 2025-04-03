@@ -155,6 +155,7 @@ Route::middleware('auth')->prefix('dashboard/leaves')->group(function () {
 Route::middleware('auth')->prefix('dashboard/attendance')->group(function () {
     Route::get('/create', [AttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/store', [AttendanceController::class, 'store'])->name('attendance.store');
+    Route::post('/storemanual', [AttendanceController::class, 'storemanual'])->name('attendance.storemanual');
     Route::get('/{id}', [AttendanceController::class, 'show'])->name('attendance.details');
     Route::get('/{id}/edit', [AttendanceController::class, 'edit'])->name('attendance.edit');
     Route::put('/{id}', [AttendanceController::class, 'update'])->name('attendance.update');

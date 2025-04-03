@@ -234,7 +234,54 @@ class AttendanceController extends Controller
          return redirect()->route('attendance.management')->with('error', 'An unexpected error occurred while updating attendance.' . $e->getMessage());
      }
  }
-
+ public function storeManual(Request $request)
+ {
+     $request->validate([
+         'employee_id' => 'required|numeric|exists:employees,employee_id',
+         'clock_in_time' => 'required|date_format:H:i',
+         'clock_out_time' => 'required|date_format:H:i|after:clock_in_time',
+         'date' => 'required|date',
+     ]);
+ 
+     try {
+         $employee = Employee::where('employee_id', $request->employee_id)->first();
+ 
+         $clockIn = Carbon::parse($request->date . ' ' . $request->clock_in_time);
+         $clockOut = Carbon::parse($request->date . ' ' . $request->clock_out_time);
+         $lateThreshold = Carbon::parse($request->date . ' 08:45:00');
+         $standardSeconds = 8 * 3600; // 8 hours
+ 
+         // Calculate work hours
+         $totalWorkSeconds = $clockIn->diffInSeconds($clockOut);
+ 
+         // Late by
+         $lateBySeconds = $clockIn->greaterThan($lateThreshold) 
+             ? $clockIn->diffInSeconds($lateThreshold) 
+             : 0;
+ 
+         // Overtime
+         $overtimeSeconds = $totalWorkSeconds > $standardSeconds 
+             ? $totalWorkSeconds - $standardSeconds 
+             : 0;
+ 
+         Attendance::create([
+             'employee_id' => $employee->id,
+             'date' => $request->date,
+             'clock_in_time' => $request->clock_in_time,
+             'clock_out_time' => $request->clock_out_time,
+             'status' => 'present',
+             'total_work_hours' => $totalWorkSeconds,
+             'overtime_seconds' => $overtimeSeconds,
+             'late_by_seconds' => $lateBySeconds,
+         ]);
+ 
+         return redirect()->route('attendance.management')->with('success', 'Attendance added successfully!');
+     } catch (\Exception $e) {
+         \Log::error('Attendance Store Manual Error: ' . $e->getMessage());
+         return redirect()->route('attendance.management')->with('error', 'Error saving attendance. ' . $e->getMessage());
+     }
+ }
+ 
     
     
     /**
