@@ -166,6 +166,20 @@ class AttendanceController extends Controller
      return response()->json(['message' => 'Records processed successfully'], 201);
  }
 
+ public function destroy($id)
+{
+    try {
+        $attendance = Attendance::findOrFail($id);
+        $attendance->delete();
+
+        return redirect()->route('attendance.management')->with('success', 'Attendance record deleted successfully!');
+    } catch (\Exception $e) {
+        \Log::error('Attendance Delete Error: ' . $e->getMessage());
+        return redirect()->route('attendance.management')->with('error', 'Failed to delete attendance record. ' . $e->getMessage());
+    }
+}
+
+
  public function update(Request $request, $id)
  {
      $attendance = Attendance::findOrFail($id);
