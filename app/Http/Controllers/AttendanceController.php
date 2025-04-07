@@ -265,6 +265,10 @@ class AttendanceController extends Controller
          $lateThreshold = Carbon::parse($request->date . ' 08:45:00');
          $standardSeconds = 8 * 3600; // 8 hours
  
+         if ($clockOut->lessThan($clockIn)) {
+            $clockOut->addDay();
+        }
+    
          // Calculate work hours
          $totalWorkSeconds = $clockIn->diffInSeconds($clockOut);
  
