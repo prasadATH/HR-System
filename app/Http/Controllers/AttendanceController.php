@@ -183,9 +183,9 @@ class AttendanceController extends Controller
      $clockOutTime = Carbon::parse($request->input('clock_out_time'));
      
      // Ensure valid clock-in and clock-out times
-     if ($clockInTime->greaterThanOrEqualTo($clockOutTime)) {
-         return redirect()->route('attendance.management')->with('error', 'Clock-out time must be after clock-in time.');
-     }
+     if ($clockOutTime->lessThan($clockInTime)) {
+        $clockOutTime->addDay();
+    }
 
      // Calculate total work hours in seconds
      $totalWorkSeconds = $clockInTime->diffInSeconds($clockOutTime);
