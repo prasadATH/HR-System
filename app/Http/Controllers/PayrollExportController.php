@@ -107,13 +107,15 @@ class PayrollExportController extends Controller
             
             foreach ($attendanceRecords as $record) {
                 $dayOfWeek = date('w', strtotime($record->date)); // 0 = Sunday, 6 = Saturday
-                if ($dayOfWeek == 0) {
-                    $sundayOTSeconds += $record->overtime_seconds;
+                $isDoubleOTDay = ($dayOfWeek == 0 || $record->date == '2025-03-13');
+            
+                if ($isDoubleOTDay) {
+                    $sundayOTSeconds += ($record->overtime_seconds * 2); // double OT
                 } else {
                     $regularOTSeconds += $record->overtime_seconds;
                 }
             }
-            
+
             $totalOTHours = ($regularOTSeconds + $sundayOTSeconds) / 3600;
             $totalLateByHours = $attendanceRecords->sum('late_by_seconds') / 3600;
             
@@ -138,8 +140,7 @@ class PayrollExportController extends Controller
 
             }else{
                 $totalDeductions = (
-                    ($payroll->epf_8_percent ?? 0) +
-                    ($payroll->epf_8_percent ?? 0) +
+                    ($payroll->epf_8_percent ?? 0)+
                     ($payroll->stamp_duty ?? 0)
                 );
         
