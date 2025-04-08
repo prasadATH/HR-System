@@ -99,9 +99,33 @@ class PayrollExportController extends Controller
     
             // Calculate OT Payment
             $grossSalary = $payroll->basic + $payroll->budget_allowance;
+     
+
             $otRate = 0.0041667327; // 0.41667327% as a decimal
-            $otPayment = $finalOTHours * ($grossSalary * 1.5 * $otRate);
-    
+            $regularOTSeconds = 0;
+            $sundayOTSeconds = 0;
+            
+            foreach ($attendanceRecords as $record) {
+                $dayOfWeek = date('w', strtotime($record->date)); // 0 = Sunday, 6 = Saturday
+                if ($dayOfWeek == 0) {
+                    $sundayOTSeconds += $record->overtime_seconds;
+                } else {
+                    $regularOTSeconds += $record->overtime_seconds;
+                }
+            }
+            
+            $totalOTHours = ($regularOTSeconds + $sundayOTSeconds) / 3600;
+            $totalLateByHours = $attendanceRecords->sum('late_by_seconds') / 3600;
+            
+            // Apply double OT rate for Sundays
+            $regularOTHours = $regularOTSeconds / 3600;
+            $sundayOTHours = $sundayOTSeconds / 3600;
+            
+            $otPayment = ($regularOTHours * ($grossSalary * 1.5 * $otRate)) +
+                         ($sundayOTHours * ($grossSalary * 1.5 * $otRate * 2)); // Double rate for Sundays
+
+
+
             // Calculate deductions and net salary
             //$noPayDeductions = ($payroll->no_pay ?? 0) * 1000;
             if($newLoanBalance >0){

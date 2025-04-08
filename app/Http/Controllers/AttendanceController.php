@@ -252,8 +252,8 @@ class AttendanceController extends Controller
  {
      $request->validate([
          'employee_id' => 'required|numeric|exists:employees,employee_id',
-         'clock_in_time' => 'required|date_format:H:i',
-         'clock_out_time' => 'required|date_format:H:i|after:clock_in_time',
+         'clock_in_time' => 'required',
+         'clock_out_time' => 'required',
          'date' => 'required|date',
      ]);
  
