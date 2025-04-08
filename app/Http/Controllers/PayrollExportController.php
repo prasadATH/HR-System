@@ -3,9 +3,11 @@ namespace App\Http\Controllers;
 
 use App\Models\SalaryDetails;
 use App\Models\Attendance;
+use App\Models\Employee;
 use App\Models\Payroll;
 use Illuminate\Http\Request;
 use ZipArchive;
+use Carbon\Carbon;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
@@ -105,17 +107,31 @@ class PayrollExportController extends Controller
             $regularOTSeconds = 0;
             $sundayOTSeconds = 0;
             
-            foreach ($attendanceRecords as $record) {
-                $dayOfWeek = date('w', strtotime($record->date)); // 0 = Sunday, 6 = Saturday
-                $isDoubleOTDay = ($dayOfWeek == 0 || $record->date == '2025-03-13');
-            
-                if ($isDoubleOTDay) {
-                    $sundayOTSeconds += ($record->overtime_seconds * 2); // double OT
-                } else {
-                    $regularOTSeconds += $record->overtime_seconds;
-                }
-            }
+            $employee = Employee::find($payroll->employee_id);
 
+
+    
+foreach ($attendanceRecords as $record) {
+    $dayOfWeek = date('w', strtotime($record->date)); // 0 = Sunday, 6 = Saturday
+    $isDoubleOTDay = ($dayOfWeek == 0 || $record->date == '2025-03-13');
+
+    // Check for department 2 on Saturday
+    if ($employee && $employee->department_id == 2 && $dayOfWeek == 6) {
+        if ($record->clock_in && $record->clock_out) {
+            $workedSeconds = Carbon::parse($record->clock_out)->diffInSeconds(Carbon::parse($record->clock_in));
+            if ($workedSeconds > 14400) {
+                $regularOTSeconds += $record->overtime_seconds;
+            }
+        }
+    } else {
+        // Original OT logic
+        if ($isDoubleOTDay) {
+            $sundayOTSeconds += ($record->overtime_seconds * 2); // double OT
+        } else {
+            $regularOTSeconds += $record->overtime_seconds;
+        }
+    }
+}
             $totalOTHours = ($regularOTSeconds + $sundayOTSeconds) / 3600;
             $totalLateByHours = $attendanceRecords->sum('late_by_seconds') / 3600;
             
