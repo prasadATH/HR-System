@@ -116,7 +116,7 @@ class AttendanceController extends Controller
          $attTimeCarbon = Carbon::parse($attFullData); // Marked attendance time
          $lateThreshold = Carbon::createFromTime(8, 45, 0);
          $overtimeThreshold = Carbon::createFromTime(16, 45, 0);
-         $workHoursThreshold = 8; // Standard working hours
+         $workHoursThreshold = 8*3600; // Standard working hours
          // Check if attendance already exists for the day
          $attendanceRecord = Attendance::where('employee_id', $employeeId)
              ->where('date', $attDate)
@@ -144,12 +144,12 @@ class AttendanceController extends Controller
              $clockOutTimeCarbon = $attTimeCarbon; // Latest clock-out time
  
              // Calculate total work hours
-             $totalWorkHours = $clockInTimeCarbon->diffInSeconds($clockOutTimeCarbon) / 3600; // Convert to hours
+             $totalWorkHours = $clockInTimeCarbon->diffInSeconds($clockOutTimeCarbon); // Convert to hours
 
              // Calculate overtime only if total work hours exceed 8
              $overtimeSeconds = 0;
              if ($totalWorkHours > $workHoursThreshold) {
-                 $overtimeSeconds = ($totalWorkHours - $workHoursThreshold) * 3600; // Convert excess hours to seconds
+                 $overtimeSeconds = ($totalWorkHours - $workHoursThreshold); // Convert excess hours to seconds
              }
  
  
