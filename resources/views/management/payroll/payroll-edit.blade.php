@@ -94,7 +94,7 @@
 
                         <div>
                             <label for="ot_hours" class="block text-xl text-black font-bold">OT Hours :</label>
-                            <input type="number" id="ot_hours" name="ot_hours" value="{{ $record->ot_hours ?? 0 }}" oninput="calculateOTPayment()" class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl text-xl" />
+                            <input type="number"  step="0.01" id="ot_hours" name="ot_hours" value="{{ $record->ot_hours ?? 0 }}" oninput="calculateOTPayment()" class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] font-bold rounded-xl text-xl" />
                         </div>
 
                         <div>
