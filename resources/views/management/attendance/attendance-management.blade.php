@@ -88,7 +88,7 @@
 
 <div class="modal fade" id="editAttendanceModal" tabindex="-1" aria-hidden="true" data-bs-keyboard="false">
   <button type="button" class="btn-close position-absolute top-0 end-0" data-bs-dismiss="modal" aria-label="Close"></button>
-  
+
     <div class="modal-dialog modal-dialog-left" style="padding: 0;">
       <div class="rounded-3xl" style="padding-top: 60px;" id="editAttendanceContent">
         <!-- Close Button -->
@@ -99,37 +99,37 @@
       </div>
     </div>
   </div>
-  
+
   <!--edit modal end -->
   <div class="flex flex-col items-start justify-start w-full px-2">
-  
+
   <div class="w-full pt-1">
     <div class="flex items-center justify-between w-full">
       <div class="flex ">
       <p class="md:text-6xl text-4xl font-bold text-black nunito-">Attendance</p>
       </div>
       <div class="flex items-center space-x-4">
-  
-  
+
+
       <!-- Filter Button -->
 
       <!-- Add record Button -->
       <button class="flex items-center justify-center nunito- space-x-2 px-8 py-2 text-white md:text-2xl text-xl bg-gradient-to-r from-[#184E77] to-[#52B69A] rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
       <p class="text-3xl"><i class="ri-add-fill"></i></p>
-          <a href="#" 
+          <a href="#"
           onclick="openAddModal()">Add Record</a>
-  
+
       </button>
-      
+
       </div>
-  
-  
-  
+
+
+
     </div>
-  
-  
+
+
   </div>
-  
+
   <nav class="flex py-3" aria-label="Breadcrumb">
     <ol class="inline-flex items-center space-x-1 md:space-x-3 nunito-">
       <li class="inline-flex items-center">
@@ -145,14 +145,14 @@
       </li>
     </ol>
   </nav>
-  
+
   <div class="w-full flex justify-end items-end pt-2 pb-2">
     <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
           <span>Generate Report</span>
       </button>
     </div>
   <div class="w-full flex justify-end items-center">
-  
+
   <div class="relative w-[300px] nunito-">
     <!-- Calendar Button -->
     <button
@@ -168,7 +168,7 @@
       </div>
       <span class="iconify text-black" data-icon="mdi:chevron-down"></span>
     </button>
-  
+
     <!-- Hidden Input for Flatpickr -->
     <input
       id="calendarInput"
@@ -197,7 +197,7 @@
         <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">O/T hours</th>
         <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Late By</th>
         <th class="text-xl w-1/2 text-black font-bold px-4 py-2 text-center align-left hidden">Actions</th>
-  
+
       </tr>
     </thead>
     <tbody>
@@ -224,19 +224,19 @@
     {{ $record->late_by }}
     </td>
     <td class="text-left align-left  bg-[#D9D9D966] rounded-r-xl">
-  
-  
-  
+
+
+
        <!-- Start dropdown -->
-  
+
   <div class="relative inline-block text-center">
           <!-- Toggle Button -->
           <button id="dropdownButton"  class="dropdown-trigger p-2 rounded hover:bg-gray-300">
           <span class="iconify" data-icon="qlementine-icons:menu-dots-16" style="width: 16px; height: 16px;"></span>
       </button>
-  
+
           <!-- Dropdown Menu -->
-          <div id="dropdown-menu" 
+          <div id="dropdown-menu"
                class="absolute top-0 right-3 mt-12 w-30 bg-white border border-gray-100 rounded-xl shadow-lg hidden z-10">
               <ul class=" text-gray-700">
                   <li><a href="#" class="block px-2 py-2 hover:bg-gray-100" onclick="openViewModal({
@@ -248,16 +248,16 @@
           overtimeHours: '{{ $record->overtime_hours }}',
           lateBy: '{{ $record->late_by_hours }}',
           date: '{{ $record->date }}'
-  
+
               })">
               View</a></li>
                   <li class="cursor-pointer" ><a onclick="openEditModal({{ $record->id}})"  class="block px-2 py-2 hover:bg-gray-100">Edit</a></li>
                   <li class="bg-red">
-                    
+
                   <form action="{{ route('attendance.destroy', ['id' => $record->id]) }}" method="POST" class="m-0 p-0">
   @csrf
               @method('DELETE')
-              <button type="submit" 
+              <button type="submit"
       class="block px-2 py-2 w-full rounded-xl bg-red-600 text-white hover:bg-red-700">
       Delete
   </button>
@@ -265,23 +265,23 @@
               </ul>
           </div>
       </div>
-  
+
        <!-- End dropdown -->
-   
-  
+
+
     </td>
   </tr>
   @endforeach
     </tbody>
   </table>
-  
-  
+
+
   </div>
-  
-  
+
+
   <!--View record form start-->
   <div id="view-attendance-modal-container" class=" fixed inset-0 bg-black bg-opacity-50 w-full opacity-0 transition-opacity duration-300 flex justify-center items-center hidden z-50">
-  
+
   <div class="w-full flex justify-center items-center rounded-3xl">
     <!-- Close Button -->
     <div id="modal-container" class="w-1/3 flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
@@ -314,10 +314,10 @@
   <p class="text-xl font-bold text-black modal-overtime-hours"></p>
   <p class="text-xl font-bold text-black modal-late-by"></p>
   <p class="text-xl font-bold text-black modal-date"></p>
-  
-  
+
+
               </div>
-            
+
           </div>
           <!-- Submit Button -->
           <div class="w-full text-center px-16">
@@ -340,10 +340,10 @@
   function openEditModal(attendanceId) {
       const modal = new bootstrap.Modal(document.getElementById('editAttendanceModal'));
       modal.show();
-  
+
       const modalContent = document.getElementById('editAttendanceContent');
       modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
-  
+
       // Fetch content from the server
       fetch(`${window.location.origin}/dashboard/attendance/${attendanceId}/edit`)
         .then(response => response.text())
@@ -355,14 +355,14 @@
           console.error('Error:', error);
         });
     }// Attendance Management Routes
-  
+
     function openAddModal() {
       const modal = new bootstrap.Modal(document.getElementById('editAttendanceModal'));
       modal.show();
-  
+
       const modalContent = document.getElementById('editAttendanceContent');
       modalContent.innerHTML = '<div class="text-center "><p>Loading...</p></div>';
-  
+
       $('#editAttendanceModal').on('shown.bs.modal', function () {
     // Ensure inputs inside the modal are editable
     $('#editAttendanceContent input').prop('disabled', false);
@@ -378,22 +378,22 @@
           console.error('Error:', error);
         });
     }// Attendance Management Routes
-  
+
   function formatDuration(seconds) {
       // Calculate hours, minutes, and seconds
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
       const remainingSeconds = seconds % 60;
-  
+
       // Format as HH:MM:SS
       return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
   }
-  
+
      function toggleDropdown(button) {
       const dropdown = button.nextElementSibling; // Find the next sibling element (dropdown menu)
       dropdown.classList.toggle('hidden'); // Toggle the 'hidden' class
   }
-  
+
     function toggleGradientText() {
       const textElement = document.getElementById('payrollText');
       if (textElement.classList.contains('text-black')) {
@@ -406,13 +406,13 @@
         textElement.classList.remove('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
       }
     }
-    
+
     function toggleMenu(menuId) {
       const menu = document.getElementById(menuId);
       menu.classList.toggle('hidden');
     }
     const textElements = document.querySelectorAll('span.text-xl');
-  
+
   textElements.forEach((element) => {
       element.addEventListener('click', function () {
           // Reset all text elements to black
@@ -420,24 +420,24 @@
               el.classList.remove('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
               el.classList.add('text-black');
           });
-  
+
           // Apply gradient to the clicked element
           this.classList.remove('text-black');
           this.classList.add('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
       });
   });
   // Initialize Flatpickr
-  
-  
-  
+
+
+
   $(document).ready(function () {
       // Initialize DataTable
       var table = $('#attendance-table').DataTable({
         dom: '<"top"f>rt<"bottom"p><"clear">', // Custom layout: search box on top, pagination on bottom
       paging: true,
-      pageLength: 10, 
-      pagingType: 'simple', 
-      order: [[1, 'desc']], 
+      pageLength: 10,
+      pagingType: 'simple',
+      order: [[1, 'desc']],
       searching: true,
           buttons: [
               {
@@ -456,48 +456,48 @@
           },
       },
       columnDefs: [
-          { 
-              targets: 0, 
-              className: 'employee-column' 
+          {
+              targets: 0,
+              className: 'employee-column'
           },
-          { 
-              targets: 1, 
-              className: 'date-column' 
+          {
+              targets: 1,
+              className: 'date-column'
           },
-          { 
-              targets: 2, 
-              className: 'checkinCheckout-column' 
+          {
+              targets: 2,
+              className: 'checkinCheckout-column'
           },
-          { 
-              targets: 3, 
-              className: 'total-work-column' 
+          {
+              targets: 3,
+              className: 'total-work-column'
           },
-          { 
-              targets: 4, 
-              className: 'total-ot-column' 
+          {
+              targets: 4,
+              className: 'total-ot-column'
           },
-          { 
-              targets: 5, 
-              className: 'lateby-column' 
+          {
+              targets: 5,
+              className: 'lateby-column'
           },
-          { 
-              targets: 6, 
-              className: 'actions-column' 
+          {
+              targets: 6,
+              className: 'actions-column'
           }
       ]
       });
-  
+
       // Attach Print functionality to the custom button
       $('#print-table').on('click', function () {
           table.button('.buttons-print').trigger(); // Trigger the print button
       });
-  
+
   // Attach a keyup event listener to the custom search input element
   $('#custom-search-input').on('keyup', function () {
       const searchTerm = $(this).val(); // Get the value of the search input
       table.search(searchTerm).draw(); // Trigger the DataTable search with the entered term
   });
-  
+
   $('#resetCalendarButton').on('click', function () {
     selectedDate.textContent = '13.03.2021'; // Reset displayed date
     calendarInput._flatpickr.clear(); // Clear Flatpickr input
@@ -507,10 +507,10 @@
   table.on('draw', function () {
       const pagination = $('.dataTables_paginate');
       const pageInfo = table.page.info();
-  
+
       // Clear existing pagination
       pagination.html('');
-  
+
       // Build custom pagination
       let customPagination = `
           <div class="flex items-center justify-end w-full space-x-4 mt-8">
@@ -522,7 +522,7 @@
               </button>
               <div class="flex items-center space-x-2">
       `;
-  
+
       for (let i = 0; i < pageInfo.pages; i++) {
           customPagination += `
               <button class="flex items-center justify-center w-8 h-8 ${
@@ -534,7 +534,7 @@
               </button>
           `;
       }
-  
+
       customPagination += `
               </div>
               <button class="flex items-center px-2 py-1 text-gray-500 hover:text-black focus:outline-none ${
@@ -549,15 +549,15 @@
               </button>
           </div>
       `;
-  
+
       pagination.html(customPagination);
   });
-  
+
   // Handle custom pagination button clicks
   $(document).on('click', '.dataTables_paginate button', function () {
       const action = $(this).data('action');
       const page = $(this).data('page');
-  
+
       if (action === 'prev') {
           table.page('previous').draw('page');
       } else if (action === 'next') {
@@ -566,15 +566,15 @@
           table.page(page).draw('page');
       }
   });
-  
-  
-  
-  
+
+
+
+
       // Initialize Flatpickr for Date Selection
       const calendarInput = document.getElementById("calendarInput");
       const selectedDate = document.getElementById("selectedDate");
       const calendarButton = document.getElementById("calendarButton");
-  
+
       flatpickr(calendarInput, {
           dateFormat: "Y-m-d",
           onChange: function (selectedDates, dateStr) {
@@ -583,14 +583,14 @@
               table.search(dateStr).draw();
           },
       });
-  
+
       calendarButton.addEventListener("click", () => {
           calendarInput._flatpickr.open();
       });
-  
+
       table.draw('page');
   });
-  
+
   function openAddNewModal() {
     const modal = document.getElementById('view-attendance-modal-container');
     modal.classList.remove('hidden'); // Make visible
@@ -598,7 +598,7 @@
       modal.classList.remove('opacity-0', 'scale-95'); // Apply transition effects
     }, 10);
   }
-  
+
   function closeAddNewModal() {
     const modal = document.getElementById('view-attendance-modal-container');
     modal.classList.add('opacity-0', 'scale-95'); // Apply transition effects
@@ -606,8 +606,8 @@
       modal.classList.add('hidden'); // Hide modal after transition
     }, 300); // Match the transition duration
   }
-  
-  
+
+
   function openViewModal(data) {
       // Populate modal fields with the passed data
       document.querySelector('#view-attendance-modal-container .modal-employee-name').textContent = data.employeeName;
@@ -618,7 +618,7 @@
       document.querySelector('#view-attendance-modal-container .modal-overtime-hours').textContent = data.overtimeHours;
       document.querySelector('#view-attendance-modal-container .modal-late-by').textContent = data.lateBy;
       document.querySelector('#view-attendance-modal-container .modal-date').textContent = data.date;
-  
+
       // Show the modal
       const modal = document.getElementById('view-attendance-modal-container');
       modal.classList.remove('hidden');
@@ -626,38 +626,38 @@
           modal.classList.remove('opacity-0', 'scale-95');
       }, 10);
   }
-  
-  
-  
-  
+
+
+
+
   // Select all dropdown triggers
   const dropdownTriggers = document.querySelectorAll('.dropdown-trigger');
-  
+
   // Event listener for dropdown buttons
   dropdownTriggers.forEach(button => {
       button.addEventListener('click', (e) => {
           e.stopPropagation(); // Prevent the click from propagating to the window
-  
+
           const dropdownMenu = button.nextElementSibling; // The dropdown menu after the button
-  
+
           // Close all other dropdowns
           document.querySelectorAll('#dropdown-menu').forEach(menu => {
               if (menu !== dropdownMenu) {
                   menu.classList.add('hidden');
               }
           });
-  
+
           // Toggle the current dropdown menu
           dropdownMenu.classList.toggle('hidden');
       });
   });
-  
+
   // Close dropdowns when clicking anywhere outside
   window.addEventListener('click', () => {
-    
+
       document.querySelectorAll('#dropdown-menu').forEach(menu => {
           menu.classList.add('hidden');
       });
   });
-  </script>  
+  </script>
 @endsection

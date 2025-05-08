@@ -37,7 +37,7 @@ class PayrollExportController extends Controller
         )
         ->get();
 
-     
+
   // ✅ Export the payroll data to an Excel file
   return Excel::download(new BankDetailsExport($payrolls), 'bank_details.xlsx');
     }
@@ -72,18 +72,18 @@ class PayrollExportController extends Controller
         return back()->with('error', 'Failed to create zip file.');
     }
 
-    public function generatePreviousMonth(Request $request) 
+    public function generatePreviousMonth(Request $request)
     {
         $selectedMonth = $request->query('selected_month');
         $previousMonth = date('Y-m', strtotime('-1 month', strtotime($selectedMonth)));
-    
+
         $payrolls = SalaryDetails::where('payed_month', $previousMonth)->get();
-    
+
         foreach ($payrolls as $payroll) {
             // Calculate new loan and advance balances after deductions
             $newLoanBalance = max(0, $payroll->loan_balance - $payroll->loan_payment);
             $newAdvanceBalance = max(0, $payroll->advance_balance - $payroll->advance_payment);
-    
+
         // Get attendance records for OT calculation (from 5th of selected month to 5th of next month)
         $startDate = date('Y-m-05', strtotime($selectedMonth));
         $endDate = date('Y-m-05', strtotime('+1 month', strtotime($selectedMonth)));
@@ -91,56 +91,72 @@ class PayrollExportController extends Controller
             $attendanceRecords = Attendance::where('employee_id', $payroll->employee_id)
                 ->whereBetween('date', [$startDate, $endDate])
                 ->get();
-   // dd($attendanceRecords);
+                
             // Calculate total OT hours and late_by hours
             $totalOTHours = $attendanceRecords->sum('overtime_seconds') / 3600;
             $totalLateByHours = $attendanceRecords->sum('late_by_seconds') / 3600;
-    
+
             // Deduct late hours from OT hours
             $finalOTHours = max(0, $totalOTHours);
-    
+
             // Calculate OT Payment
             $grossSalary = $payroll->basic + $payroll->budget_allowance;
-     
+
 
             $otRate = 0.0041667327; // 0.41667327% as a decimal
             $regularOTSeconds = 0;
             $sundayOTSeconds = 0;
-            
+
             $employee = Employee::find($payroll->employee_id);
 
 
-    
-foreach ($attendanceRecords as $record) {
-    $dayOfWeek = date('w', strtotime($record->date)); // 0 = Sunday, 6 = Saturday
-    $isDoubleOTDay = ($dayOfWeek == 0 || $record->date == '2025-03-13');
 
-    // Check for department 2 on Saturday
-    if ($employee && $employee->department_id == 2 && $dayOfWeek == 6) {
-        if ($record->clock_in && $record->clock_out) {
-            $workedSeconds = Carbon::parse($record->clock_out)->diffInSeconds(Carbon::parse($record->clock_in));
-            if ($workedSeconds > 14400) {
-                $regularOTSeconds += $record->overtime_seconds;
+        foreach ($attendanceRecords as $record) {
+            $dayOfWeek = date('w', strtotime($record->date)); // 0 = Sunday, 6 = Saturday
+            $isDoubleOTDay = ($dayOfWeek == 0);
+
+            // Check for department 2 on Saturday
+            if ($employee && $employee->department_id == 2 && $dayOfWeek == 6) {
+
+
+
+                if ($record->clock_in_time && $record->clock_out_time) {
+
+                    $workedSeconds = Carbon::parse($record->clock_out_time)->diffInSeconds(Carbon::parse($record->clock_in_time));
+
+                    if ($workedSeconds > 14400) {
+                        $saturdayTotalOTSeconds = ($workedSeconds-14400); //  OT
+                        $regularOTSeconds += $saturdayTotalOTSeconds;
+
+                    }
+                }
+
+            } else {
+
+                // Original OT logic
+                if ($isDoubleOTDay) {
+                    $sundayWorkedSeconds = Carbon::parse($record->clock_out_time)->diffInSeconds(Carbon::parse($record->clock_in_time));
+
+                    $sundayOTSeconds += ($sundayWorkedSeconds); // double OT
+
+
+                } else {
+                    $regularOTSeconds += $record->overtime_seconds;
+                }
             }
+
         }
-    } else {
-        // Original OT logic
-        if ($isDoubleOTDay) {
-            $sundayOTSeconds += ($record->overtime_seconds * 2); // double OT
-        } else {
-            $regularOTSeconds += $record->overtime_seconds;
-        }
-    }
-}
             $totalOTHours = ($regularOTSeconds + $sundayOTSeconds) / 3600;
             $totalLateByHours = $attendanceRecords->sum('late_by_seconds') / 3600;
-            
+
             // Apply double OT rate for Sundays
             $regularOTHours = $regularOTSeconds / 3600;
             $sundayOTHours = $sundayOTSeconds / 3600;
-            
+
+
             $otPayment = ($regularOTHours * ($grossSalary * 1.5 * $otRate)) +
                          ($sundayOTHours * ($grossSalary * 1.5 * $otRate * 2)); // Double rate for Sundays
+
 
 
 
@@ -152,17 +168,17 @@ foreach ($attendanceRecords as $record) {
                     ($payroll->loan_payment ?? 0) +
                     ($payroll->stamp_duty ?? 0)
                 );
-        
+
 
             }else{
                 $totalDeductions = (
                     ($payroll->epf_8_percent ?? 0)+
                     ($payroll->stamp_duty ?? 0)
                 );
-        
+
 
             }
-         
+
             $totalEarnings = (
                 $grossSalary +
                 ($payroll->transport_allowance ?? 0) +
@@ -172,7 +188,7 @@ foreach ($attendanceRecords as $record) {
                 ($payroll->production_bonus ?? 0) +
                 $otPayment // Adding OT payment to earnings
             );
-    
+
             $netSalary = $totalEarnings - $totalDeductions;
            // dd($netSalary);
             // Create new salary record
@@ -207,10 +223,10 @@ foreach ($attendanceRecords as $record) {
                 'status' => $payroll->status,
             ]);
         }
-    
+
         return redirect()->route('payroll.management')->with('success', 'Records generated for the selected month.');
     }
-    
+
 
     public function exportSalarySpreadsheet(Request $request)
     {//dd($request->all());
