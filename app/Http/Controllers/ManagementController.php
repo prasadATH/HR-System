@@ -245,7 +245,9 @@ $todos = Todo::where('user_id', auth()->id())
     public function attendanceManagement()
     {
         // Fetch attendance records with employee details
-        $attendance = Attendance::with(['employee'])->get();
+           $attendance = Attendance::with(['employee'])
+        ->where('date', '>', '2025-05-05')
+        ->get();
     
         // Transform the collection to format work hours, overtime, and late by duration
         $attendance->transform(function ($record) {
