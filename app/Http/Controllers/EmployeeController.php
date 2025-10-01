@@ -286,7 +286,8 @@ class EmployeeController extends Controller
         'probation_start_date' => 'required|date',
         'probation_period' => 'nullable|integer',
         'department_id' => 'nullable|exists:departments,id',
-        'manager_id' => $isFirstEmployee ? 'nullable' : 'nullable|exists:employees,id',
+        //'manager_id' => $isFirstEmployee ? 'nullable' : 'nullable|exists:employees,id',
+        'manager_id' => 'required_if:isFirstEmployee,false|exists:employees,id',
         'education_id' => 'nullable|exists:education,id',
         'employment_start_date' => 'nullable|date',
         'employment_end_date' => 'nullable|date',
@@ -310,8 +311,6 @@ class EmployeeController extends Controller
 
         
     ]);
-
-
     try {
 
         $imagePath = null;
