@@ -125,8 +125,7 @@ Route::get('/payroll/export-bank-details', [PayrollExportController::class, 'exp
 Route::get('/payroll/export/paysheets', [PayrollExportController::class, 'downloadPaysheets'])->name('payroll.export.paysheets');
 
 Route::get('/payroll/generate/paysheets', [PayrollExportController::class, 'generatePreviousMonth'])->name('payroll.generate.paysheets');
-
-
+Route::get('/payroll/export/pdf', [PayrollExportController::class, 'exportSalaryPDF'])->name('payroll.export.pdf');
 
 });
 

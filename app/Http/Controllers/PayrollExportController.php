@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use App\Exports\BankDetailsExport;
 
+
 class PayrollExportController extends Controller
 {
 
@@ -38,7 +39,7 @@ class PayrollExportController extends Controller
         ->get();
 
 
-  // ✅ Export the payroll data to an Excel file
+  // Export the payroll data to an Excel file
   return Excel::download(new BankDetailsExport($payrolls), 'bank_details.xlsx');
     }
     public function downloadPaysheets(Request $request)
@@ -289,4 +290,25 @@ class PayrollExportController extends Controller
 
         return response()->download($filePath)->deleteFileAfterSend(true);
     }
+
+public function exportSalaryPDF(Request $request)
+{
+    $selectedMonth = $request->query('selected_month'); 
+    if (!$selectedMonth) {
+        return back()->with('error', 'Please select a valid month.');
+    }
+
+    $employees = SalaryDetails::where('payed_month', $selectedMonth)->get();
+    if ($employees->isEmpty()) {
+        return back()->with('error', 'No records found for the selected month.');
+    }
+
+    // Pass $selectedMonth to the view
+    $pdf = Pdf::loadView('salary_pdf', [
+        'employees' => $employees,
+        'selectedMonth' => $selectedMonth
+    ])->setPaper('A3', 'landscape');
+
+    return $pdf->download("employee_salaries_{$selectedMonth}.pdf");
+}
 }
