@@ -2,12 +2,44 @@
 <!-- Main Content -->
 <div class="w-full flex justify-center items-center">
 <div class="w-full flex justify-center items-center rounded-3xl">
-  <!-- Close Button -->
   <div id="modal-container" class="w-full flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
     <div class="w-full flex flex-col justify-start items-center bg-white p-8 rounded-3xl space-y-8">
       <div class="flex flex-col justify-center items-center space-y-4">
-        <p class="text-5xl text-black font-bold">Leave</p>
-        <p class="text-3xl text-[#00000080]">Edit details of the leave</p>
+        <p class="text-5xl text-black font-bold">Edit Leave Application</p>
+        <p class="text-3xl text-[#00000080]">Edit leave details with balance tracking</p>
+      </div>
+      
+      <!-- Employee Info Section -->
+      <div id="employee-info" class="w-full p-4 bg-gray-100 rounded-lg">
+        <h3 class="text-xl font-bold mb-4">Employee Leave Information</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <strong>Employee Name:</strong> <span id="emp-name">{{ $leave->employee_name }}</span>
+          </div>
+          <div>
+            <strong>Department:</strong> <span id="emp-department">{{ $leave->employee->department->name ?? 'N/A' }}</span>
+          </div>
+        </div>
+        
+        <h4 class="text-lg font-bold mt-4 mb-2">Leave Balances</h4>
+        <div class="grid grid-cols-4 gap-4 text-sm">
+          <div class="bg-blue-100 p-2 rounded">
+            <strong>Annual Leaves</strong><br>
+            <span id="annual-remaining">{{ $leave->employee->annual_leave_balance - $leave->employee->annual_leave_used }}</span> remaining
+          </div>
+          <div class="bg-green-100 p-2 rounded">
+            <strong>Short Leaves</strong><br>
+            <span id="short-remaining">{{ $leave->employee->short_leave_balance - $leave->employee->short_leave_used }}</span> remaining
+          </div>
+          <div class="bg-yellow-100 p-2 rounded">
+            <strong>Monthly Leaves</strong><br>
+            <span id="monthly-remaining">{{ 2 - $leave->employee->monthly_leaves_used }}</span> remaining
+          </div>
+          <div class="bg-purple-100 p-2 rounded">
+            <strong>Monthly Half Leaves</strong><br>
+            <span id="half-remaining">{{ 1 - $leave->employee->monthly_half_leaves_used }}</span> remaining
+          </div>
+        </div>
       </div>
       <div class="w-full mx-auto p-6 ">
 
@@ -25,21 +57,63 @@
               id="employment_ID"
               name="employment_ID"
               value="{{ $leave->employment_ID }}"
-              placeholder="Enter the employment ID"
-              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Enter employee id"
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              onblur="fetchEmployeeData()"
             />
           </div>
 
           <div>
-            <label for="leave_type" class="block text-xl text-black font-bold">Leave Type:</label>
+            <label for="leave_type" class="block text-xl text-black font-bold">Leave Type</label>
             <input
               type="text"
               id="leave_type"
               name="leave_type"
               value="{{ $leave->leave_type }}"
-              placeholder="Enter the leave type"
+              placeholder="e.g., Sick Leave, Annual Leave"
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
+          </div>
+
+          <div>
+            <label for="leave_category" class="block text-xl text-black font-bold">Leave Category:</label>
+            <select
+              id="leave_category"
+              name="leave_category"
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              onchange="handleCategoryChange()"
+            >
+              <option value="">Select Category</option>
+              <option value="full_day" {{ $leave->leave_category == 'full_day' ? 'selected' : '' }}>Full Day Leave</option>
+              <option value="half_day" {{ $leave->leave_category == 'half_day' ? 'selected' : '' }}>Half Day Leave</option>
+              <option value="short_leave" {{ $leave->leave_category == 'short_leave' ? 'selected' : '' }}>Short Leave</option>
+            </select>
+          </div>
+
+          <div id="half_day_options" style="display: {{ $leave->leave_category == 'half_day' ? 'block' : 'none' }};">
+            <label for="half_day_type" class="block text-xl text-black font-bold">Half Day Type:</label>
+            <select
+              id="half_day_type"
+              name="half_day_type"
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value="">Select Type</option>
+              <option value="morning" {{ $leave->half_day_type == 'morning' ? 'selected' : '' }}>Morning (8:30 AM - 1:00 PM)</option>
+              <option value="evening" {{ $leave->half_day_type == 'evening' ? 'selected' : '' }}>Evening (1:00 PM - 5:00 PM)</option>
+            </select>
+          </div>
+
+          <div id="short_leave_options" style="display: {{ $leave->leave_category == 'short_leave' ? 'block' : 'none' }};">
+            <label for="short_leave_type" class="block text-xl text-black font-bold">Short Leave Type:</label>
+            <select
+              id="short_leave_type"
+              name="short_leave_type"
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value="">Select Type</option>
+              <option value="morning" {{ $leave->short_leave_type == 'morning' ? 'selected' : '' }}>Morning (8:30 AM - 10:00 AM)</option>
+              <option value="evening" {{ $leave->short_leave_type == 'evening' ? 'selected' : '' }}>Evening (3:30 PM - 5:00 PM)</option>
+            </select>
           </div>
 
           <div>
@@ -55,51 +129,84 @@
           </div>
 
           <div>
-              <label for="start_date" class="block text-xl text-black font-bold">Date From:</label>
-              <input
-                  type="date"
-                  id="start_date"
-                  name="start_date"
-                  value="{{ $leave->start_date }}"
-                  placeholder="DD:MM:YYYY"
-                  class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-          </div>
-
-          <div>
-              <label for="end_date" class="block text-xl text-black font-bold">Date To:</label>
-              <input
-                  type="date"
-                  id="end_date"
-                  name="end_date"
-                  value="{{ $leave->end_date }}"
-                  placeholder="DD:MM:YYYY"
-                  class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-          </div>
-
-          <div>
-              <label for="status" class="block text-xl text-black font-bold">Status:</label>
-              <input
-                  type="text"
-                  id="status"
-                  name="status"
-                  value="{{ $leave->status }}"
-                  placeholder="Enter the status"
-                  class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-          </div>
-
-          <div>
-            <label for="description" class="block text-xl text-black font-bold">Description:</label>
+            <label for="start_date" class="block text-xl text-black font-bold">Date From:</label>
             <input
-              type="text"
+              type="date"
+              id="start_date"
+              name="start_date"
+              value="{{ $leave->start_date }}"
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              onchange="calculateDuration()"
+            />
+          </div>
+          
+          <div>
+            <label for="end_date" class="block text-xl text-black font-bold">Date To:</label>
+            <input
+              type="date"
+              id="end_date"
+              name="end_date"
+              value="{{ $leave->end_date }}"
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              onchange="calculateDuration()"
+            />
+          </div>
+
+          <div id="time_inputs" style="display: {{ in_array($leave->leave_category, ['half_day', 'short_leave']) ? 'block' : 'none' }};">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label for="start_time" class="block text-xl text-black font-bold">Start Time:</label>
+                <input
+                  type="time"
+                  id="start_time"
+                  name="start_time"
+                  value="{{ $leave->start_time }}"
+                  class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm"
+                />
+              </div>
+              <div>
+                <label for="end_time" class="block text-xl text-black font-bold">End Time:</label>
+                <input
+                  type="time"
+                  id="end_time"
+                  name="end_time"
+                  value="{{ $leave->end_time }}"
+                  class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="status" class="block text-xl text-black font-bold">Approval Status:</label>
+            <select
+              id="status"
+              name="status"
+              class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+            >
+              <option value="pending" {{ $leave->status == 'pending' ? 'selected' : '' }}>Pending</option>
+              <option value="approved" {{ $leave->status == 'approved' ? 'selected' : '' }}>Approved</option>
+              <option value="rejected" {{ $leave->status == 'rejected' ? 'selected' : '' }}>Rejected</option>
+            </select>
+          </div>
+
+          <div class="col-span-2">
+            <label for="description" class="block text-xl text-black font-bold">Description:</label>
+            <textarea
               id="description"
               name="description"
-              value="{{ $leave->description }}"
-              placeholder="Enter the description"
+              placeholder="Enter the reason for leave"
+              rows="3"
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
+            >{{ $leave->description }}</textarea>
+          </div>
+
+          <!-- No Pay Warning -->
+          <div id="no-pay-warning" class="col-span-2 p-4 bg-red-100 border border-red-300 rounded-md" style="display: {{ $leave->is_no_pay ? 'block' : 'none' }};">
+            <h4 class="text-red-800 font-bold">⚠️ No Pay Leave Warning</h4>
+            <p class="text-red-700">This leave application exceeds available balances and will result in no-pay deductions.</p>
+            <p class="text-red-700"><strong>Current No-Pay Amount: LKR <span id="current-no-pay-amount">{{ $leave->no_pay_amount ?? 0 }}</span></strong></p>
+            <p class="text-red-700"><strong>Estimated No-Pay Amount: LKR <span id="no-pay-amount">{{ $leave->no_pay_amount ?? 0 }}</span></strong></p>
           </div>
 
           <div>
@@ -139,14 +246,16 @@
     </div>
 </div>
 
-        <!-- Submit Button -->
-        <div class="mt-6 col-span-2 flex justify-center">
-        <button
-          type="submit"
-          class="w-1/2 bg-gradient-to-r from-[#184E77] to-[#52B69A] text-white font-medium px-6 py-2 rounded-md hover:from-blue-600 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-          Save Record
-        </button>
-    </div>
+        </div>
+
+        <div class="flex justify-center space-x-4 mt-6">
+          <button
+            type="submit"
+            class="px-6 py-3 bg-gradient-to-r from-[#184E77] to-[#52B69A] text-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8] text-xl font-bold"
+          >
+            Update Leave Application
+          </button>
+        </div>
       </div>
       </form>
     </div>
@@ -163,63 +272,193 @@
   }
 </style>
 <script>
-  document.getElementById('close-button').addEventListener('click', function () {
-    document.getElementById('modal-container').style.display = 'none';
-  });
+let employeeData = @json([
+    'employee' => $leave->employee,
+    'balances' => $leave->employee->getLeaveBalances(),
+    'recent_leaves' => $leave->employee->leaves()->orderBy('created_at', 'desc')->limit(10)->get()
+]);
 
-  document.getElementById('doc-files').addEventListener('change', function(e) {
-    const files = Array.from(e.target.files);
-    const hiddenInput = document.getElementById('hidden-files');
-    const dataTransfer = new DataTransfer();
+function fetchEmployeeData() {
+    const employeeId = document.getElementById('employment_ID').value;
+    if (!employeeId) return;
     
-    // Add new files to hidden input
-    files.forEach(file => {
-        dataTransfer.items.add(file);
-    });
+    fetch(`/api/employee-leave-data?employee_id=${employeeId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert('Employee not found');
+                return;
+            }
+            
+            employeeData = data;
+            displayEmployeeInfo(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error fetching employee data');
+        });
+}
+
+function displayEmployeeInfo(data) {
+    // Basic info
+    document.getElementById('emp-name').textContent = data.employee.full_name;
+    document.getElementById('emp-department').textContent = data.employee.department?.name || 'N/A';
     
-    // Set the files to the hidden input
-    hiddenInput.files = dataTransfer.files;
+    // Balances
+    const balances = data.balances;
+    document.getElementById('annual-remaining').textContent = balances.annual_leaves_remaining;
+    document.getElementById('short-remaining').textContent = balances.short_leaves_remaining;
+    document.getElementById('monthly-remaining').textContent = balances.monthly_leaves_remaining;
+    document.getElementById('half-remaining').textContent = balances.monthly_half_leaves_remaining;
     
-    // Add new files to the list
+    calculateNoPayAmount();
+}
+
+function handleCategoryChange() {
+    const category = document.getElementById('leave_category').value;
+    const halfDayOptions = document.getElementById('half_day_options');
+    const shortLeaveOptions = document.getElementById('short_leave_options');
+    const timeInputs = document.getElementById('time_inputs');
+    
+    // Hide all conditional fields
+    halfDayOptions.style.display = 'none';
+    shortLeaveOptions.style.display = 'none';
+    timeInputs.style.display = 'none';
+    
+    // Show relevant fields
+    if (category === 'half_day') {
+        halfDayOptions.style.display = 'block';
+        timeInputs.style.display = 'block';
+    } else if (category === 'short_leave') {
+        shortLeaveOptions.style.display = 'block';
+        timeInputs.style.display = 'block';
+    }
+    
+    calculateNoPayAmount();
+}
+
+function calculateDuration() {
+    calculateNoPayAmount();
+}
+
+function calculateNoPayAmount() {
+    if (!employeeData) return;
+    
+    const category = document.getElementById('leave_category').value;
+    const startDate = document.getElementById('start_date').value;
+    const endDate = document.getElementById('end_date').value;
+    
+    if (!category || !startDate || !endDate) return;
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+    
+    let duration = days;
+    if (category === 'half_day') {
+        duration = days * 0.5;
+    }
+    
+    const balances = employeeData.balances;
+    let availableLeaves = 0;
+    let dailyRate = 1000; // Default rate
+    
+    switch (category) {
+        case 'full_day':
+            availableLeaves = Math.min(balances.annual_leaves_remaining, balances.monthly_leaves_remaining);
+            break;
+        case 'half_day':
+            availableLeaves = Math.min(balances.annual_leaves_remaining * 2, balances.monthly_half_leaves_remaining);
+            dailyRate = dailyRate / 2;
+            break;
+        case 'short_leave':
+            availableLeaves = Math.min(balances.short_leaves_remaining, balances.monthly_short_leaves_remaining);
+            dailyRate = dailyRate / 4;
+            break;
+    }
+    
+    const excessLeaves = Math.max(0, duration - availableLeaves);
+    const noPayAmount = excessLeaves * dailyRate;
+    
+    const warningDiv = document.getElementById('no-pay-warning');
+    if (noPayAmount > 0) {
+        warningDiv.style.display = 'block';
+        document.getElementById('no-pay-amount').textContent = noPayAmount.toFixed(2);
+    } else {
+        warningDiv.style.display = 'none';
+    }
+}
+
+// File upload handling
+document.getElementById('doc-files').addEventListener('change', function(e) {
     const fileList = document.getElementById('file-list-items');
-    files.forEach(file => {
+    const hiddenInput = document.getElementById('hidden-files');
+    
+    // Clear existing "no documents" message if it exists
+    const noDocsMessage = fileList.querySelector('.text-gray-500');
+    if (noDocsMessage) {
+        noDocsMessage.remove();
+    }
+    
+    hiddenInput.files = this.files;
+    
+    Array.from(this.files).forEach(file => {
         const li = document.createElement('li');
-        li.className = 'flex items-center space-x-2 mb-2';
         li.innerHTML = `
             <span class="text-2xl">
                 <i class="ri-file-pdf-2-fill"></i>
             </span>
-            <span class="text-blue-500 flex-grow">${file.name}</span>
-            <span onclick="removeDocument(this)" class="text-red-500 cursor-pointer ml-2">✖</span>
+            <span class="text-blue-500">${file.name}</span>
+            <span onclick="removeNewDocument(this)" class="text-red-500 cursor-pointer ml-2">✖</span>
         `;
         fileList.appendChild(li);
     });
 });
 
-// Function to remove documents
-function removeDocument(element) {
+function removeDocument(documentPath) {
     if (confirm('Are you sure you want to remove this document?')) {
-        const li = element.closest('li');
-        const hiddenInput = li.querySelector('input[name="existing_documents[]"]');
-        if (hiddenInput) {
-            // Create a hidden input to track removed files
-            const removedInput = document.createElement('input');
-            removedInput.type = 'hidden';
-            removedInput.name = 'removed_documents[]';
-            removedInput.value = hiddenInput.value;
-            li.closest('form').appendChild(removedInput);
-        }
-        li.remove();
+        // Find the document element and remove it
+        const elements = document.querySelectorAll('#file-list-items li');
+        elements.forEach(element => {
+            const link = element.querySelector('a');
+            if (link && link.href.includes(documentPath)) {
+                element.remove();
+            }
+        });
         
-        // If no documents left, show the "No documents attached" message
-        const fileList = document.getElementById('file-list-items');
-        if (fileList.children.length === 0) {
-            const noDocsMessage = document.createElement('li');
-            noDocsMessage.className = 'text-gray-500 italic';
-            noDocsMessage.textContent = 'No documents attached';
-            fileList.appendChild(noDocsMessage);
-        }
+        // Update existing files input
+        updateExistingFiles();
     }
 }
+
+function removeNewDocument(element) {
+    if (confirm('Are you sure you want to remove this document?')) {
+        element.closest('li').remove();
+    }
+}
+
+function updateExistingFiles() {
+    const existingFiles = [];
+    const links = document.querySelectorAll('#file-list-items a');
+    
+    links.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href) {
+            // Extract the file path from the asset URL
+            const pathMatch = href.match(/storage\/(.+)$/);
+            if (pathMatch) {
+                existingFiles.push(pathMatch[1]);
+            }
+        }
+    });
+    
+    document.getElementById('existing-files').value = JSON.stringify(existingFiles);
+}
+
+// Initialize existing files
+document.addEventListener('DOMContentLoaded', function() {
+    updateExistingFiles();
+    handleCategoryChange(); // Initialize the form based on current category
+});
 </script>
 
