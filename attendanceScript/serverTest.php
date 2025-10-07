@@ -305,13 +305,13 @@ class ServerTest {
                         break;
                         
                     case '2':
-                        // $attTime = date('Y-m-d 08:30:00');
-                        $attTime = date('2025-10-03 10:30:00');
+                        $attTime = date('Y-m-d 08:30:00');
+                        // $attTime = date('2025-10-03 10:30:00');
                         break;
                         
                     case '3':
-                        $attTime = date('2025-10-03 03:30:00');
-                        // $attTime = date('Y-m-d 17:30:00');
+                        // $attTime = date('2025-10-03 03:30:00');
+                        $attTime = date('Y-m-d 18:30:00');
                         break;
                         
                     case '4':

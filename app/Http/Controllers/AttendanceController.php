@@ -162,7 +162,7 @@ class AttendanceController extends Controller
                     ? $attDT->diffInSeconds($lateThreshold)
                     : 0;
 
-                Attendance::create([
+                $attendanceRecord = Attendance::create([
                     'employee_id'       => $employeeId,
                     'date'              => $attDate,
                     'clock_in_time'     => $attTime,
@@ -172,6 +172,9 @@ class AttendanceController extends Controller
                     'overtime_seconds'  => null,
                     'late_by_seconds'   => $lateBySeconds,
                 ]);
+
+                // Check for automatic short leave (late arrival after 9:00 AM)
+                $this->processAutoShortLeave($attendanceRecord);
 
                 continue;
             }
@@ -336,7 +339,7 @@ class AttendanceController extends Controller
                 : 0;
 
 
-            Attendance::create([
+            $attendanceRecord = Attendance::create([
                 'employee_id' => $employee->id,
                 'date' => $request->date,
                 'clock_in_time' => $request->clock_in_time,
@@ -346,6 +349,9 @@ class AttendanceController extends Controller
                 'overtime_seconds' => $overtimeSeconds,
                 'late_by_seconds' => $lateBySeconds,
             ]);
+
+            // Check for automatic short leave (late arrival after 9:00 AM)
+            $this->processAutoShortLeave($attendanceRecord);
 
             return redirect()->route('attendance.management')->with('success', 'Attendance added successfully!');
         } catch (\Exception $e) {
@@ -370,5 +376,66 @@ class AttendanceController extends Controller
 
         [$hours, $minutes, $seconds] = explode(':', $time);
         return ($hours * 3600) + ($minutes * 60) + $seconds;
+    }
+
+    /**
+     * Process automatic short leave for late attendance
+     */
+    private function processAutoShortLeave($attendanceRecord)
+    {
+        if (!$attendanceRecord->clock_in_time) {
+            return;
+        }
+        
+        $clockInTime = \Carbon\Carbon::parse($attendanceRecord->clock_in_time);
+        $lateThreshold = \Carbon\Carbon::parse('09:00:00');
+        
+        if ($clockInTime->gt($lateThreshold)) {
+            // Get employee
+            $employee = \App\Models\Employee::find($attendanceRecord->employee_id);
+            if (!$employee) {
+                return;
+            }
+            
+            // Check if auto short leave already exists
+            $existingAutoLeave = \App\Models\AutoShortLeave::where('attendance_id', $attendanceRecord->id)->first();
+            
+            if (!$existingAutoLeave) {
+                // Create auto short leave
+                \App\Models\AutoShortLeave::create([
+                    'employee_id' => $employee->id,
+                    'attendance_id' => $attendanceRecord->id,
+                    'date' => $attendanceRecord->date,
+                    'actual_clock_in' => $attendanceRecord->clock_in_time,
+                    'short_leave_type' => 'morning',
+                    'is_deducted' => false
+                ]);
+                
+                // Create leave record
+                \App\Models\Leave::create([
+                    'employee_id' => $employee->id,
+                    'employee_name' => $employee->full_name,
+                    'employment_ID' => $employee->employee_id,
+                    'leave_type' => 'Auto Short Leave - Late Arrival',
+                    'leave_category' => 'short_leave',
+                    'short_leave_type' => 'morning',
+                    'start_date' => $attendanceRecord->date,
+                    'end_date' => $attendanceRecord->date,
+                    'start_time' => '08:30:00',
+                    'end_time' => $attendanceRecord->clock_in_time,
+                    'duration' => 1,
+                    'approved_person' => 'System',
+                    'status' => 'approved',
+                    'description' => 'Automatically generated for late arrival at ' . $attendanceRecord->clock_in_time,
+                    'is_no_pay' => false,
+                    'no_pay_amount' => 0
+                ]);
+                
+                // Update employee balances
+                $employee->checkMonthlyReset();
+                $employee->increment('short_leave_used', 1);
+                $employee->increment('monthly_short_leaves_used', 1);
+            }
+        }
     }
 }
