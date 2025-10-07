@@ -108,17 +108,23 @@
           </div>
   
       </button>
-  
-  
-  
       </li>
     <!-- Loan -->
     <li class="mb-2">
       <a href="{{ route('advance.management') }}" class="flex items-center space-x-2 text-gray-600 hover:text-blue-500">
       <span class="iconify" data-icon="majesticons:money" style="width: 16px; height: 16px;"></span>
-        <span id="Loan" class="text-2xl font-bold text-black nunito-" style="font-weight: 700;">Advance</span>
+        <span id="Loan" class="text-2xl font-bold text-black nunito-" style="font-weight: 700;">Loan</span>
       </a>
     </li>
+
+     <!-- Advance -->
+    <li class="mb-2">
+      <a href="{{ route('newadvance.manage') }}" class="flex items-center space-x-2 text-gray-600 hover:text-blue-500">
+      <span class="iconify" data-icon="majesticons:money" style="width: 16px; height: 16px;"></span>
+        <span id="Advance" class="text-2xl font-bold text-black nunito-" style="font-weight: 700;">Advance</span>
+      </a>
+    </li>
+
     <!-- Expenses Claim -->
     <li>
       <button class="flex items-center justify-between w-full text-gray-600 hover:text-blue-500 focus:outline-none" onclick="toggleMenu('expensesMenu'); toggleGradientText2()">
@@ -263,10 +269,21 @@
         <li>
           <a href="{{ route('advance.management') }}"
              class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
+            Loan
+          </a>
+        </li>
+      </div>
+
+      <div class="w-full flex space-x-4">
+        <span class="iconify" data-icon="majesticons:money" style="width: 16px; height: 16px;"></span>
+        <li>
+          <a href="{{ route('newadvance.manage') }}"
+             class="menu-link text-gray-800 hover:bg-gradient-to-r hover:from-[#184E77] hover:to-[#52B69A] hover:bg-clip-text hover:text-transparent">
             Advance
           </a>
         </li>
       </div>
+      
       <div class="w-full flex space-x-4">
         <span class="iconify" data-icon="material-symbols-light:list-alt" style="width: 16px; height: 16px;"></span>
         <li>

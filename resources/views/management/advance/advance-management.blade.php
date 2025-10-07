@@ -95,7 +95,7 @@
                     <div class="w-full pt-1">
                   <div class="flex items-center justify-between w-full">
                     <div class="flex ">
-                    <p class="md:text-6xl text-4xl font-bold text-black nunito-">Advance</p>
+                    <p class="md:text-6xl text-4xl font-bold text-black nunito-">Loan</p>
                     </div>
                     <div class="flex items-center space-x-4">
                     <!-- Filter Button -->
@@ -116,13 +116,13 @@
                   <ol class="inline-flex items-center space-x-1 md:space-x-3 nunito-">
                     <li class="inline-flex items-center">
                       <a href="#" class="inline-flex items-center text-3xl font-medium text-[#00000080] hover:text-blue-600">
-                      Advances
+                      Loans
                       </a>
                     </li>
                     <li>
                       <div class="flex items-center">
                         <p class="text-[#00000080] text-3xl"><i class="ri-arrow-right-wide-line"></i></p>
-                        <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Employee Advance</a>
+                        <a href="#" class="ml-1 font-medium text-[#00000080] text-3xl hover:text-blue-600">Employee Loan</a>
                       </div>
                     </li>
                   </ol>
@@ -198,10 +198,10 @@
                   <thead>
                     <tr class="bg-white">
                       <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Employee</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Advance Amount</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Interest</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Advance Date</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Payment Duration</th>
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Loan Amount</th>
+                      <!-- <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Interest</th> -->
+                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Loan Date</th>
+                      <!-- <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Payment Duration</th> -->
                       <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Approval Status</th>
                       <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Supporting Docs.</th>
                       <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Actions</th>
@@ -217,15 +217,15 @@
                     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
                     {{ $advance->loan_amount }}
                     </td>
-                    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    <!-- <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
                     {{ $advance->interest_rate }}
-                    </td>
+                    </td> -->
                     <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
                     {{ $advance->loan_start_date }}
                     </td>
-                    <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    <!-- <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
                     {{ $advance->duration }}
-                    </td>
+                    </td> -->
                     <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
                 
                     
@@ -346,10 +346,10 @@
                                 <!-- Employee ID -->
                             <p class="text-xl font-bold text-black">Employee Name :</p>
                             <p class="text-xl font-bold text-black">Employee ID :</p>
-                            <p class="text-xl font-bold text-black">Advance Amount :</p>
-                            <p class="text-xl font-bold text-black">Interest :</p>
-                            <p class="text-xl font-bold text-black">Advance Date :</p>
-                            <p class="text-xl font-bold text-black">Payment Duration :</p>
+                            <p class="text-xl font-bold text-black">Loan Amount :</p>
+                            <!-- <p class="text-xl font-bold text-black">Interest :</p> -->
+                            <p class="text-xl font-bold text-black">Loan Date :</p>
+                            <!-- <p class="text-xl font-bold text-black">Payment Duration :</p> -->
                             <p class="text-xl font-bold text-black">Approval Status :</p>
                             <p class="text-xl font-bold text-black">Description : </p>
                             <p class="text-xl font-bold text-black">Supporting Doc :</p>
@@ -358,9 +358,9 @@
                             <p class="text-xl font-bold text-black modal-employee-name"></p>
                             <p class="text-xl font-bold text-black modal-employee-id"></p>
                             <p class="text-xl font-bold text-black modal-amount"></p>
-                            <p class="text-xl font-bold text-black modal-interest"></p>
+                            <!-- <p class="text-xl font-bold text-black modal-interest"></p> -->
                             <p class="text-xl font-bold text-black modal-start-date"></p>
-                            <p class="text-xl font-bold text-black modal-duration"></p>
+                            <!-- <p class="text-xl font-bold text-black modal-duration"></p> -->
                             <p class="text-xl font-bold text-black modal-status"></p>
                             <p class="text-xl font-bold text-black modal-description"></p>
                             <p class="text-xl font-bold text-black modal-supporting-doc"></p>
@@ -755,28 +755,28 @@ $(document).ready(function () {
             targets: 1, 
             className: 'amount-column' 
         },
+        // { 
+        //     targets: 2, 
+        //     className: 'interest-column' 
+        // },
         { 
             targets: 2, 
-            className: 'interest-column' 
-        },
-        { 
-            targets: 3, 
             className: 'date-column' 
         },
+        // { 
+        //     targets: 4, 
+        //     className: 'duration-column' 
+        // },
         { 
-            targets: 4, 
-            className: 'duration-column' 
-        },
-        { 
-            targets: 5, 
+            targets: 3, 
             className: 'approval-column' 
         },
         { 
-            targets: 6, 
+            targets: 4, 
             className: 'documents-column' 
         },
         { 
-            targets: 7, 
+            targets: 5, 
             className: 'actions-column' 
         }
     ]
