@@ -37,8 +37,31 @@ class ManagementController extends Controller
 
     public function leaveManagement()
     {
-        $leaves = Leave::all();
-        return view('management.leave.leave-management', compact('leaves'));
+        $leaves = Leave::with('employee')->get();
+        
+        // Get all employees with their leave balances
+        $employees = Employee::all()->map(function ($employee) {
+            $balances = $employee->getLeaveBalances();
+            return [
+                'id' => $employee->id,
+                'name' => $employee->full_name,
+                'employee_id' => $employee->employee_id,
+                'annual_used' => $employee->annual_leave_used,
+                'annual_balance' => $employee->annual_leave_balance,
+                'annual_remaining' => $balances['annual_leaves_remaining'],
+                'short_used' => $employee->short_leave_used,
+                'short_balance' => $employee->short_leave_balance,
+                'short_remaining' => $balances['short_leaves_remaining'],
+                'monthly_leaves_used' => $employee->monthly_leaves_used,
+                'monthly_leaves_remaining' => $balances['monthly_leaves_remaining'],
+                'monthly_half_leaves_used' => $employee->monthly_half_leaves_used,
+                'monthly_half_leaves_remaining' => $balances['monthly_half_leaves_remaining'],
+                'monthly_short_leaves_used' => $employee->monthly_short_leaves_used,
+                'monthly_short_leaves_remaining' => $balances['monthly_short_leaves_remaining'],
+            ];
+        });
+        
+        return view('management.leave.leave-management', compact('leaves', 'employees'));
     }
 
 

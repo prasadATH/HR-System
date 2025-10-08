@@ -157,7 +157,7 @@ class AttendanceController extends Controller
 
             // ---------- FIRST ENTRY OF THE DAY (CLOCK-IN) ----------
             if (!$attendanceRecord) {
-                $lateThreshold = Carbon::parse($attDate . ' 08:45:00');
+                $lateThreshold = Carbon::parse($attDate . ' 08:30:00');
                 $lateBySeconds = $attDT->greaterThan($lateThreshold)
                     ? $attDT->diffInSeconds($lateThreshold)
                     : 0;
@@ -239,7 +239,7 @@ class AttendanceController extends Controller
         // Thresholds
         $eightThirty = Carbon::parse($date . ' 08:30:00');
         $tenAM = Carbon::parse($date . ' 10:00:00');
-        $lateThreshold = Carbon::parse($date . ' 08:45:00');
+        $lateThreshold = Carbon::parse($date . ' 08:30:00');
 
         if ($clockIn->greaterThanOrEqualTo($tenAM)) {
             // After 10:00 AM – OT after 4 hours
@@ -313,7 +313,7 @@ class AttendanceController extends Controller
             // Define time thresholds
             $eightThirty = Carbon::parse($request->date . ' 08:30:00');
             $tenAM = Carbon::parse($request->date . ' 10:00:00');
-            $lateThreshold = Carbon::parse($request->date . ' 08:45:00');
+            $lateThreshold = Carbon::parse($request->date . ' 08:30:00');
 
             if ($clockIn->greaterThanOrEqualTo($tenAM)) {
                 // Came after 10:00 AM – Work from actual clock-in, OT after 4 hours
