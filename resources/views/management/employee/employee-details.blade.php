@@ -51,7 +51,7 @@
   <div class="w-1/2 flex flex-col pt-8 pb-4 space-y-4">
     <div class="w-full flex">
     <div class="w-1/3 flex justify-start items-center">
-    <img src="{{ $employee->image ? asset('storage/' . $employee->image) : asset('build/assets/bg1.png') }}" class="w-48 h-48 rounded-full">
+    <img src="{{ $employee->image ? asset('storage/' . $employee->image) : 'https://via.placeholder.com/200/cccccc/666666?text=Employee' }}" class="w-48 h-48 rounded-full object-cover border-4 border-gray-300">
     </div>
     <div class="w-2/3 flex flex-col justify-center items-start space-y-4 nunito-">
           <p class="text-5xl text-black font-bold">{{ $employee->first_name }} {{ $employee->last_name }}</p>

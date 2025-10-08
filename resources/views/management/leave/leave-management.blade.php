@@ -144,7 +144,6 @@
                   </ol>
                 </nav>
                 
-                
                 <div class="w-full flex justify-end items-end pt-2 pb-2">
                   <button id="print-table" class="flex items-center justify-center space-x-2 px-6 py-2 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
                         <span>Generate Report</span>
@@ -213,17 +212,18 @@ class="w-1/2  px-4 py-2  text-black border-2 border-[#184E77] rounded-xl shadow-
                 
                 
                 
-                <table class="w-full nunito- border-separate" style="border-spacing: 0 12px; width: 100%;" id="attendance-table">
+                                <table class="w-full nunito- border-separate" style="border-spacing: 0 12px; width: 100%;" id="attendance-table">
                   <thead class="w-full">
-                    <tr class="bg-white">
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Employee Name:</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Leave Type:</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Date From:</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Date To:</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Duration:</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Approval Status:</th>
-                      <th class="text-xl text-black font-bold px-4 py-2 text-left align-middle">Supporting Docs:</th>
-                      <th class="text-xl w-1/2 text-black font-bold px-4 py-2 text-center align-left hidden">Actions</th>
+                    <tr class="text-left">
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966] rounded-l-xl">Employee</th>
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966]">Leave Type</th>
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966]">From Date</th>
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966]">To Date</th>
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966]">Duration</th>
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966]">Leave Balance</th>
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966]">Status</th>
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966]">Documents</th>
+                      <th class="text-xl text-black px-4 py-2 bg-[#D9D9D966] rounded-r-xl">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -243,6 +243,32 @@ class="w-1/2  px-4 py-2  text-black border-2 border-[#184E77] rounded-xl shadow-
                   </td>
                   <td class="text-xl text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
                   {{ $leave->duration }}
+                  </td>
+                  
+                  <td class="text-sm text-black px-4 py-2 text-left align-middle bg-[#D9D9D966]">
+                    @php
+                      $balances = $leave->employee->getLeaveBalances();
+                    @endphp
+                    <div class="space-y-1">
+                      <div class="text-xs">
+                        <span class="font-medium">Annual:</span> 
+                        <span class="{{ $balances['annual_leaves_remaining'] < 5 ? 'text-red-600 font-bold' : 'text-green-600' }}">
+                          {{ $balances['annual_leaves_remaining'] }}
+                        </span> remaining
+                      </div>
+                      <div class="text-xs">
+                        <span class="font-medium">Short:</span> 
+                        <span class="{{ $balances['short_leaves_remaining'] < 5 ? 'text-red-600 font-bold' : 'text-green-600' }}">
+                          {{ $balances['short_leaves_remaining'] }}
+                        </span> remaining
+                      </div>
+                      <div class="text-xs">
+                        <span class="font-medium">Monthly:</span> 
+                        <span class="{{ $balances['monthly_leaves_remaining'] == 0 ? 'text-red-600 font-bold' : 'text-yellow-600' }}">
+                          {{ $balances['monthly_leaves_remaining'] }}
+                        </span> remaining
+                      </div>
+                    </div>
                   </td>
                   
                   <td class="text-xl text-[#3569C3] px-4 py-2 text-left align-middle bg-[#D9D9D966]">
@@ -348,6 +374,224 @@ class="w-1/2  px-4 py-2  text-black border-2 border-[#184E77] rounded-xl shadow-
                 
                 </div>
                 
+                <!-- Employee Leave Balances Overview Section -->
+                <div class="w-full mb-6 mt-8">
+                  <div class="bg-white rounded-xl shadow-md p-4">
+                    <div class="flex justify-between items-center mb-4">
+                      <div class="flex items-center gap-3">
+                        <h3 class="text-2xl font-bold text-black">Employee Leave Balances Overview</h3>
+                        <button onclick="toggleBalancesTable()" class="px-3 py-1 text-sm bg-[#184E77] text-white rounded-lg hover:bg-[#1B5A8A] transition duration-200">
+                          <span id="toggle-text">Show</span>
+                        </button>
+                      </div>
+                      <div class="flex gap-4 text-sm">
+                        @php
+                          $totalEmployees = $employees->count();
+                          $criticalAnnual = $employees->filter(function($emp) { return $emp['annual_remaining'] < 5; })->count();
+                          $criticalShort = $employees->filter(function($emp) { return $emp['short_remaining'] < 5; })->count();
+                          $noMonthlyLeaves = $employees->filter(function($emp) { return $emp['monthly_leaves_remaining'] == 0; })->count();
+                        @endphp
+                        <div class="bg-red-100 px-3 py-1 rounded-full">
+                          <span class="text-red-600 font-medium">{{ $criticalAnnual }} employees with <5 annual leaves</span>
+                        </div>
+                        <div class="bg-orange-100 px-3 py-1 rounded-full">
+                          <span class="text-orange-600 font-medium">{{ $criticalShort }} employees with <5 short leaves</span>
+                        </div>
+                        <div class="bg-yellow-100 px-3 py-1 rounded-full">
+                          <span class="text-yellow-600 font-medium">{{ $noMonthlyLeaves }} employees with no monthly leaves</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Live Filter Statistics -->
+                    <div id="filter-stats" class="mb-4 p-3 bg-blue-50 rounded-lg hidden">
+                      <div class="flex justify-between items-center">
+                        <h4 class="text-lg font-semibold text-blue-800">Filter Results</h4>
+                        <div id="filter-count" class="text-sm font-medium text-blue-600"></div>
+                      </div>
+                      <div class="grid grid-cols-4 gap-4 mt-2 text-sm">
+                        <div class="text-center">
+                          <div id="filtered-critical-annual" class="text-lg font-bold text-red-600">0</div>
+                          <div class="text-red-500">Critical Annual</div>
+                        </div>
+                        <div class="text-center">
+                          <div id="filtered-critical-short" class="text-lg font-bold text-orange-600">0</div>
+                          <div class="text-orange-500">Critical Short</div>
+                        </div>
+                        <div class="text-center">
+                          <div id="filtered-no-monthly" class="text-lg font-bold text-yellow-600">0</div>
+                          <div class="text-yellow-500">No Monthly</div>
+                        </div>
+                        <div class="text-center">
+                          <div id="filtered-good-balance" class="text-lg font-bold text-green-600">0</div>
+                          <div class="text-green-500">Good Balance</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Filter Section -->
+                    <div class="mb-4 p-3 bg-gray-50 rounded-lg">
+                      <!-- Quick Filter Buttons -->
+                      <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quick Filters</label>
+                        <div class="flex flex-wrap gap-2">
+                          <button onclick="applyQuickFilter('critical-annual')" class="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full hover:bg-red-200 transition duration-200">
+                            Critical Annual Leaves
+                          </button>
+                          <button onclick="applyQuickFilter('critical-short')" class="px-3 py-1 text-sm bg-orange-100 text-orange-700 rounded-full hover:bg-orange-200 transition duration-200">
+                            Critical Short Leaves
+                          </button>
+                          <button onclick="applyQuickFilter('no-monthly')" class="px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded-full hover:bg-yellow-200 transition duration-200">
+                            No Monthly Leaves
+                          </button>
+                          <button onclick="applyQuickFilter('good-balance')" class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full hover:bg-green-200 transition duration-200">
+                            Good Balance
+                          </button>
+                          <button onclick="applyQuickFilter('all')" class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition duration-200">
+                            Show All
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div class="flex flex-wrap gap-4 items-center">
+                        <!-- Search Filter -->
+                        <div class="flex-1 min-w-[200px]">
+                          <label class="block text-sm font-medium text-gray-700 mb-1">Search Employee</label>
+                          <input
+                            type="text"
+                            id="balance-search-input"
+                            placeholder="Search by name or ID..."
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]"
+                          />
+                        </div>
+                        
+                        <!-- Department Filter -->
+                        <div class="min-w-[150px]">
+                          <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                          <select id="balance-department-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]">
+                            <option value="">All Departments</option>
+                            @php
+                              $departments = $employees->pluck('department')->unique()->filter();
+                            @endphp
+                            @foreach($departments as $department)
+                              <option value="{{ $department }}">{{ $department }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                        
+                        <!-- Leave Status Filter -->
+                        <div class="min-w-[150px]">
+                          <label class="block text-sm font-medium text-gray-700 mb-1">Leave Status</label>
+                          <select id="balance-status-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]">
+                            <option value="">All Status</option>
+                            <option value="critical-annual">Critical Annual (<5)</option>
+                            <option value="critical-short">Critical Short (<5)</option>
+                            <option value="no-monthly">No Monthly Leaves</option>
+                            <option value="good-balance">Good Balance</option>
+                          </select>
+                        </div>
+                        
+                        <!-- Sort Options -->
+                        <div class="min-w-[150px]">
+                          <label class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                          <select id="balance-sort-filter" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#184E77] focus:border-[#184E77]">
+                            <option value="name">Name (A-Z)</option>
+                            <option value="annual-desc">Annual Leaves (High to Low)</option>
+                            <option value="annual-asc">Annual Leaves (Low to High)</option>
+                            <option value="short-desc">Short Leaves (High to Low)</option>
+                            <option value="short-asc">Short Leaves (Low to High)</option>
+                          </select>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex items-end gap-2">
+                          <button onclick="clearBalanceFilters()" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-200">
+                            Clear Filters
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="balances-table-container" class="overflow-x-auto" style="display: none;">
+                      <table class="min-w-full border-separate" style="border-spacing: 0 8px;">
+                        <thead>
+                          <tr class="text-sm font-medium text-gray-700">
+                            <th class="px-4 py-2 text-left bg-gray-100 rounded-l-lg">Employee</th>
+                            <th class="px-4 py-2 text-center bg-gray-100">Annual Leaves</th>
+                            <th class="px-4 py-2 text-center bg-gray-100">Short Leaves</th>
+                            <th class="px-4 py-2 text-center bg-gray-100">Monthly Leaves</th>
+                            <th class="px-4 py-2 text-center bg-gray-100">Half Leaves (Monthly)</th>
+                            <th class="px-4 py-2 text-center bg-gray-100 rounded-r-lg">Short Leaves (Monthly)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($employees as $employee)
+                          <tr class="hover:shadow-md transition duration-200" data-department="{{ $employee['department'] ?? '' }}">
+                            <td class="px-4 py-3 bg-white rounded-l-lg border-l border-t border-b border-gray-200">
+                              <div class="font-medium text-gray-900">{{ $employee['name'] }}</div>
+                              <div class="text-sm text-gray-500">ID: {{ $employee['employee_id'] }}</div>
+                            </td>
+                            <td class="px-4 py-3 text-center bg-white border-t border-b border-gray-200">
+                              <div class="flex flex-col items-center">
+                                <div class="text-lg font-semibold {{ $employee['annual_remaining'] < 5 ? 'text-red-600' : 'text-green-600' }}">
+                                  {{ $employee['annual_remaining'] }}
+                                </div>
+                                <div class="text-xs text-gray-500">{{ $employee['annual_used'] }}/{{ $employee['annual_balance'] }} used</div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                  <div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ ($employee['annual_used'] / $employee['annual_balance']) * 100 }}%"></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="px-4 py-3 text-center bg-white border-t border-b border-gray-200">
+                              <div class="flex flex-col items-center">
+                                <div class="text-lg font-semibold {{ $employee['short_remaining'] < 5 ? 'text-red-600' : 'text-green-600' }}">
+                                  {{ $employee['short_remaining'] }}
+                                </div>
+                                <div class="text-xs text-gray-500">{{ $employee['short_used'] }}/{{ $employee['short_balance'] }} used</div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                  <div class="bg-green-600 h-1.5 rounded-full" style="width: {{ ($employee['short_used'] / $employee['short_balance']) * 100 }}%"></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="px-4 py-3 text-center bg-white border-t border-b border-gray-200">
+                              <div class="flex flex-col items-center">
+                                <div class="text-lg font-semibold {{ $employee['monthly_leaves_remaining'] == 0 ? 'text-red-600' : 'text-yellow-600' }}">
+                                  {{ $employee['monthly_leaves_remaining'] }}
+                                </div>
+                                <div class="text-xs text-gray-500">{{ $employee['monthly_leaves_used'] }}/2 used</div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                  <div class="bg-yellow-600 h-1.5 rounded-full" style="width: {{ ($employee['monthly_leaves_used'] / 2) * 100 }}%"></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="px-4 py-3 text-center bg-white border-t border-b border-gray-200">
+                              <div class="flex flex-col items-center">
+                                <div class="text-lg font-semibold {{ $employee['monthly_half_leaves_remaining'] == 0 ? 'text-red-600' : 'text-purple-600' }}">
+                                  {{ $employee['monthly_half_leaves_remaining'] }}
+                                </div>
+                                <div class="text-xs text-gray-500">{{ $employee['monthly_half_leaves_used'] }}/1 used</div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                  <div class="bg-purple-600 h-1.5 rounded-full" style="width: {{ ($employee['monthly_half_leaves_used'] / 1) * 100 }}%"></div>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="px-4 py-3 text-center bg-white rounded-r-lg border-r border-t border-b border-gray-200">
+                              <div class="flex flex-col items-center">
+                                <div class="text-lg font-semibold {{ $employee['monthly_short_leaves_remaining'] == 0 ? 'text-red-600' : 'text-indigo-600' }}">
+                                  {{ $employee['monthly_short_leaves_remaining'] }}
+                                </div>
+                                <div class="text-xs text-gray-500">{{ $employee['monthly_short_leaves_used'] }}/3 used</div>
+                                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                  <div class="bg-indigo-600 h-1.5 rounded-full" style="width: {{ ($employee['monthly_short_leaves_used'] / 3) * 100 }}%"></div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
                 
                 <!--View record form start-->
                 <div id="view-attendance-modal-container" class=" fixed inset-0 bg-black bg-opacity-50 w-full opacity-0 transition-opacity duration-300 flex justify-center items-center hidden z-50">
@@ -812,14 +1056,18 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         { 
             targets: 5, 
-            className: 'approval-column' 
+            className: 'leave-balance-column' 
         },
         { 
             targets: 6, 
-            className: 'documents-column' 
+            className: 'approval-column' 
         },
         { 
             targets: 7, 
+            className: 'documents-column' 
+        },
+        { 
+            targets: 8, 
             className: 'actions-column' 
         }
     ]
@@ -840,13 +1088,13 @@ $('#custom-search-input').on('keyup', function () {
   // Approval Status Filter
   $('#approvalStatusFilter').on('change', function () {
     const status = $(this).val();
-    table.columns(5).search(status).draw(); // Assuming status is in the 6th column (index 5)
+    table.columns(6).search(status).draw(); // Status is now in the 7th column (index 6)
   });
 
 $('#resetCalendarButton').on('click', function () {
     selectedDate.textContent = '13.03.2021'; // Reset displayed date
     calendarInput._flatpickr.clear(); // Clear Flatpickr input
-    table.columns(3).search('').draw(); // Clear DataTable date filter
+    table.columns(2).search('').draw(); // Clear DataTable date filter (From Date column)
   });
 //pagination controls
 table.on('draw', function () {
@@ -925,8 +1173,8 @@ $(document).on('click', '.dataTables_paginate button', function () {
         dateFormat: "Y-m-d",
         onChange: function (selectedDates, dateStr) {
             selectedDate.textContent = dateStr;
-            // Filter DataTable by selected date
-            table.search(dateStr).draw();
+            // Filter DataTable by selected date in From Date column
+            table.columns(2).search(dateStr).draw();
         },
     });
 
@@ -1119,6 +1367,326 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// Function to toggle leave balances table visibility
+function toggleBalancesTable() {
+    const container = document.getElementById('balances-table-container');
+    const toggleText = document.getElementById('toggle-text');
+    
+    if (container.style.display === 'none' || container.style.display === '') {
+        container.style.display = 'block';
+        toggleText.textContent = 'Hide';
+        // Initialize filtering when showing for the first time
+        if (!window.balanceFilteringInitialized) {
+            initializeBalanceFiltering();
+            window.balanceFilteringInitialized = true;
+        }
+    } else {
+        container.style.display = 'none';
+        toggleText.textContent = 'Show';
+    }
+}
+
+// Initialize balance table filtering
+let allBalanceRows = [];
+let filteredBalanceRows = [];
+
+function initializeBalanceFiltering() {
+    // Store all rows for filtering
+    const tableBody = document.querySelector('#balances-table-container tbody');
+    if (tableBody) {
+        allBalanceRows = Array.from(tableBody.querySelectorAll('tr'));
+        filteredBalanceRows = [...allBalanceRows];
+    }
+    
+    // Add event listeners to filters
+    document.getElementById('balance-search-input')?.addEventListener('input', applyBalanceFilters);
+    document.getElementById('balance-department-filter')?.addEventListener('change', applyBalanceFilters);
+    document.getElementById('balance-status-filter')?.addEventListener('change', applyBalanceFilters);
+    document.getElementById('balance-sort-filter')?.addEventListener('change', applyBalanceFilters);
+}
+
+function applyBalanceFilters() {
+    const searchTerm = document.getElementById('balance-search-input')?.value.toLowerCase() || '';
+    const departmentFilter = document.getElementById('balance-department-filter')?.value || '';
+    const statusFilter = document.getElementById('balance-status-filter')?.value || '';
+    const sortFilter = document.getElementById('balance-sort-filter')?.value || 'name';
+    
+    // Filter rows
+    filteredBalanceRows = allBalanceRows.filter(row => {
+        // Search filter
+        const employeeName = row.querySelector('td:first-child .font-medium')?.textContent.toLowerCase() || '';
+        const employeeId = row.querySelector('td:first-child .text-gray-500')?.textContent.toLowerCase() || '';
+        const searchMatch = employeeName.includes(searchTerm) || employeeId.includes(searchTerm);
+        
+        // Department filter (you'll need to add department data to rows if available)
+        let departmentMatch = true;
+        if (departmentFilter) {
+            // Add department data attribute to rows in the blade template for this to work
+            const rowDepartment = row.dataset.department || '';
+            departmentMatch = rowDepartment === departmentFilter;
+        }
+        
+        // Status filter
+        let statusMatch = true;
+        if (statusFilter) {
+            const annualValue = parseInt(row.querySelector('td:nth-child(2) .text-lg')?.textContent || '0');
+            const shortValue = parseInt(row.querySelector('td:nth-child(3) .text-lg')?.textContent || '0');
+            const monthlyValue = parseInt(row.querySelector('td:nth-child(4) .text-lg')?.textContent || '0');
+            
+            switch (statusFilter) {
+                case 'critical-annual':
+                    statusMatch = annualValue < 5;
+                    break;
+                case 'critical-short':
+                    statusMatch = shortValue < 5;
+                    break;
+                case 'no-monthly':
+                    statusMatch = monthlyValue === 0;
+                    break;
+                case 'good-balance':
+                    statusMatch = annualValue >= 5 && shortValue >= 5 && monthlyValue > 0;
+                    break;
+            }
+        }
+        
+        return searchMatch && departmentMatch && statusMatch;
+    });
+    
+    // Sort rows
+    filteredBalanceRows.sort((a, b) => {
+        switch (sortFilter) {
+            case 'name':
+                const nameA = a.querySelector('td:first-child .font-medium')?.textContent || '';
+                const nameB = b.querySelector('td:first-child .font-medium')?.textContent || '';
+                return nameA.localeCompare(nameB);
+            case 'annual-desc':
+                const annualA = parseInt(a.querySelector('td:nth-child(2) .text-lg')?.textContent || '0');
+                const annualB = parseInt(b.querySelector('td:nth-child(2) .text-lg')?.textContent || '0');
+                return annualB - annualA;
+            case 'annual-asc':
+                const annualA2 = parseInt(a.querySelector('td:nth-child(2) .text-lg')?.textContent || '0');
+                const annualB2 = parseInt(b.querySelector('td:nth-child(2) .text-lg')?.textContent || '0');
+                return annualA2 - annualB2;
+            case 'short-desc':
+                const shortA = parseInt(a.querySelector('td:nth-child(3) .text-lg')?.textContent || '0');
+                const shortB = parseInt(b.querySelector('td:nth-child(3) .text-lg')?.textContent || '0');
+                return shortB - shortA;
+            case 'short-asc':
+                const shortA2 = parseInt(a.querySelector('td:nth-child(3) .text-lg')?.textContent || '0');
+                const shortB2 = parseInt(b.querySelector('td:nth-child(3) .text-lg')?.textContent || '0');
+                return shortA2 - shortB2;
+            default:
+                return 0;
+        }
+    });
+    
+    // Update display
+    updateBalanceTableDisplay();
+}
+
+function updateBalanceTableDisplay() {
+    const tableBody = document.querySelector('#balances-table-container tbody');
+    if (!tableBody) return;
+    
+    // Hide all rows
+    allBalanceRows.forEach(row => {
+        row.style.display = 'none';
+    });
+    
+    // Show filtered rows
+    filteredBalanceRows.forEach(row => {
+        row.style.display = '';
+    });
+    
+    // Update results count
+    updateBalanceResultsCount();
+}
+
+function updateBalanceResultsCount() {
+    const totalCount = allBalanceRows.length;
+    const filteredCount = filteredBalanceRows.length;
+    
+    // Add results counter if it doesn't exist
+    let counter = document.getElementById('balance-results-counter');
+    if (!counter) {
+        counter = document.createElement('div');
+        counter.id = 'balance-results-counter';
+        counter.className = 'text-sm text-gray-600 mb-2';
+        const tableContainer = document.getElementById('balances-table-container');
+        tableContainer.insertBefore(counter, tableContainer.firstChild);
+    }
+    
+    counter.textContent = `Showing ${filteredCount} of ${totalCount} employees`;
+    
+    // Update filter statistics
+    updateFilterStatistics();
+}
+
+function updateFilterStatistics() {
+    const statsContainer = document.getElementById('filter-stats');
+    const filterCount = document.getElementById('filter-count');
+    
+    if (filteredBalanceRows.length !== allBalanceRows.length) {
+        // Show statistics when filtering is active
+        statsContainer.classList.remove('hidden');
+        
+        // Count different categories in filtered results
+        let criticalAnnual = 0;
+        let criticalShort = 0;
+        let noMonthly = 0;
+        let goodBalance = 0;
+        
+        filteredBalanceRows.forEach(row => {
+            const annualValue = parseInt(row.querySelector('td:nth-child(2) .text-lg')?.textContent || '0');
+            const shortValue = parseInt(row.querySelector('td:nth-child(3) .text-lg')?.textContent || '0');
+            const monthlyValue = parseInt(row.querySelector('td:nth-child(4) .text-lg')?.textContent || '0');
+            
+            if (annualValue < 5) criticalAnnual++;
+            if (shortValue < 5) criticalShort++;
+            if (monthlyValue === 0) noMonthly++;
+            if (annualValue >= 5 && shortValue >= 5 && monthlyValue > 0) goodBalance++;
+        });
+        
+        // Update counters
+        document.getElementById('filtered-critical-annual').textContent = criticalAnnual;
+        document.getElementById('filtered-critical-short').textContent = criticalShort;
+        document.getElementById('filtered-no-monthly').textContent = noMonthly;
+        document.getElementById('filtered-good-balance').textContent = goodBalance;
+        
+        filterCount.textContent = `${filteredBalanceRows.length} employees found`;
+    } else {
+        // Hide statistics when no filtering is active
+        statsContainer.classList.add('hidden');
+    }
+}
+
+function clearBalanceFilters() {
+    document.getElementById('balance-search-input').value = '';
+    document.getElementById('balance-department-filter').value = '';
+    document.getElementById('balance-status-filter').value = '';
+    document.getElementById('balance-sort-filter').value = 'name';
+    
+    // Reset to show all rows
+    filteredBalanceRows = [...allBalanceRows];
+    updateBalanceTableDisplay();
+}
+
+function exportBalanceData() {
+    // Prepare CSV data
+    const csvData = [];
+    
+    // Add headers
+    csvData.push([
+        'Employee Name',
+        'Employee ID',
+        'Department',
+        'Annual Leaves Remaining',
+        'Annual Leaves Used',
+        'Annual Leaves Total',
+        'Short Leaves Remaining',
+        'Short Leaves Used',
+        'Short Leaves Total',
+        'Monthly Leaves Remaining',
+        'Monthly Leaves Used',
+        'Monthly Half Leaves Remaining',
+        'Monthly Half Leaves Used',
+        'Monthly Short Leaves Remaining',
+        'Monthly Short Leaves Used'
+    ]);
+    
+    // Add data from filtered rows
+    filteredBalanceRows.forEach(row => {
+        const employeeName = row.querySelector('td:first-child .font-medium')?.textContent || '';
+        const employeeId = row.querySelector('td:first-child .text-gray-500')?.textContent.replace('ID: ', '') || '';
+        const department = row.dataset.department || '';
+        
+        const annualRemaining = row.querySelector('td:nth-child(2) .text-lg')?.textContent || '0';
+        const annualUsed = row.querySelector('td:nth-child(2) .text-xs')?.textContent.split('/')[0] || '0';
+        const annualTotal = row.querySelector('td:nth-child(2) .text-xs')?.textContent.split('/')[1]?.split(' ')[0] || '0';
+        
+        const shortRemaining = row.querySelector('td:nth-child(3) .text-lg')?.textContent || '0';
+        const shortUsed = row.querySelector('td:nth-child(3) .text-xs')?.textContent.split('/')[0] || '0';
+        const shortTotal = row.querySelector('td:nth-child(3) .text-xs')?.textContent.split('/')[1]?.split(' ')[0] || '0';
+        
+        const monthlyRemaining = row.querySelector('td:nth-child(4) .text-lg')?.textContent || '0';
+        const monthlyUsed = row.querySelector('td:nth-child(4) .text-xs')?.textContent.split('/')[0] || '0';
+        
+        const halfRemaining = row.querySelector('td:nth-child(5) .text-lg')?.textContent || '0';
+        const halfUsed = row.querySelector('td:nth-child(5) .text-xs')?.textContent.split('/')[0] || '0';
+        
+        const monthlyShortRemaining = row.querySelector('td:nth-child(6) .text-lg')?.textContent || '0';
+        const monthlyShortUsed = row.querySelector('td:nth-child(6) .text-xs')?.textContent.split('/')[0] || '0';
+        
+        csvData.push([
+            employeeName,
+            employeeId,
+            department,
+            annualRemaining,
+            annualUsed,
+            annualTotal,
+            shortRemaining,
+            shortUsed,
+            shortTotal,
+            monthlyRemaining,
+            monthlyUsed,
+            halfRemaining,
+            halfUsed,
+            monthlyShortRemaining,
+            monthlyShortUsed
+        ]);
+    });
+    
+    // Convert to CSV string
+    const csvContent = csvData.map(row => 
+        row.map(cell => `"${cell}"`).join(',')
+    ).join('\n');
+    
+    // Download CSV
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `employee_leave_balances_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function applyQuickFilter(filterType) {
+    // Clear existing filters
+    document.getElementById('balance-search-input').value = '';
+    document.getElementById('balance-department-filter').value = '';
+    document.getElementById('balance-sort-filter').value = 'name';
+    
+    // Apply the quick filter
+    if (filterType === 'all') {
+        document.getElementById('balance-status-filter').value = '';
+    } else {
+        document.getElementById('balance-status-filter').value = filterType;
+    }
+    
+    // Apply filters
+    applyBalanceFilters();
+    
+    // Update active filter styling
+    updateQuickFilterButtons(filterType);
+}
+
+function updateQuickFilterButtons(activeFilter) {
+    // Reset all buttons
+    document.querySelectorAll('[onclick^="applyQuickFilter"]').forEach(btn => {
+        btn.classList.remove('ring-2', 'ring-[#184E77]');
+    });
+    
+    // Highlight active button
+    const activeButton = document.querySelector(`[onclick="applyQuickFilter('${activeFilter}')"]`);
+    if (activeButton) {
+        activeButton.classList.add('ring-2', 'ring-[#184E77]');
+    }
+}
+
 </script>
   
   

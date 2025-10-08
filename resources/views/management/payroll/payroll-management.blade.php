@@ -156,6 +156,9 @@
         <button id="Export_payslips" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
             <span>Export Payslips (ZIP)</span>
         </button>
+        <button id="Export_PDF" class="flex items-center justify-center space-x-2 px-6 py-2 ml-4 text-[#184E77] border-2 border-[#184E77] text-2xl bg-white rounded-xl shadow-sm hover:from-[#1B5A8A] hover:to-[#60C3A8]">
+            <span>Export PDF</span>
+        </button>
 
 
 
@@ -693,6 +696,19 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = `${window.location.origin}/dashboard/payroll/payroll/export/paysheets?selected_month=${month}`;
 
     });
+
+document.getElementById('Export_PDF').addEventListener('click', () => {
+    const month = document.getElementById('monthSelector').value;
+    if (!month) {
+        alert('Please select a month before exporting.');
+        return;
+    }
+
+    // Include the full prefix path
+    window.location.href = `${window.location.origin}/dashboard/payroll/payroll/export/pdf?selected_month=${month}`;
+});
+
+
 
 
 

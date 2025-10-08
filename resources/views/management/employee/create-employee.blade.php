@@ -82,8 +82,31 @@
         <div class="w-1/2 flex flex-col justify-center items-center nunito- space-y-4 p-8 bg-[#D9D9D980] rounded-3xl">
             <div class="w-full flex">
                 <div class="w-1/3 flex justify-start items-center">
-                    <img id="profileImage" src="{{ asset('build/assets/bg1.png') }}" class="w-48 h-48 rounded-full" onclick="triggerFileInput()">
-                    <input type="file" name="image" id="image" style="display:none;" onchange="previewImage(event)">
+                    <div class="relative">
+                        <!-- Upload/Click Area -->
+                        <div class="relative group cursor-pointer" onclick="triggerFileInput()">
+                            <div id="imagePlaceholder" class="w-48 h-48 rounded-full flex flex-col items-center justify-center bg-gray-200 border-2 border-dashed border-[#52B69A]">
+                                <i class="ri-user-add-line text-gray-400 text-4xl mb-2"></i>
+                                <span class="text-gray-500 text-sm font-medium text-center px-4">Upload Employee Photo</span>
+                            </div>
+                            <img id="profileImage" src="{{ asset('build/assets/bg1.png') }}" class="w-48 h-48 rounded-full object-cover border-2 border-[#52B69A] hidden">
+                            <div class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <i class="ri-camera-fill text-white text-2xl mb-1"></i>
+                                <span class="text-white text-sm font-semibold" id="hover-text">Upload Photo</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons (below the image when uploaded) -->
+                        <div id="imageActions" class="mt-2 gap-2 hidden" style="display: none;">
+                            <button type="button" onclick="triggerFileInput()" class="px-3 py-1 text-xs bg-[#184E77] text-white rounded-md hover:bg-[#1B5A8A] transition-colors duration-200">
+                                Change Photo
+                            </button>
+                            <button type="button" onclick="removeImage()" class="px-3 py-1 text-xs bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors duration-200">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                    <input type="file" name="image" id="image" style="display:none;" accept="image/*" onchange="previewImage(event)">
                 </div>
                 <div class="w-2/3 flex flex-col justify-center items-start space-y-4 nunito-">
                 <div class="w-3/4 space-y-4 pl-16 text-black font-bold">
@@ -507,9 +530,35 @@
         const reader = new FileReader();
         reader.onload = function() {
             const output = document.getElementById('profileImage');
+            const placeholder = document.getElementById('imagePlaceholder');
+            const imageActions = document.getElementById('imageActions');
+            const hoverText = document.getElementById('hover-text');
+            
             output.src = reader.result;  // Update the image preview
+            output.classList.remove('hidden');  // Show the uploaded image
+            placeholder.classList.add('hidden');  // Hide the placeholder
+            imageActions.style.display = 'flex';  // Show action buttons
+            imageActions.classList.remove('hidden');
+            hoverText.textContent = 'Change Photo';  // Update hover text
         };
         reader.readAsDataURL(event.target.files[0]);  // Convert image to data URL for preview
+    }
+
+    function removeImage() {
+        const output = document.getElementById('profileImage');
+        const placeholder = document.getElementById('imagePlaceholder');
+        const imageActions = document.getElementById('imageActions');
+        const imageInput = document.getElementById('image');
+        const hoverText = document.getElementById('hover-text');
+        
+        // Reset image
+        output.src = '';
+        output.classList.add('hidden');  // Hide the uploaded image
+        placeholder.classList.remove('hidden');  // Show the placeholder
+        imageActions.style.display = 'none';  // Hide action buttons
+        imageActions.classList.add('hidden');
+        imageInput.value = '';  // Clear the file input
+        hoverText.textContent = 'Upload Photo';  // Reset hover text
     }
 
 </script>

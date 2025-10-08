@@ -13,6 +13,52 @@
 
 @section('content')
 
+<style>
+/* Custom pagination styling */
+.dataTables_paginate {
+    margin-top: 1rem !important;
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+}
+
+.pagination-btn, .page-number-btn {
+    transition: all 0.2s ease-in-out;
+    border-radius: 0.375rem;
+}
+
+.pagination-btn:hover:not(:disabled):not(.opacity-50), 
+.page-number-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-btn:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.pagination-btn:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.page-number-btn {
+    border-radius: 0.375rem !important;
+    margin: 0 1px;
+}
+
+/* Hide default DataTables pagination info */
+.dataTables_info {
+    display: none !important;
+}
+
+/* Ensure table wrapper has proper spacing */
+.dataTables_wrapper {
+    margin-bottom: 2rem;
+}
+</style>
+
 @if(session('success') )
 <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -433,10 +479,10 @@
   $(document).ready(function () {
       // Initialize DataTable
       var table = $('#attendance-table').DataTable({
-        dom: '<"top"f>rt<"bottom"p><"clear">', // Custom layout: search box on top, pagination on bottom
+        dom: 'rt<"bottom"p>', // Remove default search, keep table and pagination
       paging: true,
       pageLength: 10,
-      pagingType: 'simple',
+      pagingType: 'full_numbers',
       order: [[1, 'desc']],
       searching: true,
           buttons: [
@@ -509,52 +555,92 @@
       const pageInfo = table.page.info();
 
       // Clear existing pagination
-      pagination.html('');
+      pagination.empty();
 
-      // Build custom pagination
-      let customPagination = `
-          <div class="flex items-center justify-end w-full space-x-4 mt-8">
-              <button class="flex items-center px-2 py-1 text-gray-500 hover:text-black focus:outline-none ${
-                  pageInfo.page === 0 ? 'cursor-not-allowed text-gray-400' : ''
-              }" data-action="prev" ${pageInfo.page === 0 ? 'disabled' : ''}>
-                  <i class="ri-arrow-left-s-line"></i>
-                  <span class="ml-1">Prev</span>
-              </button>
-              <div class="flex items-center space-x-2">
-      `;
-
-      for (let i = 0; i < pageInfo.pages; i++) {
-          customPagination += `
-              <button class="flex items-center justify-center w-8 h-8 ${
-                  i === pageInfo.page
-                      ? 'font-bold text-black bg-[#52B69A80] rounded-full focus:outline-none'
-                      : 'text-black rounded-full hover:bg-gray-200 focus:outline-none'
-              }" data-page="${i}">
-                  ${i + 1}
-              </button>
-          `;
-      }
-
-      customPagination += `
+      // Only show pagination if there are multiple pages
+      if (pageInfo.pages > 1) {
+          // Build custom pagination
+          let customPagination = $(`
+              <div class="flex items-center justify-center w-full space-x-2 mt-6 mb-4">
+                  <button class="pagination-btn prev-btn flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 hover:text-gray-700 ${
+                      pageInfo.page === 0 ? 'cursor-not-allowed opacity-50' : ''
+                  }" data-action="prev" ${pageInfo.page === 0 ? 'disabled' : ''}>
+                      <i class="ri-arrow-left-s-line mr-1"></i>
+                      Prev
+                  </button>
+                  <div class="flex items-center space-x-1 page-numbers">
+                  </div>
+                  <button class="pagination-btn next-btn flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 hover:text-gray-700 ${
+                      pageInfo.page + 1 >= pageInfo.pages ? 'cursor-not-allowed opacity-50' : ''
+                  }" data-action="next" ${pageInfo.page + 1 >= pageInfo.pages ? 'disabled' : ''}>
+                      Next
+                      <i class="ri-arrow-right-s-line ml-1"></i>
+                  </button>
               </div>
-              <button class="flex items-center px-2 py-1 text-gray-500 hover:text-black focus:outline-none ${
-                  pageInfo.page + 1 === pageInfo.pages
-                      ? 'cursor-not-allowed text-gray-400'
-                      : ''
-              }" data-action="next" ${
-          pageInfo.page + 1 === pageInfo.pages ? 'disabled' : ''
-      }>
-                  <span class="mr-1">Next</span>
-                  <i class="ri-arrow-right-s-line"></i>
-              </button>
-          </div>
-      `;
+          `);
 
-      pagination.html(customPagination);
+          // Add page number buttons
+          const pageNumbersContainer = customPagination.find('.page-numbers');
+          
+          // Calculate which pages to show
+          let startPage = Math.max(0, pageInfo.page - 2);
+          let endPage = Math.min(pageInfo.pages - 1, startPage + 4);
+          
+          // Adjust start if we're near the end
+          if (endPage - startPage < 4) {
+              startPage = Math.max(0, endPage - 4);
+          }
+
+          // Add first page and ellipsis if needed
+          if (startPage > 0) {
+              pageNumbersContainer.append(`
+                  <button class="page-number-btn w-8 h-8 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900" data-page="0">
+                      1
+                  </button>
+              `);
+              if (startPage > 1) {
+                  pageNumbersContainer.append('<span class="px-2 py-2 text-gray-500">...</span>');
+              }
+          }
+
+          // Add page numbers
+          for (let i = startPage; i <= endPage; i++) {
+              const isActive = i === pageInfo.page;
+              pageNumbersContainer.append(`
+                  <button class="page-number-btn w-8 h-8 text-sm font-medium ${
+                      isActive 
+                          ? 'text-white bg-[#184E77] border-[#184E77]' 
+                          : 'text-gray-700 bg-white hover:bg-gray-50 hover:text-gray-900'
+                  } border border-gray-300" data-page="${i}">
+                      ${i + 1}
+                  </button>
+              `);
+          }
+
+          // Add last page and ellipsis if needed
+          if (endPage < pageInfo.pages - 1) {
+              if (endPage < pageInfo.pages - 2) {
+                  pageNumbersContainer.append('<span class="px-2 py-2 text-gray-500">...</span>');
+              }
+              pageNumbersContainer.append(`
+                  <button class="page-number-btn w-8 h-8 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900" data-page="${pageInfo.pages - 1}">
+                      ${pageInfo.pages}
+                  </button>
+              `);
+          }
+
+          pagination.append(customPagination);
+      }
   });
 
   // Handle custom pagination button clicks
-  $(document).on('click', '.dataTables_paginate button', function () {
+  $(document).on('click', '.dataTables_paginate .pagination-btn, .dataTables_paginate .page-number-btn', function (e) {
+      e.preventDefault();
+      
+      if ($(this).prop('disabled') || $(this).hasClass('opacity-50')) {
+          return;
+      }
+
       const action = $(this).data('action');
       const page = $(this).data('page');
 
