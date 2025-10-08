@@ -432,6 +432,18 @@ function openAddModal() {
                         handleAddFileSelection(this);
                     });
                 }
+                // Wire up status handler for injected create form
+                const statusEl = modalContent.querySelector('#status');
+                if (statusEl && typeof window.handleStatusChange === 'function') {
+                  statusEl.addEventListener('change', window.handleStatusChange);
+                  window.handleStatusChange();
+                }
+                // Wire up category handler for injected create form
+                const categoryEl = modalContent.querySelector('#leave_category');
+                if (categoryEl && typeof window.handleCategoryChange === 'function') {
+                  categoryEl.addEventListener('change', window.handleCategoryChange);
+                  window.handleCategoryChange();
+                }
             }, 100);
       })
       .catch(error => {
@@ -588,6 +600,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (existingFilesData) {
                     initializeExistingFiles(existingFilesData.value);
                 }
+                // Wire up status handler for injected edit form
+                const statusEl = modalContent.querySelector('#status');
+                if (statusEl && typeof window.handleStatusChange === 'function') {
+                  statusEl.addEventListener('change', window.handleStatusChange);
+                  window.handleStatusChange();
+                }
+                // Wire up category handler for injected edit form
+                const categoryEl = modalContent.querySelector('#leave_category');
+                if (categoryEl && typeof window.handleCategoryChange === 'function') {
+                  categoryEl.addEventListener('change', window.handleCategoryChange);
+                  window.handleCategoryChange();
+                }
             }, 100);
       })
       .catch(error => {
@@ -668,21 +692,76 @@ document.addEventListener('DOMContentLoaded', function() {
     const menu = document.getElementById(menuId);
     menu.classList.toggle('hidden');
   }
-  const textElements = document.querySelectorAll('span.text-xl');
+    // Initialize clickable gradient text once
+    if (!window.__lmTextElementsInit) {
+            // Duplicate textElements initializations removed; guarded earlier with __lmTextElementsInit
+            window.__lmTextElementsInit = true;
+    }
 
-textElements.forEach((element) => {
-    element.addEventListener('click', function () {
-        // Reset all text elements to black
-        textElements.forEach((el) => {
-            el.classList.remove('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
-            el.classList.add('text-black');
-        });
+    // Global status change handler for dynamically injected create/edit forms
+    window.handleStatusChange = function () {
+        const container = document.getElementById('editAttendanceContent') || document;
+        const statusEl = container.querySelector('#status') || document.getElementById('status');
+        const approvedByField = container.querySelector('#approved_by_field') || document.getElementById('approved_by_field');
+        const approvedPersonInput = container.querySelector('#approved_person') || document.getElementById('approved_person');
 
-        // Apply gradient to the clicked element
-        this.classList.remove('text-black');
-        this.classList.add('bg-gradient-to-r', 'from-[#184E77]', 'to-[#52B69A]', 'text-transparent', 'bg-clip-text');
-    });
-});
+        if (!statusEl || !approvedByField || !approvedPersonInput) return;
+
+        const val = (statusEl.value || '').toLowerCase();
+        if (val === 'approved' || val === 'rejected') {
+            approvedByField.style.display = 'block';
+            approvedPersonInput.required = true;
+        } else {
+            approvedByField.style.display = 'none';
+            approvedPersonInput.required = false;
+            approvedPersonInput.value = '';
+        }
+    };
+
+    // Global category change handler for dynamically injected create/edit forms
+    window.handleCategoryChange = function () {
+        const container = document.getElementById('editAttendanceContent') || document;
+        const categoryEl = container.querySelector('#leave_category') || document.getElementById('leave_category');
+        const halfDayOptions = container.querySelector('#half_day_options') || document.getElementById('half_day_options');
+        const shortLeaveOptions = container.querySelector('#short_leave_options') || document.getElementById('short_leave_options');
+        const timeInputs = container.querySelector('#time_inputs') || document.getElementById('time_inputs');
+        const placeholder = container.querySelector('#category_type_placeholder') || document.getElementById('category_type_placeholder');
+        const halfDaySelect = container.querySelector('#half_day_type') || document.getElementById('half_day_type');
+        const shortLeaveSelect = container.querySelector('#short_leave_type') || document.getElementById('short_leave_type');
+
+        if (!categoryEl) return;
+
+        const category = categoryEl.value;
+
+        // Hide all conditional fields
+        if (halfDayOptions) halfDayOptions.classList.add('hidden');
+        if (shortLeaveOptions) shortLeaveOptions.classList.add('hidden');
+        if (timeInputs) timeInputs.classList.add('hidden');
+
+        // Show placeholder by default
+        if (placeholder) placeholder.style.display = 'block';
+
+        // Reset required flags
+        if (halfDaySelect) halfDaySelect.required = false;
+        if (shortLeaveSelect) shortLeaveSelect.required = false;
+
+        if (category === 'half_day') {
+            if (halfDayOptions) halfDayOptions.classList.remove('hidden');
+            if (timeInputs) timeInputs.classList.remove('hidden');
+            if (placeholder) placeholder.style.display = 'none';
+            if (halfDaySelect) halfDaySelect.required = true;
+        } else if (category === 'short_leave') {
+            if (shortLeaveOptions) shortLeaveOptions.classList.remove('hidden');
+            if (timeInputs) timeInputs.classList.remove('hidden');
+            if (placeholder) placeholder.style.display = 'none';
+            if (shortLeaveSelect) shortLeaveSelect.required = true;
+        }
+
+        // Call calculateNoPayAmount if it exists
+        if (typeof window.calculateNoPayAmount === 'function') {
+            window.calculateNoPayAmount();
+        }
+    };
 // Initialize Flatpickr$(document).ready(function () {
     // Initialize DataTable
 

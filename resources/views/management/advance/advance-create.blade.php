@@ -1,8 +1,8 @@
 <div id="modal-container" class="w-full flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
     <div class="w-full flex flex-col justify-start items-center bg-white p-8 rounded-3xl space-y-8">
       <div class="flex flex-col justify-center items-center space-y-4">
-        <p class="text-5xl text-black font-bold">Advance</p>
-        <p class="text-3xl text-[#00000080]">Enter the Information about Advance</p>
+        <p class="text-5xl text-black font-bold">Loan</p>
+        <p class="text-3xl text-[#00000080]">Enter the Information about Loan</p>
       </div>
       <div class="w-full mx-auto p-6">
       <form action="{{ route('advance.store') }}" method="POST" class="w-full mx-auto p-6 "  enctype="multipart/form-data">
@@ -21,7 +21,7 @@
             />
           </div>
           <div>
-            <label for="loan_amount" class="block text-xl text-black font-bold">Advance Amount :</label>
+            <label for="loan_amount" class="block text-xl text-black font-bold">Loan Amount :</label>
             <input
               type="number"
               id="loan_amount"
@@ -35,7 +35,7 @@
             />
             <p id="loan_amount_error" class="text-red-600 text-sm mt-1 hidden">Loan amount must be a positive number.</p>
           </div>
-          <div>
+          <!-- <div>
             <label for="interest_rate" class="block text-xl text-black font-bold">Interest(%) :</label>
             <input
               type="number"
@@ -49,11 +49,11 @@
               required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
-          </div>
+          </div> -->
 
           <!-- Claim Date -->
           <div>
-            <label for="loan_start_date" class="block text-xl text-black font-bold">Advance Date :</label>
+            <label for="loan_start_date" class="block text-xl text-black font-bold">Loan Date :</label>
             <input
               type="date"
               id="loan_start_date"
@@ -64,7 +64,7 @@
             />
           </div>
           <!-- Status -->
-          <div>
+          <!-- <div>
             <label for="duration" class="block text-xl text-black font-bold">Payment Duration(Months):</label>
             <input
               type="number"
@@ -75,7 +75,7 @@
               required
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 font-bold text-[#0000008C]"
             />
-          </div>
+          </div> -->
 
               <!-- Approval Status -->
               <div>

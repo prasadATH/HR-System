@@ -268,8 +268,6 @@ public function advanceManagement()
     $advances = Loan::all();
     return view('management.advance.advance-management', compact('advances'));
 }
-    
-
 
 
 /**

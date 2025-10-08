@@ -185,6 +185,7 @@
                 <select name="manager_id" id="manager_id" 
                     class="w-full p-2 text-xl border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#52B69A]" 
                     @if($isFirstEmployee) disabled @endif>
+                     @if(!$isFirstEmployee) required @endif>
                     <option value="">Select Manager</option>
                     @foreach($employees->unique('employee_id') as $employee)
                         <option value="{{ $employee->id }}">{{ $employee->employee_id }} - {{ $employee->first_name }}</option>
