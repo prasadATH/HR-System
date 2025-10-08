@@ -1,8 +1,8 @@
 <div id="modal-container" class="w-full flex flex-col justify-start items-center relative bg-white nunito- p-2 rounded-3xl bg-gradient-to-r from-[#184E77] to-[#52B69A]">
     <div class="w-full flex flex-col justify-start items-center bg-white p-8 rounded-3xl space-y-8">
       <div class="flex flex-col justify-center items-center space-y-4">
-        <p class="text-5xl text-black font-bold">Advance</p>
-        <p class="text-3xl text-[#00000080]">Edit details of the Advance</p>
+        <p class="text-5xl text-black font-bold">Loan</p>
+        <p class="text-3xl text-[#00000080]">Edit details of the Loan</p>
       </div>
       <div class="w-full mx-auto p-6 ">
 
@@ -23,7 +23,7 @@
           </div>
 
           <div>
-            <label for="loan_amount" class="block text-xl text-black font-bold">Advance Amount:</label>
+            <label for="loan_amount" class="block text-xl text-black font-bold">Loan Amount:</label>
             <input
               type="text"
               id="loan_amount"
@@ -33,7 +33,7 @@
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
-
+<!-- 
           <div>
             <label for="interest_rate" class="block text-xl text-black font-bold">Interest:</label>
             <input
@@ -44,10 +44,10 @@
               placeholder="Enter the interest"
               class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
-          </div>
+          </div> -->
 
           <div>
-              <label for="loan_start_date" class="block text-xl text-black font-bold">Advance Date:</label>
+              <label for="loan_start_date" class="block text-xl text-black font-bold">Loan Date:</label>
               <input
                   type="date"
                   id="loan_start_date"
@@ -58,7 +58,7 @@
               />
           </div>
 
-          <div>
+          <!-- <div>
               <label for="duration" class="block text-xl text-black font-bold">Payment Duration:</label>
               <input
                   type="text"
@@ -68,19 +68,20 @@
                   placeholder="eg:-6"
                   class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
-          </div>
+          </div> -->
 
-          <div>
-              <label for="status" class="block text-xl text-black font-bold">Status:</label>
-              <input
-                  type="text"
+           <!-- Approval Status -->
+              <div>
+                <label for="status" class="block text-xl text-black font-bold">Approval Status :</label>
+                <select
                   id="status"
                   name="status"
-                  value="{{ $advance->status }}"
-                  placeholder="Enter the status"
-                  class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              />
-          </div>
+                  class="mt-1 block w-full px-3 py-2 border-2 border-[#1C1B1F80] rounded-md shadow-sm focus:bg-gradient-to-r from-[#184E77] to-[#52B69A] text-xl text-black focus:border-blue-500 font-bold text-[#0000008C]">
+                  <option value="approved">Approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
 
           <div>
             <label for="description" class="block text-xl text-black font-bold">Description:</label>

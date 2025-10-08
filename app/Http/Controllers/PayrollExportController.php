@@ -5,6 +5,7 @@ use App\Models\SalaryDetails;
 use App\Models\Attendance;
 use App\Models\Employee;
 use App\Models\Payroll;
+use App\Models\Leave;
 use Illuminate\Http\Request;
 use ZipArchive;
 use Carbon\Carbon;
@@ -88,6 +89,12 @@ class PayrollExportController extends Controller
         // Get attendance records for OT calculation (from 5th of selected month to 5th of next month)
         $startDate = date('Y-m-05', strtotime($selectedMonth));
         $endDate = date('Y-m-05', strtotime('+1 month', strtotime($selectedMonth)));
+        
+        // Calculate leave-based no-pay deductions
+        $leaveNoPayAmount = Leave::where('employee_id', $payroll->employee_id)
+            ->where('is_no_pay', true)
+            ->whereBetween('start_date', [$startDate, $endDate])
+            ->sum('no_pay_amount');
           //  dd($startDate);
             $attendanceRecords = Attendance::where('employee_id', $payroll->employee_id)
                 ->whereBetween('date', [$startDate, $endDate])
@@ -161,23 +168,20 @@ class PayrollExportController extends Controller
 
 
 
-            // Calculate deductions and net salary
-            //$noPayDeductions = ($payroll->no_pay ?? 0) * 1000;
-            if($newLoanBalance >0){
+            // Calculate deductions including leave no-pay
+            if($newLoanBalance > 0){
                 $totalDeductions = (
                     ($payroll->epf_8_percent ?? 0) +
                     ($payroll->loan_payment ?? 0) +
-                    ($payroll->stamp_duty ?? 0)
+                    ($payroll->stamp_duty ?? 0) +
+                    $leaveNoPayAmount  // Add leave no-pay
                 );
-
-
-            }else{
+            } else {
                 $totalDeductions = (
-                    ($payroll->epf_8_percent ?? 0)+
-                    ($payroll->stamp_duty ?? 0)
+                    ($payroll->epf_8_percent ?? 0) +
+                    ($payroll->stamp_duty ?? 0) +
+                    $leaveNoPayAmount  // Add leave no-pay
                 );
-
-
             }
 
             $totalEarnings = (
@@ -214,7 +218,7 @@ class PayrollExportController extends Controller
                 'epf_12_percent' => $payroll->epf_12_percent,
                 'etf_3_percent' => $payroll->etf_3_percent,
                 'stamp_duty' => $payroll->stamp_duty,
-                'no_pay' => $payroll->no_pay,
+                'no_pay' => $payroll->no_pay + $leaveNoPayAmount, // Include leave no-pay
                 'total_deductions' => $totalDeductions,
                 'net_salary' => $netSalary,
                 'loan_balance' => $newLoanBalance,
@@ -225,7 +229,7 @@ class PayrollExportController extends Controller
             ]);
         }
 
-        return redirect()->route('payroll.management')->with('success', 'Records generated for the selected month.');
+        return redirect()->route('payroll.management')->with('success', 'Records generated for the selected month with leave deductions.');
     }
 
 

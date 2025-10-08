@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Employee extends Model
 {
@@ -38,7 +39,18 @@ class Employee extends Model
         'bank_name',
         'account_no',
         'branch_name',
+        'annual_leave_balance',
+        'annual_leave_used',
+        'short_leave_balance',
+        'short_leave_used',
+        'monthly_leaves_used',
+        'monthly_half_leaves_used',
+        'monthly_short_leaves_used',
+        'last_monthly_reset',
+        'leave_year_start'
     ];
+
+    protected $dates = ['leave_year_start'];
 
    
 
@@ -67,14 +79,108 @@ class Employee extends Model
         return $this->hasMany(Employee::class, 'manager_id');
     }
     
+    /**
+     * Relationship: Education
+     */
     public function education()
     {
         return $this->belongsTo(Education::class, 'education_id', 'id');
     }
 
+    /**
+     * Relationship: Leaves
+     */
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
+
+    /**
+     * Relationship: Auto Short Leaves
+     */
+    public function autoShortLeaves()
+    {
+        return $this->hasMany(AutoShortLeave::class);
+    }
+
     public function employees()
     {
         return $this->hasMany(Employee::class, 'department_id', 'department_id');
+    }
+
+    /**
+     * Check if monthly reset is needed
+     */
+    public function checkMonthlyReset()
+    {
+        $currentMonth = Carbon::now()->format('Y-m');
+        
+        if ($this->last_monthly_reset !== $currentMonth) {
+            $this->update([
+                'monthly_leaves_used' => 0,
+                'monthly_half_leaves_used' => 0,
+                'monthly_short_leaves_used' => 0,
+                'last_monthly_reset' => $currentMonth
+            ]);
+        }
+    }
+
+    /**
+     * Get remaining leave balances
+     */
+    public function getLeaveBalances()
+    {
+        $this->checkMonthlyReset();
+        
+        return [
+            'annual_leaves_remaining' => $this->annual_leave_balance - $this->annual_leave_used,
+            'short_leaves_remaining' => $this->short_leave_balance - $this->short_leave_used,
+            'monthly_leaves_remaining' => 2 - $this->monthly_leaves_used,
+            'monthly_half_leaves_remaining' => 1 - $this->monthly_half_leaves_used,
+            'monthly_short_leaves_remaining' => 3 - $this->monthly_short_leaves_used
+        ];
+    }
+
+    /**
+     * Calculate no-pay amount for excess leaves
+     */
+    public function calculateNoPayAmount($leaveType, $duration)
+    {
+        $balances = $this->getLeaveBalances();
+        $dailyRate = $this->getDailyRate();
+        
+        switch ($leaveType) {
+            case 'full_day':
+                $available = min($balances['annual_leaves_remaining'], $balances['monthly_leaves_remaining']);
+                return max(0, ($duration - $available) * $dailyRate);
+                
+            case 'half_day':
+                $available = min($balances['annual_leaves_remaining'] * 2, $balances['monthly_half_leaves_remaining']);
+                return max(0, ($duration - $available) * ($dailyRate / 2));
+                
+            case 'short_leave':
+                $available = min($balances['short_leaves_remaining'], $balances['monthly_short_leaves_remaining']);
+                return max(0, ($duration - $available) * ($dailyRate / 4));
+        }
+        
+        return 0;
+    }
+
+    /**
+     * Get daily rate for no-pay calculation
+     */
+    private function getDailyRate()
+    {
+        // Get latest salary details
+        $latestSalary = \App\Models\SalaryDetails::where('employee_id', $this->employee_id)
+            ->latest()
+            ->first();
+            
+        if ($latestSalary) {
+            return ($latestSalary->basic + $latestSalary->budget_allowance) / 30;
+        }
+        
+        return 1000; // Default daily rate
     }
 }
 

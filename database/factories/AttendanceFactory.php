@@ -13,7 +13,7 @@ class AttendanceFactory extends Factory
 
     public function definition()
     {
-        $expectedClockIn = Carbon::createFromTime(9, 0, 0); // Standard clock-in time: 09:00 AM
+        $expectedClockIn = Carbon::createFromTime(8, 30, 0); // Standard clock-in time: 08:30 AM
         $clockInTime = $this->faker->optional(0.9)->dateTimeBetween('08:30:00', '12:00:00'); // 90% chance of having a clock-in time
         $clockOutTime = $this->faker->optional(0.9)->dateTimeBetween('16:00:00', '20:00:00'); // 90% chance of having a clock-out time
 

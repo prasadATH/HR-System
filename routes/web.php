@@ -15,6 +15,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\EmployeeContributionController;
 use App\Http\Controllers\PayrollExportController;
+use App\Http\Controllers\AdvanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,10 @@ Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->n
 Route::post('/sendresetlink', [AuthController::class, 'handleForgotPassword'])->name('sendresetlink');
 Route::get('/password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/update', [AuthController::class, 'updateNewPassword'])->name('password.update');
+
+// API Routes for Leave Management
+Route::get('/api/employee-leave-data', [LeaveController::class, 'getEmployeeLeaveData'])->name('api.employee.leave.data');
+Route::post('/api/process-auto-short-leave/{attendanceId}', [LeaveController::class, 'processAutoShortLeave'])->name('api.process.auto.short.leave');
 Route::get('/resetsuccess', [AuthController::class, 'showResetSuccess'])->name('resetsuccess');
 Route::put('/password/update', [AuthController::class, 'updatePassword'])->name('new-password.update');
 
@@ -92,6 +97,7 @@ Route::prefix('management')->group(function () {
     Route::get('/expense-management', [ManagementController::class, 'expenseManagement'])->name('expense.management');
     Route::get('/incident-management', [ManagementController::class, 'incidentManagement'])->name('incident.management');
     Route::get('/advance-management', [ManagementController::class, 'advanceManagement'])->name('advance.management');
+
 
     Route::get('/main-dashboard', [ManagementController::class, 'viewDashboard'])->name('dashboard.management');
     Route::get('/count-dashboard', [DashboardController::class, 'getEmployeeCountByDepartment'])->name('count.management');
@@ -182,6 +188,17 @@ Route::middleware('auth')->prefix('dashboard/advances')->group(function () {
     Route::put('/advance/{id}', [LoanController::class, 'update'])->name('advance.update');
     Route::delete('/advance/{id}', [LoanController::class, 'destroy'])->name('advance.destroy');
 
+});
+
+//Advance Management Routes
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
+    Route::get('/newadvance', [AdvanceController::class, 'index'])->name('newadvance.manage');
+    Route::get('/newadvance/create', [AdvanceController::class, 'create'])->name('newadvance.create');
+    Route::post('/newadvance', [AdvanceController::class, 'store'])->name('newadvance.store');
+    Route::get('/newadvance/{id}', [AdvanceController::class, 'show'])->name('newadvance.show');
+    Route::get('/newadvance/{id}/edit', [AdvanceController::class, 'edit'])->name('newadvance.edit');
+    Route::put('/newadvance/{id}', [AdvanceController::class, 'update'])->name('newadvance.update');
+    Route::delete('/newadvance/{id}', [AdvanceController::class, 'destroy'])->name('newadvance.destroy');
 });
 
 Route::post('/notify', [NotificationController::class, 'notify'])->name('notify');
