@@ -193,18 +193,20 @@ class LoanController extends Controller
      * Employee ID 3 and 5 get 5000, others get 2500
      */
     private function calculateMonthlyPayment($employeeId)
-    {
-        // Convert to string for comparison to handle both string and integer inputs
-        $employeeId = (string)$employeeId;
-        
-        // Check if employee ID is 3 or 5
-        if ($employeeId === '3' || $employeeId === '5') {
+{
+    // Convert to string for comparison to handle both string and integer inputs
+    $employeeId = (string)$employeeId;
+    
+    switch ($employeeId) {
+        case '3':
+        case '5':
             return 5000;
-        }
-        
-        // Default monthly payment for other employees
-        return 2500;
+        case '7':
+            return 7000;
+        default:
+            return 2500;
     }
+}
 
     /**
      * Calculate loan end date and remaining balance
